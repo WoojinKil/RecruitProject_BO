@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbBcpcMenuacsTot">
+
+	<sql id="select-one-sql">
+		/*[TbBcpcMenuacsTot.xml][select][TANINE]*/
+		SELECT TOT_DT
+             , SYS_CD
+             , GRP_ROL_ID
+             , USR_ID
+             , MENU_SRNO
+             , MENU_NM
+             , LOGIN_MBR_ID_CNT
+             , VST_CUST_CNT
+             , CRTR_ID
+             , RGST_DTM
+             , UPDR_ID
+             , MDF_DTM
+          FROM TB_BCPC_MENUACS_TOT
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND MENU_SRNO = #{menu_srno, jdbcType=NUMERIC} 
+           AND SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND TOT_DT = #{tot_dt, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbBcpcMenuacsTot">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+
+	<insert id="insert" parameterType="TbBcpcMenuacsTot">
+        /*[TbBcpcMenuacsTot.xml][insert][TANINE]*/
+        INSERT INTO TB_BCPC_MENUACS_TOT
+		(
+			 TOT_DT
+		   , SYS_CD
+		   , GRP_ROL_ID
+		   , USR_ID
+		   , MENU_SRNO
+		   , MENU_NM
+		   , LOGIN_MBR_ID_CNT
+		   , VST_CUST_CNT
+		   , CRTR_ID
+		   , RGST_DTM
+		   , UPDR_ID
+		   , MDF_DTM
+		)
+		VALUES
+		(
+			 #{tot_dt, jdbcType=VARCHAR}
+		   , #{sys_cd, jdbcType=VARCHAR}
+		   , #{grp_rol_id, jdbcType=VARCHAR}
+		   , #{usr_id, jdbcType=VARCHAR}
+		   , #{menu_srno, jdbcType=NUMERIC}
+		   , #{menu_nm, jdbcType=VARCHAR}
+		   , #{login_mbr_id_cnt, jdbcType=NUMERIC}
+		   , #{vst_cust_cnt, jdbcType=NUMERIC}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , #{rgst_dtm, jdbcType=TIMESTAMP}
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , #{mdf_dtm, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="update" parameterType="tbBcpcMenuacsTot">
+        /*[TbBcpcMenuacsTot.xml][update][TANINE]*/
+		UPDATE TB_BCPC_MENUACS_TOT
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(menu_nm)">
+		       MENU_NM = #{menu_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_login_mbr_id_cnt)">
+		     , LOGIN_MBR_ID_CNT = #{login_mbr_id_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_vst_cust_cnt)">
+		     , VST_CUST_CNT = #{vst_cust_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rgst_dtm)">
+		     , RGST_DTM = #{rgst_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(updr_id)">
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_dtm)">
+		     , MDF_DTM = #{mdf_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND MENU_SRNO = #{menu_srno, jdbcType=NUMERIC} 
+           AND SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND TOT_DT = #{tot_dt, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TbBcpcMenuacsTot">
+        /*[TbBcpcMenuacsTot.xml][delete][TANINE]*/
+		DELETE FROM TB_BCPC_MENUACS_TOT
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND MENU_SRNO = #{menu_srno, jdbcType=NUMERIC} 
+           AND SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND TOT_DT = #{tot_dt, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</delete>
+
+
+    <select id="selectTbBcpcMenuacsTotList" parameterType="ParameterMap" resultType="TbBcpcMenuacsTot">
+          SELECT P.*  /*[TbBcpcMenuacsTot.xml][selectTbBcpcMenuacsTotList][메뉴별 클릭 수][TANINE]*/
+          FROM (
+            SELECT V.*
+                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                 , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                 , @ROW_NUMBER TOTAL_COUNT
+                 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                  </if>
+              FROM (
+                SELECT Y.*
+                     , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                  FROM (
+					    SELECT MT.MENU_SRNO AS MENU_SRNO /* 메뉴번호  */
+                             , MT.MENU_ACS AS MENU_ACS /* 메뉴 접속자 수  */
+                             , MT.MENU_VST_CUST_CNT AS MENU_VST_CUST_CNT /* 메뉴 클릭 수  */
+                             , MU.DEPTH_FULLNAME AS DEPTH_FULLNAME /* 메뉴 경로  */
+                             , ROUND((MT.MENU_VST_CUST_CNT / MT.MENU_ACS) ,1) AS UV_VST_CUST_CNT /* 인당 클릭 수  */
+                             , MU.SYS_CD
+                             , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = MU.SYS_CD) AS SYS_NM
+                          FROM (
+                                SELECT A.MENU_SRNO
+                                     , COUNT(A.USR_ID) AS MENU_ACS
+                                     , SUM(A.VST_CUST_CNT) AS MENU_VST_CUST_CNT
+                                  FROM (
+                                        SELECT USR_ID
+                                             , SYS_CD
+                                             , MENU_SRNO
+                                             , SUM(VST_CUST_CNT) AS VST_CUST_CNT
+                                          FROM TB_BCPC_MENUACS_TOT
+                                         WHERE 1=1
+                                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_id)">
+                                           AND GRP_ROL_ID =  #{grp_rol_id}
+                                         </if>
+                                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt) ">
+                                           AND DATE_FORMAT(tot_dt,'%y-%m-%d') BETWEEN DATE_FORMAT(#{sch_st_dt ,jdbcType=VARCHAR},'%y-%m-%d') AND DATE_FORMAT(#{sch_ed_dt ,jdbcType=VARCHAR},'%y-%m-%d')
+                                         </if>
+                                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+                                           AND SYS_CD = #{sys_cd}
+                                         </if>
+                                           AND MENU_SRNO != 0
+                                      GROUP BY USR_ID, SYS_CD, MENU_SRNO
+                                        ) A
+                              GROUP BY A.MENU_SRNO 
+                                ) MT
+                      LEFT JOIN (
+                                 SELECT BTM.MNU_SEQ AS MNU_SEQ -- 메뉴에 대한 전체 경로
+                                      , CONCAT(TOP.MNU_NM , '>' , MIDD.MNU_NM , '>' , BTM.MNU_NM) AS DEPTH_FULLNAME
+                                      , BTM.SYS_CD
+                                   FROM TSYS_ADM_MNU TOP
+                                      , TSYS_ADM_MNU MIDD
+                                      , TSYS_ADM_MNU BTM
+                                  WHERE 1=1
+                                    AND TOP.MNU_SEQ = MIDD.UP_MNU_SEQ
+                                    AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ    
+                                                          
+                                 ) MU
+                             ON MT.MENU_SRNO = MU.MNU_SEQ
+         ) Y, (SELECT @row_number := 0) RN
+             )V
+        ) P
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+       </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Applicant">
+	<select id="selectApplicantList" parameterType="ParameterMap" resultType="BaseApplicantDto">
+		select AP.applicantNo
+			  ,AP.applicantId
+			  ,AP.applyNo
+			  ,AP.applicantMillitary
+			  ,AP.applicantVeteran
+			  ,AP.applicantDisability
+			  ,AP.applicantJobProtect
+			  ,AP.applyDate
+			  ,AP.finalApplyChecked
+			
+		
+		
+		from ta_recruit_applicant AP
+			 ,ta_recruit_notice N
+		where 1=1
+		and AP.recruitNo=N.recruitNO
+		and AP.recruitNo=#{RECRUITNO}
+		
+		
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITNO)">AND AP.RECRUITNO        = #{RECRUITNO         ,jdbcType=NUMERIC} </if>
+	
+	
+	
+	</select>
+
+
+</mapper>

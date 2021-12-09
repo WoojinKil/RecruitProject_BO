@@ -1,0 +1,11 @@
+log4jdbc.dump.sql.maxlinelength=-1
+jdbc.datasource=jdbc/DataSource
+
+#log4jdbc
+#jdbc.driverClass=org.gjt.mm.mysql.Driver
+jdbc.common.driverClass=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#jdbc.driverClass=core.log.jdbc.driver.MysqlDriver
+jdbc.common.url=jdbc:log4jdbc:mysql://14.63.166.136:3306/pandora3_standard?useLocalSessionState=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+jdbc.common.username=root
+jdbc.common.password=ta946505
+

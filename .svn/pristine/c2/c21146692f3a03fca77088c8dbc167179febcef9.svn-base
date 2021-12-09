@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrPtnrInf">
+	
+	<sql id="select-one-sql">
+		/*[BaseTmbrPtnrInf.xml][select][TANINE]*/
+		SELECT PTNR_SEQ
+             , CORP_NM
+             , PROJ_NM
+             , ST_YM
+             , ED_YM
+             , PTNR_IMG_URL
+             , PTNR_CTS
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TMBR_PTNR_INF
+		 WHERE PTNR_SEQ = #{ptnr_seq, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TmbrPtnrInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

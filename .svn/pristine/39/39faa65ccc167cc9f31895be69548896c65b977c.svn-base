@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+    <!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath*:app/mybatis/jdbc.properties</value>
+        </property>
+    </bean> -->
+
+    <!-- JNDI 로 datasource를 받아오는 경우 -->
+    <!--
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="${jdbc.datasource}"/>
+    <property name="resourceRef" value="true" />
+    </bean>
+    -->
+
+     <!--
+    #####################################################
+    # myBatis setting
+    #####################################################
+    -->
+    <bean id="dataSourceCommon" class="kr.co.ta9.pandora3.app.bean.CommonDriverDataSource">
+        <property name="driverClassName" value="${jdbc.common.driverClass}"/>
+        <property name="url" value="${jdbc.common.url}"/>
+        <property name="username" value="${jdbc.common.username}"/>
+        <property name="password" value="${jdbc.common.password}"/>
+        <property name="maxActive" value="50"/>
+        <property name="maxIdle" value="20"/>
+        <property name ="validationQuery" value="select 1 from dual" />
+        <property name ="testWhileIdle" value="true" />
+        <property name ="timeBetweenEvictionRunsMillis" value="600000"/>
+    </bean>
+
+    <bean id="sqlSessionFactoryCommon" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSourceCommon" />
+        <property name="configLocation" value="classpath:app/mybatis/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:app/mysql_common/**/*.xml" />
+    </bean>
+
+    <bean id="sqlSessionTemplateCommon" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactoryCommon"/>
+    </bean>
+
+    <!-- 트랜잭션 매니저 빈을 생성한다. -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSourceCommon"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysUsrRol">
+	
+	<sql id="select-one-sql">
+		/*[BaseTsysUsrRol.xml][select][TANINE]*/
+		SELECT ROL_ID
+             , ROL_NM
+             , US_YN
+             , APL_ST_DT
+             , APL_ED_DT
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_USR_ROL
+		 WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysUsrRol">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

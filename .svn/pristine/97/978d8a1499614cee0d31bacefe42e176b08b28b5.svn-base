@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- BO 프로그램버튼목록 조회 기본 xml -->
+<mapper namespace="TsysPgmBtnInf">
+	
+	<sql id="select-one-sql">
+		/*[BaseTsysPgmBtnInf.xml][select][TANINE]*/
+		SELECT PGM_ID              --  프로그램ID
+             , PGM_BTN_CD          --  프로그램버튼ID
+             , US_YN               --  사용여부
+             , CRTR_ID             --  생성자ID
+             , CRT_DTTM            --  생성일시
+             , UPDR_ID             --  수정자ID
+             , UPD_DTTM            --  수정일시
+          FROM TSYS_PGM_BTN_INF
+		 WHERE PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR} 
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysPgmBtnInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+	<insert id="insert" parameterType="TsysPgmBtnInf">
+        /*[BaseTsysPgmBtnInfTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_PGM_BTN_INF
+		(
+			 PGM_ID                   -- 프로그램ID
+		   , PGM_BTN_CD               -- 프로그램버튼ID
+		   , US_YN                    -- 사용여부    
+		   , CRTR_ID                  -- 생성자ID   
+		   , CRT_DTTM                 -- 생성일시    
+		   , UPDR_ID                  -- 수정자ID   
+		   , UPD_DTTM                 -- 수정일시    
+		)
+		VALUES
+		(
+			 #{pgm_id, jdbcType=VARCHAR}
+		   , #{pgm_btn_cd, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TsysPgmBtnInf">
+        /*[BaseTsysPgmBtnInfTrx.xml][update][TANINE]*/
+		UPDATE TSYS_PGM_BTN_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dttm)">
+		     , CRT_DTTM = #{crt_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR} 
+          AND PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysPgmBtnInf">
+        /*[BaseTsysPgmBtnInfTrx.xml][delete][TANINE]*/
+		UPDATE TSYS_PGM_BTN_INF
+		   SET US_YN = 'N'
+		 WHERE PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR} 
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+	</delete>
+	
+
+	<select id="getTsysPgmBtnInfList" parameterType="ParameterMap" resultType="TsysPgmBtnInf">
+		/* [TsysPgmBtnInf.xml][getTsysPgmBtnInfList][버튼 목록 조회 ][TANINE] */
+	    SELECT PGM_ID             AS PGM_ID     -- 프로그램ID 
+               , PGM_BTN_CD       AS PGM_BTN_CD -- 프로그램버튼ID
+               , US_YN            AS US_YN      -- 사용여부 
+               , CRTR_ID          AS CRTR_ID    -- 생성자ID 
+               , UPDR_ID          AS UPDR_ID    -- 수정자ID
+          FROM TSYS_PGM_BTN_INF
+          WHERE PGM_ID = #{pgm_id ,jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteTsysPgmBtnInf" parameterType="TsysPgmBtnInf" >
+		/* [TsysPgmBtnInfTrx.xml][deleteTsysPgmBtnInf][버튼 삭제 ][TANINE] */
+	    DELETE    
+	      FROM TSYS_PGM_BTN_INF
+        WHERE PGM_ID = #{pgm_id ,jdbcType=VARCHAR}
+	</delete>
+	
+	
+</mapper>

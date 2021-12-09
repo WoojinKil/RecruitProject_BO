@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 공통팝업 조회 기본 xml -->
+<mapper namespace="TcmnPopupInf">
+
+	<sql id="select-one-sql">
+		/*[BaseTcmnPopupInf.xml][select][TANINE]*/
+		SELECT POPUP_ID
+             , POPUP_NM
+             , POPUP_DESC
+             , GRD_CONF
+             , SCH_SYNX
+             , FROM_SYNX
+             , WHERE_SYNX
+             , WHERE_ADD
+             , SRT_SYNX
+             , SCH_BOX
+             , POPUP_WDT
+             , POPUP_HGT
+             , PG_YN
+             , US_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TCMN_POPUP_INF
+		 WHERE POPUP_ID = #{popup_id, jdbcType=VARCHAR}
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TcmnPopupInf">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	<insert id="insert" parameterType="TcmnPopupInf">
+        /*[BaseTcmnPopupInfTrx.xml][insert][공통팝업 등록][TANINE]*/
+        INSERT INTO TCMN_POPUP_INF
+		(
+			 POPUP_ID
+		   , POPUP_NM
+		   , POPUP_DESC
+		   , GRD_CONF
+		   , SCH_SYNX
+		   , FROM_SYNX
+		   , WHERE_SYNX
+		   , WHERE_ADD
+		   , SRT_SYNX
+		   , SCH_BOX
+		   , POPUP_WDT
+		   , POPUP_HGT
+		   , PG_YN
+		   , US_YN
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{popup_id, jdbcType=VARCHAR}
+		   , #{popup_nm, jdbcType=VARCHAR}
+		   , #{popup_desc, jdbcType=LONGVARCHAR}
+		   , #{grd_conf, jdbcType=LONGVARCHAR}
+		   , #{sch_synx, jdbcType=LONGVARCHAR}
+		   , #{from_synx, jdbcType=LONGVARCHAR}
+		   , #{where_synx, jdbcType=LONGVARCHAR}
+		   , #{where_add, jdbcType=LONGVARCHAR}
+		   , #{srt_synx, jdbcType=VARCHAR}
+		   , #{sch_box, jdbcType=LONGVARCHAR}
+		   , #{popup_wdt, jdbcType=NUMERIC}
+		   , #{popup_hgt, jdbcType=NUMERIC}
+		   , #{pg_yn, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TcmnPopupInf">
+        /*[BaseTcmnPopupInfTrx.xml][update][공통팝업 수정][TANINE]*/
+		UPDATE TCMN_POPUP_INF
+		   SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(popup_nm)">
+		     , POPUP_NM = #{popup_nm, jdbcType=VARCHAR}
+		       </if>
+		       <choose>
+			      <when test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(popup_desc)">
+			      , POPUP_DESC = #{popup_desc, jdbcType=LONGVARCHAR}
+			      </when>
+			      <otherwise>
+			      , POPUP_DESC = NULL	
+			      </otherwise>
+		       </choose>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grd_conf)">
+		     , GRD_CONF = #{grd_conf, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_synx)">
+		     , SCH_SYNX = #{sch_synx, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(from_synx)">
+		     , FROM_SYNX = #{from_synx, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(where_synx)">
+		     , WHERE_SYNX = #{where_synx, jdbcType=LONGVARCHAR}
+		       </if>
+		       <choose>
+			      <when test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(where_add)">
+			      , WHERE_ADD = #{where_add, jdbcType=LONGVARCHAR}
+			      </when>
+			      <otherwise>
+			      , WHERE_ADD = NULL	
+			      </otherwise>
+		       </choose>
+		       <choose>
+			      <when test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(srt_synx)">
+			      , SRT_SYNX = #{srt_synx, jdbcType=VARCHAR}
+			      </when>
+			      <otherwise>
+			      , SRT_SYNX = NULL
+			      </otherwise>
+		       </choose>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_box)">
+		     , SCH_BOX = #{sch_box, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_popup_wdt)">
+		     , POPUP_WDT = #{popup_wdt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_popup_hgt)">
+		     , POPUP_HGT = #{popup_hgt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pg_yn)">
+		     , PG_YN = #{pg_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		WHERE POPUP_ID = #{popup_id, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="delete" parameterType="TcmnPopupInf">
+        /*[BaseTcmnPopupInfTrx.xml][delete][공통팝업 삭제][TANINE]*/
+        UPDATE TCMN_POPUP_INF
+           SET US_YN   = 'N'
+		 WHERE POPUP_ID = #{popup_id, jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 공통팝업관리 조회 -->
+    <select id="selectTcmnPopupInfList" parameterType="ParameterMap" resultType="TcmnPopupInf">
+    /* [TcmnPopupInf.xml][selectTcmnPopupInfList][공통팝업관리 조회][TANINE] */
+    SELECT P.*
+        FROM
+            (SELECT	  Ceil(V.id / #{rows, jdbcType=NUMERIC})          	PAGE,
+                      Ceil(@row_number / #{rows, jdbcType=NUMERIC}) 	TOTAL_PAGE,
+                      V.*,
+                      @row_number as TOTAL_COUNT
+               FROM   (SELECT A.POPUP_ID                        AS POPUP_ID                    /* 공통팝업코드 */
+                            , A.POPUP_NM                        AS POPUP_NM                    /* 공통팝업명 */
+                            , A.POPUP_DESC                      AS POPUP_DESC                  /* 공통팝업텍스트 */
+                            , A.GRD_CONF                        AS GRD_CONF                    /* 그리드 설정 값 */
+                            , A.SCH_SYNX                        AS SCH_SYNX                    /* 셀렉트 절 */
+                            , A.FROM_SYNX                       AS FROM_SYNX                   /* 프롬 절 */
+                            , A.WHERE_SYNX                      AS WHERE_SYNX                  /* 조건 절 */
+                            , A.WHERE_ADD                       AS WHERE_ADD                   /* 조건 추가 절 */
+                            , A.SRT_SYNX                        AS SRT_SYNX                    /* 정렬 */
+                            , A.SCH_BOX                         AS SCH_BOX                     /* 조회 콤보 박스 설정값  */
+                            , A.POPUP_WDT                       AS POPUP_WDT                   /* 공통팝업 넓이 */
+                            , A.POPUP_HGT                       AS POPUP_HGT                   /* 공통팝업 높이 */
+                            , A.PG_YN                           AS PG_YN                       /* 페이징여부 */
+                            , A.CRT_DTTM                        AS CRT_DTTM                    /* 등록일자 */
+                            , A.US_YN                           AS US_YN                       /*사용자명*/
+                            , B.USR_NM                          AS USR_NM                      /* 사용자명 */
+                            ,( @row_number := @row_number + 1 ) AS ID			               /* mysql ROWNUM */
+                         FROM TCMN_POPUP_INF A
+                            , TMBR_ADM_LGN_INF B
+                            ,(SELECT @row_number := 0) RN 					                   /* mysql ROWNUM */
+                        WHERE 1=1
+                          AND A.CRTR_ID = B.USR_ID
+                          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_popup_id)">
+                          AND A.POPUP_ID LIKE CONCAT('%',#{sch_popup_id ,jdbcType=VARCHAR},'%')
+                          </if>
+                          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_popup_nm)">
+                          AND A.POPUP_NM LIKE CONCAT('%',#{sch_popup_nm ,jdbcType=VARCHAR},'%')
+                          </if>
+                     ) V
+                     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                     ORDER BY V.CRT_DTTM
+                     </if>
+            )P
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+        WHERE  P.page = #{page ,jdbcType=NUMERIC}
+        </if>
+    </select>
+
+	<!-- 공통팝업그리드설정값조회 -->
+    <select id="selectTcmnPopupInfGrid" parameterType="ParameterMap" resultType="TcmnPopupInf">
+    /* [TcmnPopupInf.xml][selectTcmnPopupInfGrid][공통팝업그리드설정값조회][TANINE] */
+   	   SELECT A.POPUP_ID                  /* 공통팝업코드 */
+   	        , A.POPUP_NM                  /* 팝업명 */
+            , A.GRD_CONF                  /* 그리드 설정 값 */
+            , A.SCH_BOX                /* 조회 콤보 박스 설정값  */
+            , A.POPUP_DESC                  /* 공통팝업텍스트 */
+            , A.POPUP_WDT                 /* 공통팝업 넓이 */
+            , A.POPUP_HGT                /* 공통팝업 높이 */
+         FROM TCMN_POPUP_INF A
+        WHERE 1=1
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(popup_id)">
+	      AND A.POPUP_ID = #{popup_id ,jdbcType=VARCHAR}
+	    </if>
+    </select>
+
+	<!-- 공통팝업그리드쿼리절조회 -->
+    <select id="selectTcmnPopupInfInfo" parameterType="ParameterMap" resultType="TcmnPopupInf">
+    /* [TcmnPopupInf.xml][selectTcmnPopupInfInfo][공통팝업그리드쿼리절조회][TANINE] */
+   	   SELECT A.POPUP_ID                            /* 공통팝업코드 */
+            , A.POPUP_NM                            /* 공통팝업명 */
+            , A.POPUP_DESC                          /* 공통팝업텍스트 */
+            , A.GRD_CONF                            /* 그리드 설정 값 */
+            , A.SCH_SYNX                            /* 셀렉트 절 */
+            , A.FROM_SYNX                           /* 프롬 절 */
+            , A.WHERE_SYNX                          /* 조건 절 */
+            , A.WHERE_ADD                           /* 조건 추가 절 */
+            , A.SRT_SYNX                            /* 정렬 */
+            , A.SCH_BOX                             /* 조회 콤보 박스 설정값  */
+            , A.POPUP_WDT                           /* 공통팝업 넓이 */
+            , A.POPUP_HGT                           /* 공통팝업 높이 */
+            , A.PG_YN                               /* 페이징여부 */
+            , A.CRT_DTTM                            /* 등록일자 */
+            , A.US_YN
+         FROM TCMN_POPUP_INF A
+        WHERE 1=1
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(popup_id)">
+	      AND A.POPUP_ID = #{popup_id ,jdbcType=VARCHAR}
+	    </if>
+    </select>
+
+
+
+	<!-- 공통 팝업  관리 중복체크 -->
+    <select id="selectTcmnPopupInfCnt" parameterType="ParameterMap" resultType="int">
+    	 /* [TcmnPopupInf.xml][selectTcmnPopupInfCnt][공통 팝업  관리 중복체크][TANINE] */
+    	 SELECT COUNT(1)
+    	   FROM TCMN_POPUP_INF
+    	  WHERE POPUP_ID = #{popup_id ,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 공통팝업 페이징 prefix -->
+  	<sql id="popupPaging-Prefix">
+  		/*[Common.xml][popupPaging-Prefix][페이징헤더][TANINE]*/
+  		SELECT TTT.*
+          FROM (
+		        SELECT TT.*
+				     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+		             , CEIL(TT.ID / #{rows, jdbcType=NUMERIC}) PAGE
+		             , @ROW_NUMBER TOTAL_COUNT
+		             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+		             </if>
+		          FROM (
+						SELECT T.*
+						     , (@ROW_NUMBER := @ROW_NUMBER + 1) ID
+				          FROM (
+    </sql>
+
+    <!-- 공통팝업 페이징 suffix-->
+    <sql id="popupPaging-Suffix">
+    	/*[Common.xml][popupPaging-Suffix][페이징FOOTER][TANINE]*/
+				               ) T
+				             , (SELECT @ROW_NUMBER := 0) RN
+		               ) TT
+		       ) TTT
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE TTT.PAGE = #{page ,jdbcType=NUMERIC}
+         </if>
+	</sql>
+
+</mapper>

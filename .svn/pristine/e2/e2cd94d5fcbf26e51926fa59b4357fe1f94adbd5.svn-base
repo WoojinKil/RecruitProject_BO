@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>classpath*:#{systemProperties['jdbc.properties']}</value>
+		</property>
+	</bean>
+	<!-- Root Context: defines shared resources visible to all other web components -->
+    <import resource="classpath*:app/mybatis/mybatis-context.xml"/>
+
+    <bean id="tcmnCdDtlDao" class="kr.co.ta9.pandora3.pcmn.dao.TcmnCdDtlDao" >
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplateCommon" />
+    </bean>
+    <bean id="tdspSysInfDao" class="kr.co.ta9.pandora3.pdsp.dao.TdspSysInfDao"> 
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplateCommon" />
+    </bean>    
+    <bean id="tsysAdmRolDao" class="kr.co.ta9.pandora3.psys.dao.TsysAdmRolDao"> 
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplateCommon" />
+    </bean>    
+    
+    <!-- 2020.05.21 추가 -->
+    <bean id="tbMetaCmpnyWrkSysMDao" class="kr.co.ta9.pandora3.meta.dao.TbMetaCmpnyWrkSysMDao"> 
+        <property name="sqlSessionTemplate" ref="sqlSessionTemplateCommon" />
+    </bean>  
+</beans>

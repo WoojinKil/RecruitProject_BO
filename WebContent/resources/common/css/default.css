@@ -1,0 +1,94 @@
+@charset "UTF-8";
+@font-face {
+	font-family: 'notoR';
+	font-weight: normal;
+	font-style: normal;
+	src:url('../font/notokr-regular.eot');
+	src:url('../font/notokr-regular.eot?#iefix') format('embedded-opentype'),
+		url('../font/notokr-regular.woff2') format('woff2'),
+		url('../font/notokr-regular.woff') format('woff'),
+		url('../font/notokr-regular.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'notoB';
+	font-weight: normal;
+	font-style: normal;
+	src:url('../font/notokr-bold.eot');
+	src:url('../font/notokr-bold.eot?#iefix') format('embedded-opentype'),
+		url('../font/notokr-bold.woff2') format('woff2'),
+		url('../font/notokr-bold.woff') format('woff'),
+		url('../font/notokr-bold.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'NanumSquare';
+	font-weight: 300;
+	src:url('../font/NanumSquareL.eot');
+	src:url('../font/NanumSquareL.eot?#iefix') format('embedded-opentype'),
+		url('../font/NanumSquareL.woff') format('woff'),
+		url('../font/NanumSquareL.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'NanumSquare';
+	font-weight: 400;
+	src:url('../font/NanumSquareR.eot');
+	src:url('../font/NanumSquareR.eot?#iefix') format('embedded-opentype'),
+		url('../font/NanumSquareR.woff2') format('woff2'),
+		url('../font/NanumSquareR.woff') format('woff'),
+		url('../font/NanumSquareR.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'NanumSquare';
+	font-weight: 700;
+	src:url('../font/NanumSquareB.eot');
+	src:url('../font/NanumSquareB.eot?#iefix') format('embedded-opentype'),
+		url('../font/NanumSquareB.woff2') format('woff2'),
+		url('../font/NanumSquareB.woff') format('woff'),
+		url('../font/NanumSquareB.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'NanumSquare';
+	font-weight: 800;
+	src:url('../font/NanumSquareEB.eot');
+	src:url('../font/NanumSquareEB.eot?#iefix') format('embedded-opentype'),
+		url('../font/NanumSquareEB.woff') format('woff'),
+		url('../font/NanumSquareEB.ttf') format('truetype');
+}
+* {margin:0;padding:0;}
+body, button, select, textarea, .inputTxt {color:#666;font:14px/1.5 notoR, '맑은 고딕', 'malgun gothic', AppleSDGothicNeo-Regular, '돋움', dotum, sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;}
+a {color:#666;text-decoration:none;}
+ol, li {list-style:none;}
+table {table-layout:fixed;width:100%;border-collapse:collapse;border:0;}
+colgroup {background:none;}
+fieldset, img {border:0;}
+img, iframe {vertical-align:top;}
+legend, caption, .hidden {position:fixed;z-index:-1;visibility:hidden;}
+address, em {font-style:normal;}
+button {overflow:visible;cursor:pointer;background:none;border:0;}
+input, select, textarea, button, label, td img {vertical-align:middle;}
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, nav, menu, main, nav, section {display:block;}
+
+select, .input_txt {height:29px;border:1px solid #c2c2c2;box-sizing:border-box;border-radius:0;}
+.input_txt {padding:0 10px;}
+textarea {border:1px solid #c2c2c2;resize:none;}
+.input_txt:focus, textarea:focus {border:1px solid #c2c2c2;}
+
+.chkS {display:inline-block;margin:0 15px 0 0;cursor:pointer;vertical-align:middle;}
+.chkS input {position:absolute;visibility:hidden;position:static\9;visibility:visible\9;}
+.chkS input + span {display:inline-block;}
+.chkS input + span:before {content:"";display:inline-block;display:none\9;margin:0 10px 0 0;width:20px;height:20px;background:url(../images/bg_chkS.png) no-repeat 0 0;vertical-align:-3px;}
+.chkS input:checked + span:before {background-position:0 -20px;}
+
+.chkB {display:inline-block;margin:0 15px 0 0;cursor:pointer;vertical-align:middle;}
+.chkB input {position:absolute;visibility:hidden;position:static\9;visibility:visible\9;}
+.chkB input + span {display:inline-block;}
+.chkB input + span:before {content:"";display:inline-block;display:none\9;margin:0 10px 0 0;width:18px;height:18px;background:url(../images/bg_chkB.gif) no-repeat 0 -20px;border:1px solid #7f7f7f;vertical-align:middle;}
+.chkB input:checked + span:before {background-position:0 0;}
+
+.radioB {display:inline-block;margin:0 15px 0 0;cursor:pointer;vertical-align:middle;}
+.radioB input {position:absolute;visibility:hidden;position:static\9;visibility:visible\9;}
+.radioB input + span {display:inline-block;}
+.radioB input + span:before {content:"";display:inline-block;display:none\9;margin:0 10px 0 0;width:24px;height:24px;background:url(../images/bg_radioB.gif) no-repeat 0 0;vertical-align:-6px;}
+.radioB input:checked + span {font-weight:bold;}
+.radioB input:checked + span:before {background-position:0 -24px;}
+
+hr {margin:50px 0;border:0;border-top:1px solid #000;}

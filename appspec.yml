@@ -1,0 +1,21 @@
+version: 0.0
+os: linux
+files:
+  - source: pandora3-0.0.1-SNAPSHOT.war
+    destination: /data/was/tomcat/apache-tomcat-8.5.41/webapps
+permissions:
+  - object: /data/was/tomcat/apache-tomcat-8.5.41/webapps
+    pattern: "**"
+    owner: tomcat
+    group: solution
+    mode: 755
+    type:
+      - file
+hooks:
+  ApplicationStop:
+    - location: scripts/stop-application.sh
+      timeout: 300
+  ApplicationStart:
+    - location: scripts/start-application.sh
+      timeout: 300
+      runas: tomcat

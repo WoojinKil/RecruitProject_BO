@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 접속 카운트 로그 조회 XML -->
+<mapper namespace="TmbrConnLog">
+	
+	<sql id="select-one-sql">
+		/*[BaseTmbrConnLog.xml][select][TANINE]*/
+		SELECT CONN_SEQ    /* 접속순번 */
+             , IP_ADDR     /* IP주소 */
+             , USR_AGT     /* 사용자에이전트 */
+             , CRTR_ID     /* 생성자ID */
+             , CRT_DTTM    /* 생성일시 */
+          FROM TMBR_CONN_LOG
+		 WHERE CONN_SEQ = #{conn_seq, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TmbrConnLog">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<!-- 접속정보(IP/UserAgent) 저장 -->
+	<insert id="insert" parameterType="TmbrConnLog">
+        /*[BaseTmbrConnLogTrx.xml][insert][TANINE]*/
+        INSERT INTO TMBR_CONN_LOG
+		(
+		<!-- CONN_SEQ    /* 접속순번 AUTO INCREMENT */-->
+		     IP_ADDR     /* IP주소 */
+		   , USR_AGT     /* 사용자에이전트 */
+		   , CRTR_ID     /* 생성자ID */
+		   , CRT_DTTM    /* 생성일시 */
+		)
+		VALUES
+		(
+	   <!--  #{conn_seq, jdbcType=NUMERIC}  -->
+		     #{ip_addr, jdbcType=VARCHAR}
+		   , #{usr_agt, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TmbrConnLog">
+        /*[BaseTmbrConnLogTrx.xml][update][TANINE]*/
+		UPDATE TMBR_CONN_LOG
+		   SET CRT_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ip_addr)">
+		     , IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_agt)">
+		     , USR_AGT = #{usr_agt, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		WHERE CONN_SEQ = #{conn_seq, jdbcType=NUMERIC} 
+	</update>
+
+	<delete id="delete" parameterType="TmbrConnLog">
+        /*[BaseTmbrConnLogTrx.xml][delete][TANINE]*/
+		DELETE FROM TMBR_CONN_LOG
+		 WHERE CONN_SEQ = #{conn_seq, jdbcType=NUMERIC} 
+	</delete>
+	
+
+	<!-- 당일 접속IP 중복 체크 -->
+	<select id="selectTmbrConnLogIpOvlp" parameterType="ParameterMap" resultType="String">
+		/* [TmbrConnLog.xml][selectTmbrConnLogIpOvlp][당일 접속IP 중복 체크][TANINE] */
+		SELECT CASE WHEN COUNT(1) = 0 THEN 'N'
+					ELSE 'Y'
+				END                            AS OVLP_YN  /* IP중복여부 */
+		  FROM TMBR_CONN_LOG
+		 WHERE DATE_FORMAT(CRT_DTTM, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		   AND IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 방문자수/화면접속수 조회 -->
+	<select id="selectTmbrConnSttsVisrAcsCntList" resultType="TmbrConnLog">
+		/* [TmbrConnLog.xml][selectTmbrConnSttsVisrAcsCntList][방문자수/화면접속수 조회][TANINE] */
+		SELECT T1.* 
+		  FROM (SELECT 'THIS'              AS WK_TP        /* 주간 유형 */
+		             , VISR_CNT            AS VISR_CNT     /* 방문자수 */
+		             , SCRN_ACS_CNT        AS SCRN_ACS_CNT /* 화면접근수 */
+		             , DAYOFWEEK(CRT_DTTM) AS DAY_OF_WEEK  /* 요일 */
+		          FROM TMBR_CONN_STTS 
+		         WHERE DATE_FORMAT(CRT_DTTM, '%Y-%m-%d')
+					   BETWEEN (SELECT DATE_SUB(CRT_DTTM, INTERVAL (DAYOFWEEK(CRT_DTTM)-1) DAY) STD_DATE 
+								  FROM TMBR_CONN_STTS 
+							 	 GROUP BY STD_DATE
+								 ORDER BY CRT_DTTM DESC 
+								 LIMIT 1)
+						   AND (SELECT DATE_SUB(CRT_DTTM, INTERVAL (DAYOFWEEK(CRT_DTTM)-7) DAY) END_DATE 
+								  FROM TMBR_CONN_STTS 
+								 GROUP BY END_DATE 
+								 ORDER BY CRT_DTTM DESC 
+								 LIMIT 1)
+		         ORDER BY CRT_DTTM DESC) T1 
+		UNION ALL 
+		SELECT T2.* 
+		  FROM (SELECT 'LAST'              AS WK_TP        /* 주간 유형 */ 
+		             , VISR_CNT            AS VISR_CNT     /* 방문자수 */  
+		             , SCRN_ACS_CNT        AS SCRN_ACS_CNT /* 화면접근수 */ 
+		             , DAYOFWEEK(CRT_DTTM) AS DAY_OF_WEEK  /* 요일 */    
+		          FROM TMBR_CONN_STTS 
+		         WHERE DATE_FORMAT(CRT_DTTM, '%Y-%m-%d')
+					   BETWEEN (SELECT DATE_SUB(CRT_DTTM, INTERVAL (DAYOFWEEK(CRT_DTTM)-1) DAY) STD_DATE 
+								  FROM TMBR_CONN_STTS 
+								 GROUP BY STD_DATE 
+								 ORDER BY CRT_DTTM DESC 
+								 LIMIT 1, 1) 
+						   AND (SELECT DATE_SUB(CRT_DTTM, INTERVAL (DAYOFWEEK(CRT_DTTM)-7) DAY) END_DATE 
+								  FROM TMBR_CONN_STTS 
+								 GROUP BY END_DATE 
+								 ORDER BY CRT_DTTM DESC 
+								 LIMIT 1, 1) 
+		         ORDER BY CRT_DTTM DESC) T2
+	</select>
+
+	<!-- 진입 통계 목록 그리드 조회 -->
+	<select id="selectTmbrConnSttsGridList" parameterType="ParameterMap" resultType="TmbrConnLog">
+		/* [TmbrConnLog.xml][selectTmbrConnSttsGridList][진입 통계 목록 그리드 조회][TANINE] */
+		SELECT P.*
+		  FROM (SELECT CEIL(V2.ID / #{rows, jdbcType=NUMERIC})       AS PAGE
+					 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE
+					 , @ROW_NUMBER 								     AS TOTAL_COUNT
+					 , V2.*
+				  FROM (SELECT (@ROW_NUMBER := @ROW_NUMBER + 1 )     AS ID
+						 	 , V1.*
+						  FROM (<choose>
+									<when test='sch_type == "02"'>
+									SELECT T.*
+									  FROM (SELECT MONTH(CRT_DTTM)   AS STD_YMD_TP   /* 기준월 */
+												 , SUM(VISR_CNT)     AS VISR_CNT     /* 방문자수 */
+												 , SUM(SCRN_ACS_CNT) AS SCRN_ACS_CNT /* 화면접근수 */
+											  FROM TMBR_CONN_STTS
+										     WHERE 1=1
+											<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_dt)">
+										       AND CRT_DTTM LIKE CONCAT(DATE_FORMAT(#{sch_dt, jdbcType=VARCHAR}, '%Y'),'%')
+											</if>
+											 GROUP BY STD_YMD_TP
+										   ) T
+									</when>
+									<when test='sch_type == "03"'>
+									SELECT T.*
+									  FROM (SELECT YEAR(CRT_DTTM)    AS STD_YMD_TP   /* 기준년도 */  
+												 , SUM(VISR_CNT)     AS VISR_CNT     /* 방문자수 */ 
+												 , SUM(SCRN_ACS_CNT) AS SCRN_ACS_CNT /* 화면접근수 */
+											  FROM TMBR_CONN_STTS
+											 GROUP BY STD_YMD_TP
+										   ) T
+									 WHERE T.STD_YMD_TP IS NOT NULL
+									</when>
+									<otherwise>
+									SELECT T.*
+									  FROM (SELECT DATE(CRT_DTTM)    AS STD_YMD_TP   /* 기준일자 */  
+												 , SUM(VISR_CNT)     AS VISR_CNT     /* 방문자수 */ 
+												 , SUM(SCRN_ACS_CNT) AS SCRN_ACS_CNT /* 화면접근수 */
+											  FROM TMBR_CONN_STTS
+											 WHERE 1=1
+											<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_dt)">
+											   AND CRT_DTTM LIKE CONCAT(DATE_FORMAT(#{sch_dt, jdbcType=VARCHAR}, '%Y%m'),'%')
+											</if>
+											 GROUP BY CRT_DTTM
+										   ) T
+									 WHERE T.STD_YMD_TP IS NOT NULL
+									</otherwise>
+								</choose>
+							   ) V1
+							 , (SELECT @ROW_NUMBER := 0) RN
+						 WHERE 1 = 1
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">   
+						 ORDER BY V1.STD_YMD_TP DESC
+						</if>
+					   ) V2
+			   ) P
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+		 WHERE  P.PAGE = #{page, jdbcType=NUMERIC}
+		</if>
+	</select>
+	
+	<!-- 진입통계 초기값(전체/당일) 조회 -->
+	<select id="selectTmbrConnSttsInitCnt" parameterType="ParameterMap" resultType="TmbrConnLog">
+		/* [TmbrConnLog.xml][selectTmbrConnSttsInitCnt][진입통계 초기값(전체/당일) 조회][TANINE] */
+		SELECT 'TOT'        AS CNT_TP       /* 유형 */
+			 , VISR_CNT     AS VISR_CNT     /* 방문자수 */
+			 , SCRN_ACS_CNT AS SCRN_ACS_CNT /* 화면접근수 */
+		  FROM TMBR_CONN_STTS
+		 WHERE CRT_DTTM = 0
+		UNION ALL
+		SELECT 'TGT'        AS CNT_TP       /* 유형 */
+			 , VISR_CNT     AS VISR_CNT     /* 방문자수 */
+			 , SCRN_ACS_CNT AS SCRN_ACS_CNT /* 화면접근수 */
+		  FROM TMBR_CONN_STTS
+		 WHERE CRT_DTTM = DATE_FORMAT(#{sch_dt, jdbcType=VARCHAR}, '%Y%m%d')
+	</select>
+	
+	<!-- 전체 접속자 수/페이지 뷰 통계 갱신 -->
+	<insert id="insertTmbrConnStts" parameterType="ParameterMap">
+		/* [TmbrConnLogTrx.xml][insertAccessStsInfo][전체 접속자 수/페이지 뷰 통계 갱신][TANINE] */
+		INSERT INTO TMBR_CONN_STTS
+		(
+			 CRT_DTTM     /* 생성일시 */
+		   , VISR_CNT     /* 방문자수 */
+		   , SCRN_ACS_CNT /* 화면접근수 */
+		)
+		VALUES
+		(
+			 DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		   , #{visr_cnt, jdbcType=NUMERIC}
+		   , 1
+		) ON DUPLICATE KEY
+		UPDATE 
+			 CRT_DTTM     = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		   , VISR_CNT	  = (SELECT CS.VISR_CNT + #{visr_cnt, jdbcType=NUMERIC} 
+							   FROM TMBR_CONN_STTS CS
+							  WHERE CS.CRT_DTTM = DATE_FORMAT(SYSDATE(), '%Y%m%d'))
+		   , SCRN_ACS_CNT = (SELECT CS.SCRN_ACS_CNT + 1
+							   FROM TMBR_CONN_STTS CS 
+							  WHERE CS.CRT_DTTM = DATE_FORMAT(SYSDATE(), '%Y%m%d'))
+	</insert>
+
+	<update id="updateTmbrConnSttsTotInfo" parameterType="ParameterMap">
+		INSERT /* [TmbrConnLogTrx.xml][updateAccessStsTotInfo][전체 누적 통계 업데이트][TANINE] */
+		  INTO TMBR_CONN_STTS
+		(
+			 CRT_DTTM     /* 생성일시 */
+		   , VISR_CNT     /* 방문자수 */
+		   , SCRN_ACS_CNT /* 화면접근수 */
+		)
+		VALUES
+		(
+			 0
+		   , 1
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(unq_flag)">
+		   , 1
+		</if>
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(unq_flag)">
+		   , 0
+		</if>
+		)
+			ON DUPLICATE KEY
+		UPDATE CRT_DTTM     = 0
+			 , SCRN_ACS_CNT = SCRN_ACS_CNT + 1
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(unq_flag)">
+			 , VISR_CNT	  = VISR_CNT + 1
+		</if>
+	</update>
+	
+	
+</mapper>

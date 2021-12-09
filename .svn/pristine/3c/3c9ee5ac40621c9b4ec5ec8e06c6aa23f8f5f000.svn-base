@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmOrgGrpRolRtnn">
+    
+    <select id="selectPsysOrgGrpRolRtnnGridList" parameterType="ParameterMap" resultType="TsysAdmOrgGrpRolRtnn">
+    /*[TsysAdmOrgGrpRolRtnn.xml][selectPsysOrgGrpRolRtnnGridList][조직별 권한 그룹 조회][TANINE]*/
+    SELECT OGRR.ORG_CD
+         , OGRR.GRP_ROL_ID
+         , O.ORG_NM
+         , GR.GRP_ROL_NM
+      FROM TSYS_ADM_ORG_GRP_ROL_RTNN OGRR
+         , TSYS_ORG O
+         , TSYS_ADM_GRP_ROL GR
+     WHERE OGRR.ORG_CD = O.ORG_CD
+       AND OGRR.GRP_ROL_ID = GR.GRP_ROL_ID
+       AND OGRR.ORG_CD = #{org_cd, jdbcType=NUMERIC}
+    </select>
+    
+    <select id="selectTsysOrgGrpRolAllList" parameterType="ParameterMap" resultType="TsysAdmOrgGrpRolRtnn">
+    /*[TsysAdmOrgGrpRolRtnn.xml][selectTsysOrgGrpRolAllList][상위 조직에 따른 하위 조직 권한 그룹 검색][TANINE]*/
+    SELECT AA.*
+         , BB.GRP_ROL_ID   AS GRP_ROL_ID
+      FROM (
+            SELECT ORG_CD
+                 , ORG_NM
+              FROM TSYS_ORG
+             WHERE ORG_CD = #{org_cd, jdbcType=NUMERIC}
+                OR UP_ORG_CD = (SELECT ORG_CD FROM TSYS_ORG WHERE ORG_CD = #{org_cd, jdbcType=VARCHAR} )
+                OR UP_ORG_CD IN (
+                                  SELECT ORG_CD
+                                    FROM TSYS_ORG
+                                   WHERE UP_ORG_CD IN (SELECT ORG_CD FROM TSYS_ORG WHERE ORG_CD = #{org_cd, jdbcType=VARCHAR} )
+                                  )
+           ) AA LEFT JOIN TSYS_ADM_ORG_GRP_ROL_RTNN BB
+        ON AA.ORG_CD = BB.ORG_CD
+    </select>
+
+
+</mapper>

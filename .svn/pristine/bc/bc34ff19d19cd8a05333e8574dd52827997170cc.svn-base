@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmRolRtnn">
+
+	<sql id="select-one-sql">
+		/*[TsysAdmRolRtnn.xml][select][TANINE]*/ 
+		SELECT USR_ID
+             , ROL_ID
+             , APL_ST_DT
+             , APL_ED_DT
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_ROL_RTNN
+		 WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR}
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR}
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmRolRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+
+	<insert id="insert" parameterType="TsysAdmRolRtnn">
+        /*[BaseTsysAdmRolRtnn.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_ROL_RTNN
+		(
+			 USR_ID
+		   , ROL_ID
+		   , APL_ST_DT
+		   , APL_ED_DT
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{usr_id, jdbcType=VARCHAR}
+		   , #{rol_id, jdbcType=VARCHAR}
+		   , #{apl_st_dt, jdbcType=VARCHAR}
+		   , #{apl_ed_dt, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysAdmRolRtnn">
+        /*[BaseTsysAdmRolRtnn.xml][update][TANINE]*/
+		UPDATE TSYS_ADM_ROL_RTNN
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(apl_st_dt)">
+		     , APL_ST_DT = #{apl_st_dt, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(apl_ed_dt)">
+		     , APL_ED_DT = #{apl_ed_dt, jdbcType=VARCHAR}
+		       </if>
+		WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR}
+          AND USR_ID = #{usr_id, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="delete" parameterType="TsysAdmRolRtnn">
+        /*[BaseTsysAdmRolRtnn.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_ROL_RTNN
+		 WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR}
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR}
+	</delete>
+
+	 <!-- 사용자 권한 할당 등록 -->
+    <insert id="insertTsysAdmRolRtnn" parameterType="TsysAdmRolRtnn">
+		/*[TsysAdmRolRtnnTrx.xml][insertTsysAdmRolRtnn][사용자 권한 할당 등록][TANINE]*/
+   		INSERT INTO TSYS_ADM_ROL_RTNN
+   		(
+			   APL_ED_DT
+		     , APL_ST_DT
+		     , UPD_DTTM
+		     , UPDR_ID
+		     , CRT_DTTM
+		     , CRTR_ID
+		     , ROL_ID
+		     , USR_ID
+		)
+		SELECT
+			  APL_ED_DT
+		    , APL_ST_DT
+			, SYSDATE()
+			, UPDR_ID
+			, SYSDATE()
+			, CRTR_ID
+			, ROL_ID
+			, #{usr_id, jdbcType=VARCHAR} as USR_ID
+		from  TSYS_USR_ROL
+		WHERE CURRENT_TIMESTAMP BETWEEN APL_ST_DT AND APL_ED_DT
+		and   ROL_ID = #{rol_id, jdbcType=VARCHAR}
+    </insert>
+    
+    
+    <insert id="insertTsysAdmRolRtnnOne" parameterType="TsysAdmRolRtnn">
+        /*[TsysAdmRolRtnnTrx.xml][insertTsysAdmRolRtnnOne][사용자별 권한 할당][TANINE]*/
+        INSERT INTO TSYS_ADM_ROL_RTNN
+        (
+             USR_ID
+           , ROL_ID
+           , APL_ST_DT
+           , APL_ED_DT
+           , CRTR_ID
+           , CRT_DTTM
+           , UPDR_ID
+           , UPD_DTTM
+        )
+        VALUES
+        (
+             #{usr_id, jdbcType=VARCHAR}
+           , #{rol_id, jdbcType=VARCHAR}
+           , replace(#{f_apl_st_dt, jdbcType=VARCHAR}, '-', '')
+           , replace(#{f_apl_ed_dt, jdbcType=VARCHAR}, '-', '')
+           , #{crtr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+           , #{updr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+        )
+    </insert>
+    
+    <!-- 사용자 권한 할당 삭제 -->
+    <delete id="deleteTsysAdmRolRtnnByUsrId" parameterType="String">
+		/*[TsysAdmRolRtnnTrx.xml][deleteTsysAdmRolRtnnByUsrId][사용자 권한 할당 삭제][TANINE]*/
+        DELETE
+          FROM TSYS_ADM_ROL_RTNN
+         WHERE USR_ID = #{usr_id}
+    </delete>
+    
+    <insert id="insertTsysAdmRolRtnnMap" parameterType="HashMap">
+        /*[TsysAdmRolRtnnTrx.xml][insertTsysAdmRolRtnnMap][권한 신청에 따른 사용자별 권한 할당][TANINE]*/
+        INSERT INTO TSYS_ADM_ROL_RTNN
+        (
+             USR_ID
+           , ROL_ID
+           , APL_ST_DT
+           , APL_ED_DT
+           , CRTR_ID
+           , CRT_DTTM
+           , UPDR_ID
+           , UPD_DTTM
+        )
+        VALUES
+        (
+             #{usr_id, jdbcType=VARCHAR}
+           , #{rol_id, jdbcType=VARCHAR}
+           , (SELECT APL_ST_DT FROM TSYS_ADM_ROL WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR})
+           , (SELECT APL_ED_DT FROM TSYS_ADM_ROL WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR})
+           , #{crtr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+           , #{updr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+        )
+    </insert>
+
+    <!-- 사용자 권한 할당 그리드 리스트 -->
+    <select id="selectTsysAdmRolRtnnGridList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+    /*[TsysAdmRolRtnn.xml][selectTsysAdmRolRtnnGridList][사용자 권한 할당 그리드 리스트][TANINE]*/
+        SELECT P.*
+          FROM (
+                SELECT V.*
+                      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                     , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                     , @ROW_NUMBER TOTAL_COUNT
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                      </if>
+                 FROM (
+                       SELECT Y.*
+                            , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                         FROM (
+                               SELECT U.USR_ID           -- 사용자아이디
+                                    , get_masking(U.USR_NM,'name') AS USR_NM           -- 사용자명
+                                    , U.LGN_ID           -- 로그인아이디
+                                    , U.LGN_PWD          -- 비밀번호
+                                    , U.MNGR_TP_CD       -- 관리자유형코드
+                                    , CASE WHEN U.MNGR_TP_CD = '99' -- 외부 사원은 점명/ 내부직원은 조직명
+                                           THEN (SELECT ORG_NM FROM TSYS_ORG WHERE ORG_CD = U.ORG_CD)
+                                           ELSE (SELECT ORG_NM FROM TSYS_ORG WHERE ORG_CD = U.ORG_CD) END AS CSTR_NM
+                                    , U.USR_EML_ADDR      -- 이메일
+                                    , U.ACTV_YN          -- 활성화여부
+                                    , U.PWD_FAIL_CNT     -- 비밀번호실패카운트
+                                    , U.PWD_FAIL_DTTM    -- 비밀번호실패일시
+                                    , U.PWD_UPD_DTTM     -- 비밀번호수정일시
+                                    , U.CRTR_ID          -- 등록자
+                                    , U.CRT_DTTM         -- 등록일시
+                                    , U.UPDR_ID          -- 수정자
+                                    , U.UPD_DTTM         -- 수정일시
+                                    , URA.ROL_ID         -- 권한아이디
+                                    , (SELECT ROL_NM FROM TSYS_ADM_ROL WHERE ROL_ID = URA.ROL_ID) AS ROL_NM         -- 권한명
+                                    , URA.APL_ST_DT      -- 적용시작일시
+                                    , URA.APL_ED_DT      -- 적용종료일시
+                                    , DATE_FORMAT(URA.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+                                    , DATE_FORMAT(URA.UPD_DTTM,'%Y-%m-%d') AS F_UPD_DTTM
+                                 FROM TMBR_ADM_LGN_INF U
+                                INNER JOIN TSYS_ADM_ROL_RTNN URA
+                                   ON U.USR_ID = URA.USR_ID
+                                WHERE 1 = 1
+								<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_id)">
+								  AND URA.ROL_ID = #{rol_id  ,jdbcType=VARCHAR}
+								</if>
+								<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_id)">
+								  AND U.USR_ID = #{usr_id  ,jdbcType=VARCHAR}
+								</if>
+								<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+								  AND U.USR_NM LIKE  CONCAT('%',#{usr_nm    ,jdbcType=VARCHAR},'%')
+								</if>
+								
+                               ) Y
+                             , (SELECT @ROW_NUMBER := 0) RN
+                       )V
+                 <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY V.USR_NM
+                 </if>
+                ) P
+          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+          WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+          </if>
+    </select>
+
+    <!-- 사용자 권한 할당 그리드 리스트 -->
+    <select id="selectTsysAdmRolRtnnInfo" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+    /*[TsysAdmRolRtnn.xml][selectTsysAdmRolRtnnInfo][사용자 권한 사용자 검색][TANINE]*/
+    	SELECT USR_ID
+    	     , LGN_ID
+    	     , USR_NM
+    	     , USR_EML_ADDR
+    	  FROM TMBR_ADM_LGN_INF
+    	 WHERE 1 = 1
+    	   AND USR_NM LIKE CONCAT('%',#{userNm	,jdbcType=VARCHAR},'%')
+    </select>
+    
+    <!-- 사용자 권한 할당 그리드 리스트 -->
+    <select id="selectTsysAdmRolRtnnAppGridList" parameterType="ParameterMap" resultType="TsysAdmRolRtnn">
+    /*[TsysAdmRolRtnn.xml][selectTsysAdmRolRtnnAppGridList][사용자 권한 신청 그리드 리스트][TANINE]*/
+        SELECT P.*
+          FROM (
+                SELECT V.*
+                      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                     , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                     , @ROW_NUMBER TOTAL_COUNT
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                      </if>
+                 FROM (
+                       SELECT Y.*
+                            , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                         FROM (
+                               SELECT U.USR_ID           -- 사용자아이디
+                                    , U.USR_NM           -- 사용자명
+                                    , U.LGN_ID           -- 로그인아이디
+                                    , U.LGN_PWD          -- 비밀번호
+                                    , U.MNGR_TP_CD       -- 관리자유형코드
+                                    , U.USR_EML_ADDR      -- 이메일
+                                    , U.ACTV_YN          -- 활성화여부
+                                    , U.PWD_FAIL_CNT     -- 비밀번호실패카운트
+                                    , U.PWD_FAIL_DTTM    -- 비밀번호실패일시
+                                    , U.PWD_UPD_DTTM     -- 비밀번호수정일시
+                                    , U.CRTR_ID          -- 등록자
+                                    , U.CRT_DTTM         -- 등록일시
+                                    , U.UPDR_ID          -- 수정자
+                                    , U.UPD_DTTM         -- 수정일시
+                                    , URA.ROL_ID         -- 권한아이디
+                                    , URA.APL_ST_DT      -- 적용시작일시
+                                    , URA.APL_ED_DT      -- 적용종료일시
+                                    , DATE_FORMAT(URA.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+                                    , DATE_FORMAT(URA.UPD_DTTM,'%Y-%m-%d') AS F_UPD_DTTM
+                                 FROM TMBR_ADM_LGN_INF U
+                                INNER JOIN TSYS_ADM_ROL_RTNN URA
+                                   ON U.USR_ID = URA.USR_ID
+                                WHERE 1 = 1
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_id)">
+                                  AND URA.ROL_ID = #{rol_id  ,jdbcType=VARCHAR}
+                                </if>
+                               ) Y
+                             , (SELECT @ROW_NUMBER := 0) RN
+                       )V
+                 <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY V.USR_NM
+                 </if>
+                ) P
+          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+          WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+          </if>
+    </select>
+    
+    <select id="selectTsysAdmRolRtnnList" parameterType="ParameterMap" resultType="TsysAdmRolRtnn">
+    /*[TsysAdmRolRtnn.xml][selectTsysAdmRolRtnnList][사용자 권한 조회][TANINE]*/
+        SELECT U.USR_ID           -- 사용자아이디
+             , U.USR_NM           -- 사용자명
+             , URA.ROL_ID         -- 권한아이디
+             , (SELECT ROL_NM FROM TSYS_ADM_ROL WHERE ROL_ID = URA.ROL_ID) AS ROL_NM
+             , URA.APL_ST_DT      -- 적용시작일시
+             , URA.APL_ED_DT      -- 적용종료일시
+             , DATE_FORMAT(URA.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+             , DATE_FORMAT(URA.UPD_DTTM,'%Y-%m-%d') AS F_UPD_DTTM
+          FROM TMBR_ADM_LGN_INF U, TSYS_ADM_ROL_RTNN URA
+         WHERE U.USR_ID = URA.USR_ID
+           AND U.USR_ID = #{usr_id, jdbcType=VARCHAR}
+    </select>
+    
+    <select id="selectSitTsysAdmRolRtnnList" parameterType="Map" resultType="TsysAdmRolRtnn">
+    /*[TsysAdmRolRtnn.xml][selectSitTsysAdmRolRtnnList][사용자 개인 권한 시스템별 조회][TANINE]*/
+        SELECT AR.ROL_ID
+             , AR.ROL_NM
+             , AR.US_YN
+             , AR.APL_ST_DT
+             , AR.APL_ED_DT
+             , AR.SYS_CD
+             , ALI.USR_ID
+          FROM TSYS_ADM_ROL_RTNN ARR
+             , TSYS_ADM_ROL AR
+             , TMBR_ADM_LGN_INF ALI
+         WHERE ARR.ROL_ID = AR.ROL_ID
+           AND ARR.USR_ID = ALI.USR_ID
+           AND AR.SYS_CD =  #{sys_cd, jdbcType=VARCHAR}
+           AND ALI.USR_ID = #{usr_id, jdbcType=VARCHAR}
+    </select>
+    
+</mapper>

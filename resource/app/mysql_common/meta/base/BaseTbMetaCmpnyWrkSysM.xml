@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMetaCmpnyWrkSysM">
+	
+	<sql id="select-one-sql">
+		/*[TbMetaCmpnyWrkSysM.xml][select][TANINE]*/
+		SELECT CMPNY_CD
+             , SYS_CD
+             , SYS_NM
+             , SYS_CNTS
+             , SYS_RMK
+             , TPIC_EMPNO
+             , TPIC_TELNO
+             , TPIC_EMAIL
+             , REGRT_EMPNO
+             , REG_DTM
+             , SYS_US_YN
+             , CRT_DTM
+             , CRT_ID
+             , MDF_DTM
+             , MDF_ID
+          FROM TB_META_CMPNY_WRK_SYS_M
+		 WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbMetaCmpnyWrkSysM">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

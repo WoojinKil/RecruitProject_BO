@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMetaPjtUsrM">
+	
+	<sql id="select-one-sql">
+		/*[TbMetaPjtUsrM.xml][select][TANINE]*/
+		SELECT CMPNY_CD
+             , PJT_CD
+             , STAF_EMPNO
+             , ORZN_GBCD
+             , ORZN_CMPNY_NM
+             , STAF_GBCD
+             , PJT_ROLE_GBCD
+             , SYS_ROLE_GBCD
+             , USE_STA_DY
+             , USE_END_DY
+             , CRT_DTM
+             , CRT_ID
+             , MDF_DTM
+             , MDF_ID
+          FROM TB_META_PJT_USR_M
+		 WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND PJT_CD = #{pjt_cd, jdbcType=VARCHAR} 
+           AND STAF_EMPNO = #{staf_empno, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbMetaPjtUsrM">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

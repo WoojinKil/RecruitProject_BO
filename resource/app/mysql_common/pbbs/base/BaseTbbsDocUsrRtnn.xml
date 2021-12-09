@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsDocUsrRtnn">
+	
+	<sql id="select-one-sql">
+		/*[TbbsDocUsrRtnn.xml][select][TANINE]*/
+		SELECT USR_ID
+             , MODL_SEQ
+             , DOC_SEQ
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TBBS_DOC_USR_RTNN
+		 WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC} 
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbbsDocUsrRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

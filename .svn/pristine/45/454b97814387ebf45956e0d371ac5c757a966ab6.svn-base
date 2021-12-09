@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMetaPjtMTrx">
+	
+	<insert id="insert" parameterType="TbMetaPjtM">
+        /*[TbMetaPjtM.xml][insert][TANINE]*/
+        INSERT INTO TB_META_PJT_M
+		(
+			 CMPNY_CD
+		   , PJT_CD
+		   , PJT_STA_DY
+		   , PJT_END_DY
+		   , SYS_CD
+		   , PJT_TPIC_EMPNO
+		   , PJT_TPIC_TELNO
+		   , PJT_TPIC_EMAIL
+		   , US_YN
+		   , CRT_DTM
+		   , CRT_ID
+		   , MDF_DTM
+		   , MDF_ID
+		)
+		VALUES
+		(
+			 #{cmpny_cd, jdbcType=VARCHAR}
+		   , #{pjt_cd, jdbcType=VARCHAR}
+		   , #{pjt_sta_dy, jdbcType=VARCHAR}
+		   , #{pjt_end_dy, jdbcType=VARCHAR}
+		   , #{sys_cd, jdbcType=VARCHAR}
+		   , #{pjt_tpic_empno, jdbcType=VARCHAR}
+		   , #{pjt_tpic_telno, jdbcType=VARCHAR}
+		   , #{pjt_tpic_email, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crt_dtm, jdbcType=TIMESTAMP}
+		   , #{crt_id, jdbcType=VARCHAR}
+		   , #{mdf_dtm, jdbcType=TIMESTAMP}
+		   , #{mdf_id, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="tbMetaPjtM">
+        /*[TbMetaPjtM.xml][update][TANINE]*/
+		UPDATE TB_META_PJT_M
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pjt_sta_dy)">
+		       PJT_STA_DY = #{pjt_sta_dy, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pjt_end_dy)">
+		     , PJT_END_DY = #{pjt_end_dy, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+		     , SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pjt_tpic_empno)">
+		     , PJT_TPIC_EMPNO = #{pjt_tpic_empno, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pjt_tpic_telno)">
+		     , PJT_TPIC_TELNO = #{pjt_tpic_telno, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pjt_tpic_email)">
+		     , PJT_TPIC_EMAIL = #{pjt_tpic_email, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dtm)">
+		     , CRT_DTM = #{crt_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_id)">
+		     , CRT_ID = #{crt_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_dtm)">
+		     , MDF_DTM = #{mdf_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_id)">
+		     , MDF_ID = #{mdf_id, jdbcType=VARCHAR}
+		       </if>
+		WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND PJT_CD = #{pjt_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TbMetaPjtM">
+        /*[TbMetaPjtM.xml][delete][TANINE]*/
+		DELETE FROM TB_META_PJT_M
+		 WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND PJT_CD = #{pjt_cd, jdbcType=VARCHAR} 
+	</delete>
+
+</mapper>

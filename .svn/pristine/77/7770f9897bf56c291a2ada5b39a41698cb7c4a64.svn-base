@@ -1,0 +1,3 @@
+@CHARSET "UTF-8";
+
+.frameWrap .tableTopLeft{display:block !important; margin-bottom:10px;}

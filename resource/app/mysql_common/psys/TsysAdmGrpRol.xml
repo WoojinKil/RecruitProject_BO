@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmGrpRol">
+
+	
+	<sql id="select-one-sql">
+		/*[TsysAdmGrpRol.xml][select][TANINE]*/
+		SELECT GRP_ROL_ID
+             , GRP_ROL_NM
+             , US_YN
+             , APL_ST_DT
+             , APL_ED_DT
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_GRP_ROL
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmGrpRol">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TsysAdmGrpRol">
+        /*[TsysAdmGrpRol.xml][insert][TANINE]*/
+        <selectKey resultType="String" keyProperty="grp_rol_id" order="BEFORE">
+            SELECT IFNULL(MAX(CAST(GRP_ROL_ID AS UNSIGNED)), 0) + 1 FROM TSYS_ADM_GRP_ROL
+        </selectKey>
+        INSERT INTO TSYS_ADM_GRP_ROL
+		(
+			 GRP_ROL_ID
+		   , GRP_ROL_NM
+		   , US_YN
+		   , APL_ST_DT
+		   , APL_ED_DT
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		   , SRT_SEQ
+		)
+		VALUES
+		(
+			 #{grp_rol_id, jdbcType=VARCHAR}
+		   , #{grp_rol_nm, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+           , replace(#{f_apl_st_dt, jdbcType=VARCHAR}, '-', '')
+           , replace(#{f_apl_ed_dt, jdbcType=VARCHAR}, '-', '')
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{srt_seq, jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysAdmGrpRol">
+        /*[TsysAdmGrpRol.xml][update][TANINE]*/
+		UPDATE TSYS_ADM_GRP_ROL
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_nm)">
+		       GRP_ROL_NM = #{grp_rol_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(f_apl_st_dt)">
+		     , APL_ST_DT = replace(#{f_apl_st_dt, jdbcType=VARCHAR}, '-', '')
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(f_apl_ed_dt)">
+		     , APL_ED_DT = replace(#{f_apl_ed_dt, jdbcType=VARCHAR}, '-', '')
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dttm)">
+		     , CRT_DTTM = #{crt_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(updr_id)">
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(upd_dttm)">
+		     , UPD_DTTM = #{upd_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(srt_seq)">
+		     , SRT_SEQ = #{srt_seq, jdbcType=NUMERIC}
+		       </if>
+		WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysAdmGrpRol">
+        /*[TsysAdmGrpRol.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_GRP_ROL
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+	</delete>
+
+    <!-- 사용자 권한 그리드 리스트 조회  -->
+    <select id="selectTsysAdmGrpRolGridList" parameterType="ParameterMap" resultType="TsysAdmGrpRol">
+        /* [TsysAdmGrpRol.xml][selectTsysAdmGrpRolGridList][권한 그룹 그리드 리스트 조회][TANINE] */
+      SELECT P.*
+          FROM (
+            SELECT V.*
+                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                 , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                 , @ROW_NUMBER TOTAL_COUNT
+                 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                  </if>
+              FROM (
+                SELECT Y.*
+                     , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                  FROM (
+                        SELECT GR.GRP_ROL_ID
+                             , GR.GRP_ROL_NM
+                             , GR.US_YN
+                             , GR.APL_ST_DT
+                             , GR.APL_ED_DT
+                             , DATE_FORMAT(GR.APL_ST_DT, '%Y-%m-%d') AS F_APL_ST_DT
+                             , DATE_FORMAT(GR.APL_ED_DT, '%Y-%m-%d') AS F_APL_ED_DT
+                             , GR.CRTR_ID
+                             , GR.CRT_DTTM
+                             , GR.UPDR_ID
+                             , GR.UPD_DTTM
+                             , DATE_FORMAT(GR.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM
+                             , GR.SRT_SEQ
+                          FROM TSYS_ADM_GRP_ROL GR
+                         WHERE 1 = 1
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_id)">
+                           AND GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR}
+                        </if>
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_nm)">
+                           AND GRP_ROL_NM LIKE CONCAT('%', #{grp_rol_nm ,jdbcType=VARCHAR}, '%')
+                        </if>
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+                           AND US_YN = #{us_yn, jdbcType=VARCHAR}
+                        </if>
+                        ORDER BY GR.SRT_SEQ
+                        ) Y, (SELECT @row_number := 0) RN
+             )V
+        ) P
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+       </if>
+       ORDER BY P.SRT_SEQ
+    </select>
+
+        <!-- 사용자 권한수 -->
+    <select id="selectTsysAdmGrpRolCnt" parameterType="ParameterMap" resultType="Integer">
+        /* [TsysAdmGrpRol.xml][selectTsysAdmRolCnt][사용자 권한수 ][TANINE] */
+        SELECT COUNT(1)
+          FROM TSYS_ADM_GRP_ROL
+         WHERE GRP_ROL_ID = #{grp_rol_id ,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectTsysAdmGrpRolList" parameterType="ParameterMap" resultType="TsysAdmGrpRol">
+      SELECT GR.GRP_ROL_ID
+           , GR.GRP_ROL_NM
+           , GR.US_YN
+           , GR.APL_ST_DT
+           , GR.APL_ED_DT
+           , DATE_FORMAT(GR.APL_ST_DT, '%Y-%m-%d') AS F_APL_ST_DT
+           , DATE_FORMAT(GR.APL_ED_DT, '%Y-%m-%d') AS F_APL_ED_DT
+           , GR.CRTR_ID
+           , GR.CRT_DTTM
+           , GR.UPDR_ID
+           , GR.UPD_DTTM
+           , DATE_FORMAT(GR.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM
+           , GR.SRT_SEQ
+        FROM TSYS_ADM_GRP_ROL GR
+       WHERE 1 = 1
+         AND US_YN = 'Y'
+         AND GR.GRP_ROL_ID != '21'
+    ORDER BY GR.SRT_SEQ
+    </select>
+    
+    <select id="selectTsysAdmGrpRolNms" parameterType="ParameterMap" resultType="String">
+        SELECT /* [TsysAdmGrpRol.xml][selectTsysAdmGrpRolNms][권한 그룹명 조회 ][TANINE] */
+               GROUP_CONCAT(GRP_ROL_NM)
+          FROM TSYS_ADM_GRP_ROL
+         WHERE 1=1
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_id)">
+           AND GRP_ROL_ID IN
+         <foreach collection="grp_rol_id" item="grp_rol_id" open="(" close=")" separator=",">
+               #{grp_rol_id}
+         </foreach>
+         </if>
+    </select>
+    
+
+</mapper>

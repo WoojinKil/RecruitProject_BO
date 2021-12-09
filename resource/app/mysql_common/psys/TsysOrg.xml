@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysOrg">
+
+	<sql id="select-one-sql">
+		/*[BaseTsysOrg.xml][select][TANINE]*/
+		SELECT ORG_CD
+             , UP_ORG_CD
+             , ORG_NM
+             , ORG_DPTH
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ORG
+		 WHERE ORG_CD = #{org_cd, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysOrg">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    <insert id="insert" parameterType="TsysOrg">
+        /*[BaseTsysOrgTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ORG
+		(
+		<!-- ORG_CD  -->
+		     UP_ORG_CD
+		   , ORG_NM
+		   , ORG_DPTH
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+		<!-- #{org_cd, jdbcType=NUMERIC}  --> 
+		     #{up_org_cd, jdbcType=NUMERIC}
+		   , #{org_nm, jdbcType=VARCHAR}
+		   , #{org_dpth, jdbcType=NUMERIC}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysOrg">
+        /*[BaseTsysOrgTrx.xml][update][TANINE]*/
+		UPDATE TSYS_ORG
+		   SET UPDR_ID	= #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		  	   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_org_cd)">
+		     , UP_ORG_CD = #{up_org_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(org_nm)">
+		     , ORG_NM = #{org_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_org_dpth)">
+		     , ORG_DPTH = #{org_dpth, jdbcType=NUMERIC}
+		       </if>
+		WHERE ORG_CD = #{org_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysOrg">
+        /*[BaseTsysOrgTrx.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ORG
+		 WHERE ORG_CD = #{org_cd, jdbcType=NUMERIC} 
+	</delete>
+	
+
+    <select id="selectTsysOrgTreeList" parameterType="ParameterMap" resultType="TsysOrgTree">
+         /*[TsysOrg.xml][selectTsysOrgTreeList][조직(트리)리스트 조회 ][TANINE]*/ 
+            SELECT OG.ORG_CD     AS ID
+                 , OG.UP_ORG_CD  AS PID
+                 , OG.ORG_NM     AS NAME
+                 , OG.ORG_DPTH
+                 , OG.ORG_CLS_CD
+            <!-- , OG.US_YN  -->
+            <!-- , OG.MNU_YN -->
+                 , (SELECT CASE WHEN count(1) > 0 THEN 'FALSE' ELSE  'TRUE' END
+                      FROM TSYS_ORG O
+                     WHERE O.ORG_CD = OG.UP_ORG_CD) AS OPEN
+                 , (SELECT CASE WHEN count(1) > 0 THEN 'FALSE' ELSE  'TRUE' END
+                      FROM TSYS_ORG O
+                     WHERE O.ORG_CD = OG.UP_ORG_CD) AS ISPARENT
+                 , 'Y'              AS ISSAVED
+                 , (SELECT GRP_ROL_NM FROM TSYS_ADM_GRP_ROL WHERE GRP_ROL_ID = OGRR.GRP_ROL_ID) AS GRP_ROL_NM
+            <!-- , DC.SRT_SEQ -->
+              FROM (SELECT GET_TREE_ORG(ORG_CD) AS CODE
+                         , @LEVEL                AS LEV
+                         , T1.ORG_NM
+                    <!-- , T1.SRT_SEQ -->
+                         , @CODE                 AS IDX2
+                      FROM (SELECT @START_WITH := 0
+                                 , @CODE := @START_WITH
+                                 , @LEVEL := 0
+                           ) VARS
+                         , (SELECT *
+                              FROM TSYS_ORG
+                             WHERE 1 = 1
+                             ORDER BY ORG_DPTH
+                           ) T1
+                     WHERE @CODE IS NOT NULL
+                   ) OG2
+              JOIN TSYS_ORG OG
+                ON LPAD (OG.ORG_CD,10,'0') = LPAD( OG2.CODE,10,'0')
+         LEFT JOIN TSYS_ADM_ORG_GRP_ROL_RTNN OGRR
+                ON OG.ORG_CD = OGRR.ORG_CD
+             WHERE 1 = 1
+          ORDER BY ID
+    </select>
+    
+    <select id="selectTsysOrgList" parameterType="ParameterMap" resultType="TsysOrg">
+         /*[TsysOrg.xml][selectTsysOrgList][하위 조직 조회][TANINE]*/
+        SELECT P.*      
+          FROM (SELECT V.*
+                    <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                     , CEIL(V.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                     , @ROW_NUMBER                                      AS TOTAL_COUNT
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})    AS TOTAL_PAGE
+                    </if>
+                  FROM (SELECT Y.*
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                          FROM (SELECT OG.ORG_CD     AS ORG_CD
+                                     , OG.UP_ORG_CD  AS UP_ORG_CD
+                                     , OG.ORG_DPTH      AS ORG_DPTH
+                                     , OG.CRT_DTTM      AS CRT_DTTM
+                                     , OG.UPD_DTTM      AS UPD_DTTM
+                                  FROM TSYS_ORG OG
+                                 WHERE 1 = 1
+                                   AND OG.UP_ORG_CD = #{org_cd, jdbcType=VARCHAR}
+                               ) Y
+                             , (SELECT @ROW_NUMBER := 0) RN
+                       ) V
+                 <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY V.ORG_CD
+                 </if>
+               ) P
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+        </if>
+    </select>
+    
+    <select id="selectTsysOrgGridList" parameterType="ParameterMap" resultType="TsysOrg" >
+    /*[TsysOrg.xml][selectTsysOrgGridList][상하위 조직 조회][TANINE]*/
+        SELECT  B.ORG_CD
+              , A.UP_ORG_CD
+              , A.ORG_NM AS HR_UP_ORG_NM
+              , B.ORG_NM
+              , B.ORG_DPTH
+              , B.CRTR_ID
+              , B.CRT_DTTM
+              , B.UPDR_ID
+              , B.UPD_DTTM
+              , B.SYS_CD 
+          FROM  (SELECT ORG_CD
+                      , UP_ORG_CD
+                      , ORG_NM
+                      , ORG_DPTH
+                      , CRTR_ID
+                      , CRT_DTTM
+                      , UPDR_ID
+                      , UPD_DTTM
+                      , SYS_CD
+                   FROM TSYS_ORG
+                  WHERE ORG_DPTH = 1) A, 
+                (SELECT ORG_CD
+                      , UP_ORG_CD
+                      , ORG_NM
+                      , ORG_DPTH
+                      , CRTR_ID
+                      , CRT_DTTM
+                      , UPDR_ID
+                      , UPD_DTTM
+                      , SYS_CD
+                   FROM TSYS_ORG ) B 
+         WHERE A.ORG_CD = B.UP_ORG_CD  
+         <!-- <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+               AND A.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+         </if> -->
+         ORDER BY A.ORG_CD
+    </select>
+    
+    <select id="selectTsysOrgTree" parameterType="ParameterMap" resultType="TsysOrg">
+    /*[TbBchrOrgI.xml][selectTsysOrgTree][조직 트리 구조 조회][TANINE]*/
+        SELECT OG.ORG_CD         AS id
+             , OG.UP_ORG_CD      AS parent
+             , OG.ORG_NM         AS org_nm
+             , LEV                  AS level    
+             , CASE WHEN LEV &lt; 3 THEN 'TRUE' ELSE 'FALSE' 
+                END AS expanded
+            , (SELECT CASE WHEN COUNT(1) &gt; 0 THEN 'FALSE' ELSE  'TRUE' END
+                 FROM TSYS_ORG O
+                WHERE O.UP_ORG_CD = OG.ORG_CD) AS isLeaf
+             FROM (SELECT GET_TREE_ORG(ORG_CD) AS CODE
+                     , @LEVEL                AS LEV
+                     , @CODE                 AS IDX2
+                     , @ROWNUM:=@ROWNUM+1    AS ROWNUM
+                  FROM (SELECT @START_WITH := 0
+                             , @CODE := @START_WITH
+                             , @LEVEL := 0
+                       ) VARS
+                     , (SELECT *
+                          FROM TSYS_ORG
+                       ) T1
+                     , (SELECT @ROWNUM:=0) R
+                 WHERE @CODE IS NOT NULL
+               ) OG2
+          JOIN TSYS_ORG OG
+            ON LPAD(OG.ORG_CD, 10, '0') = LPAD(OG2.CODE, 10, '0')
+      ORDER BY OG2.ROWNUM
+    </select>
+    
+</mapper>

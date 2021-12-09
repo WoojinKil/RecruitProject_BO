@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmFvrt">
+
+	<sql id="select-one-sql">
+		/*[TsysAdmFvrt.xml][select][TANINE]*/
+		SELECT MNU_SEQ
+             , UP_MNU_SEQ
+             , USR_ID
+             , MNU_NM
+             , URL
+             , SRT_SEQ
+             , PGM_ID
+             , CRTR_ID
+             , CRT_DTTM
+          FROM TSYS_ADM_FVRT
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmFvrt">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TsysAdmFvrt">
+        /*[TsysAdmFvrt.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_FVRT
+		(
+			 MNU_SEQ
+		   , UP_MNU_SEQ
+		   , USR_ID
+		   , MNU_NM
+		   , URL
+		   , SRT_SEQ
+		   , PGM_ID
+		   , CRTR_ID
+		   , CRT_DTTM
+		)
+		VALUES
+		(
+			 #{mnu_seq, jdbcType=NUMERIC}
+		   , #{up_mnu_seq, jdbcType=NUMERIC}
+		   , #{usr_id, jdbcType=VARCHAR}
+		   , #{mnu_nm, jdbcType=VARCHAR}
+		   , #{url, jdbcType=VARCHAR}
+		   , #{srt_seq, jdbcType=NUMERIC}
+		   , #{pgm_id, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysAdmFvrt">
+        /*[TsysAdmFvrt.xml][update][TANINE]*/
+		UPDATE TSYS_ADM_FVRT
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_up_mnu_seq)">
+		     , UP_MNU_SEQ = #{up_mnu_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">
+		     , MNU_NM = #{mnu_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url)">
+		     , URL = #{url, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_srt_seq)">
+		     , SRT_SEQ = #{srt_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pgm_id)">
+		     , PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dttm)">
+		     , CRT_DTTM = #{crt_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysAdmFvrt">
+        /*[TsysAdmFvrt.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_FVRT
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</delete>
+	
+
+	<insert id="insertTsysAdmFvrt" parameterType="TsysAdmFvrt">
+         /*[TsysAdmFvrtTrx.xml][insertTsysAdmFvrt][즐겨찾기추가][TANINE]*/
+		INSERT INTO TSYS_ADM_FVRT
+		(
+		     MNU_SEQ
+		   , UP_MNU_SEQ
+		   , USR_ID
+		   , MNU_NM
+		   , URL
+		   , SRT_SEQ
+		   , PGM_ID
+		   , CRTR_ID
+		   , CRT_DTTM
+		)
+		(
+		SELECT  MNU_SEQ
+		      , UP_MNU_SEQ
+		      , #{usr_id, jdbcType=VARCHAR}
+		      , MNU_NM
+		      , URL
+		      , (SELECT IFNULL(MAX(SRT_SEQ),0)+1 FROM TSYS_ADM_FVRT WHERE USR_ID =  #{usr_id, jdbcType=VARCHAR})
+		      , PGM_ID
+		      , #{crtr_id, jdbcType=VARCHAR}
+		      ,SYSDATE()
+		FROM TSYS_ADM_MNU
+		WHERE MNU_SEQ =  #{mnu_seq, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<delete id="deleteUpMnuTsysAdmFvrt" parameterType="TsysAdmFvrt">
+        /*[TsysAdmFvrt.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_FVRT
+		 WHERE UP_MNU_SEQ = #{up_mnu_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</delete>
+	
+	<select id="selectExistTsysAdmFvrt" parameterType="ParameterMap" resultType="String">
+		/*[TsysAdmFvrt.xml][selectExistTsysAdmFvrt][즐겨찾기유무조회][TANINE]*/
+		SELECT CASE WHEN COUNT(1)>0 THEN 'Y'
+		           	       ELSE 'N'
+		           END AS EXIST_YN
+		FROM TSYS_ADM_FVRT
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{user_id, jdbcType=VARCHAR}
+    </select>
+    
+    <select id="getTsysAdmFvrtList" parameterType="ParameterMap" resultType="TsysAdmFvrt">
+        /*[TsysAdmFvrt.xml][getTsysAdmFvrtList][즐겨찾기목록조회][TANINE]*/
+        
+             SELECT V.*
+             , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS MNU_DEPTH
+             , @PV := V.MIDD_MNU_SEQ AS PV
+         FROM ( 
+                    SELECT DISTINCT
+                               TOP.MNU_SEQ    AS TOP_MNU_SEQ
+                             , TOP.MNU_NM     AS TOP_MNU_NM
+                             , TOP.SRT_SEQ    AS TOP_SRT_SEQ
+                             , MIDD.MNU_SEQ   AS MIDD_MNU_SEQ
+                             , MIDD.MNU_NM    AS MIDD_MNU_NM
+                             , MIDD.SRT_SEQ   AS MIDD_SRT_SEQ
+                             , BTM.MNU_SEQ
+                             , BTM.MNU_NM
+                             , BTM.SRT_SEQ    AS BTM_SRT_SEQ
+                             , BTM.MNU_TP_CD
+<!--                             , CASE WHEN (MIDD.URL IS NULL OR TRIM(MIDD.URL) = '') THEN BTM.URL -->
+<!--                            END AS URL -->
+                             , PG.TRG_URL  AS URL
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                THEN CASE WHEN MIDD.US_YN = 'Y'
+                                      THEN BTM.US_YN ELSE MIDD.US_YN
+                                  END
+                                ELSE TOP.US_YN
+                            END AS US_YN
+                             , CASE WHEN MIDD.PGM_ID IS NULL THEN BTM.PGM_ID END AS PGM_ID
+                  FROM TSYS_ADM_MNU TOP     /* 최상단 메뉴 */
+                     , TSYS_ADM_MNU MIDD    /* 중단 메뉴 */
+                     , TSYS_ADM_MNU BTM     /* 하단 메뉴 */
+                  LEFT JOIN TSYS_PGM_INF PG
+                    ON BTM.PGM_ID = PG.PGM_ID        
+                     , TSYS_ADM_FVRT FVRT
+                 WHERE TOP.MNU_SEQ = MIDD.UP_MNU_SEQ
+                   AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                   AND TOP.FRNT_YN = 'N'
+                   AND MIDD.FRNT_YN = 'N'
+                   AND BTM.FRNT_YN = 'N'
+                   AND TOP.US_YN   = 'Y'
+                   AND TOP.US_YN   = MIDD.US_YN
+                   AND TOP.US_YN   = BTM.US_YN
+<!--                   AND TOP.MNU_SEQ =    #{top_mnu_seq, jdbcType=VARCHAR} -->
+                   AND BTM.MNU_SEQ = FVRT.MNU_SEQ
+                   AND FVRT.USR_ID =    #{user_id, jdbcType=VARCHAR} 
+                 ORDER BY TOP_SRT_SEQ, MIDD_SRT_SEQ, BTM_SRT_SEQ 
+              ) V
+            , (SELECT @RN := 1) RN
+            , (SELECT @PV := '') PV
+   </select>
+</mapper>

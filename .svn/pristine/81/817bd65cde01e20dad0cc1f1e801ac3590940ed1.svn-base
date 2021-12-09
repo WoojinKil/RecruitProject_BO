@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsTmpDocInfTrx">
+	
+	<insert id="insert" parameterType="TbbsTmpDocInf">
+        /*[TbbsTmpDocInf.xml][insert][TANINE]*/
+        INSERT INTO TBBS_TMP_DOC_INF
+		(
+			 DOC_SEQ
+		   , MODL_SEQ
+		   , IP_ADDR
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{doc_seq, jdbcType=NUMERIC}
+		   , #{modl_seq, jdbcType=NUMERIC}
+		   , #{ip_addr, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tbbsTmpDocInf">
+        /*[TbbsTmpDocInf.xml][update][TANINE]*/
+		UPDATE TBBS_TMP_DOC_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ip_addr)">
+		       IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+		       </if>
+		WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC} 
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC} 
+	</update>
+
+	<delete id="delete" parameterType="TbbsTmpDocInf">
+        /*[TbbsTmpDocInf.xml][delete][TANINE]*/
+		DELETE FROM TBBS_TMP_DOC_INF
+		 WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC} 
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC} 
+	</delete>
+
+</mapper>

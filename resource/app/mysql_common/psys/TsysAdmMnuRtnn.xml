@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmMnuRtnn">
+
+	<sql id="select-one-sql">
+		/*[TsysAdmMnuRtnn.xml][select][TANINE]*/
+		SELECT USR_ID
+             , MNU_SEQ
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_MNU_RTNN
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmMnuRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TsysAdmMnuRtnn">
+        /*[TsysAdmMnuRtnnTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_MNU_RTNN
+		(
+			 USR_ID
+		   , MNU_SEQ
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{usr_id, jdbcType=VARCHAR}
+		   , #{mnu_seq, jdbcType=NUMERIC}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<delete id="delete" parameterType="TsysAdmMnuRtnn">
+        /*[TsysAdmMnuRtnnTrx.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_MNU_RTNN
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</delete>
+	
+	<select id="selectTsysAdmMnuRtnnGrdList" parameterType="ParameterMap" resultType="TsysAdmMnuRtnn">
+		/*[TsysAdmMnuRtnn.xml][selectTsysAdmMnuRtnnGrdList][관리자메뉴할당 그리드 조회][TANINE]*/
+		SELECT XXX.*
+          FROM (
+				SELECT XX.*
+		             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+		             , CEIL(XX.ID / #{rows, jdbcType=NUMERIC}) AS PAGE
+		             , @ROW_NUMBER AS TOTAL_COUNT
+		             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE
+		              </if>
+		          FROM (
+				        SELECT X.*
+						     , (@ROW_NUMBER := @ROW_NUMBER + 1) ID
+				          FROM (
+						        SELECT T2.USR_ID
+								     , T1.PGM_ID
+								     , T1.UP_MNU_SEQ
+								     , (SELECT S1.MNU_NM
+								          FROM TSYS_ADM_MNU S1
+								         WHERE S1.MNU_SEQ = T1.UP_MNU_SEQ) AS UP_MNU_NM
+								     , T1.MNU_SEQ
+									 , T1.MNU_NM
+									 , T2.CRT_DTTM
+									 , T1.SYS_CD
+									 , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = T1.SYS_CD) AS SYS_NM
+								  FROM TSYS_ADM_MNU T1
+									 , TSYS_ADM_MNU_RTNN T2
+								 WHERE T1.MNU_SEQ = T2.MNU_SEQ
+								   AND T1.US_YN = 'Y'
+								   AND T1.MNU_YN = 'Y'
+								   AND T1.FRNT_YN = 'N'
+								   AND T1.MNU_DPTH = 3
+								   AND T2.USR_ID = #{usr_id, jdbcType=VARCHAR}
+								   AND T1.SYS_CD =  #{sys_cd, jdbcType=VARCHAR}
+				               ) X
+				             , (SELECT @ROW_NUMBER := 0) RN
+		               ) XX
+		         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+		         ORDER BY XX.CRT_DTTM
+		         </if>
+               ) XXX
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE XXX.PAGE = #{page, jdbcType=NUMERIC}
+         </if>
+	</select>
+	
+	<select id="selectTsysAdmMnuRtnnYn" parameterType="ParameterMap" resultType="String">
+        /*[TsysAdmMnuRtnn.xml][selectTsysAdmMnuRtnnYn][관리자메뉴할당 여부 조회][TANINE]*/
+        SELECT CASE WHEN COUNT(1) > 0 THEN 'Y'
+                    ELSE 'N'
+                END AS RTNN_YN
+          FROM TSYS_ADM_MNU_RTNN
+         WHERE USR_ID = #{usr_id, jdbcType=VARCHAR}
+           AND MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}
+    </select>
+    
+    <insert id="insertApplMnu" parameterType="TsysAdmMnuRtnn">
+        /*[TsysAdmMnuRtnnTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_MNU_RTNN
+		(
+			 USR_ID
+		   , MNU_SEQ
+		   , APVL_YN
+		   , APPL_DT
+		   , APPL_STAT_CD
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		   
+		)
+		VALUES
+		(
+			 #{usr_id, jdbcType=VARCHAR}
+		   , #{mnu_seq, jdbcType=NUMERIC}
+		   , 'N'
+		   , DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		   , '20'
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+	
+</mapper>

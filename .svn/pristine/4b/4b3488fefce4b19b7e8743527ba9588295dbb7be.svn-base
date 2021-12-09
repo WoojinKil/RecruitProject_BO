@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsCmtInf">
+	
+	<sql id="select-one-sql">
+		/*[BaseTbbsCmtInf.xml][select][TANINE]*/
+		SELECT CMT_SEQ                             /* 댓글 번호 */   
+             , MODL_SEQ                            /* 게시판 번호 */  
+             , DOC_SEQ                             /* 문서 번호 */   
+             , PRNT_SEQ                            /* 상위 문서 번호 */
+             , CTS                                 /* 내용 */      
+             , BLMD_CNT                                          
+             , PWD                                 /* 댓글 비밀 번호 */
+             , SCRT_YN                             /* 비밀 여부 */   
+             , IP_ADDR                             /* 작성자IP */   
+             , TGT_USR_ID                          /* 타겟 사용자ID */
+             , CRTR_ID                             /* 생성자ID */   
+             , CRT_DTTM                            /* 생성일시 */    
+             , UPDR_ID                             /* 수정자ID */   
+             , UPD_DTTM                            /* 수정일시 */    
+          FROM TBBS_CMT_INF
+		 WHERE CMT_SEQ = #{cmt_seq, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbbsCmtInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

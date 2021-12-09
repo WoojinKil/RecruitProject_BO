@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsQaCmtInfTrx">
+
+	<insert id="insert" parameterType="TbbsQaCmtInf">
+        /*[TbbsQaCmtInf.xml][insert][TANINE]*/
+        INSERT INTO TBBS_QA_CMT_INF
+		(
+			 MODL_SEQ
+		   , DOC_SEQ
+		   , SCRT_YN
+		   , CTS
+		   , LGN_ID
+		   , IP_ADDR
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{modl_seq, jdbcType=NUMERIC}
+		   , #{doc_seq, jdbcType=NUMERIC}
+		   , #{scrt_yn, jdbcType=VARCHAR}
+		   , #{cts, jdbcType=LONGVARCHAR}
+		   , #{lgn_id, jdbcType=VARCHAR}
+		   , #{ip_addr, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tbbsQaCmtInf">
+        /*[TbbsQaCmtInf.xml][update][TANINE]*/
+		UPDATE TBBS_QA_CMT_INF
+		   SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_modl_seq)">
+		     , MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_doc_seq)">
+		     , DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(scrt_yn)">
+		     , SCRT_YN = #{scrt_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cts)">
+		     , CTS = #{cts, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+		     , LGN_ID = #{lgn_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ip_addr)">
+		     , IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+		       </if>
+		WHERE CMT_SEQ = #{cmt_seq, jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delete" parameterType="TbbsQaCmtInf">
+        /*[TbbsQaCmtInf.xml][delete][TANINE]*/
+		DELETE FROM TBBS_QA_CMT_INF
+		 WHERE CMT_SEQ = #{cmt_seq, jdbcType=NUMERIC}
+	</delete>
+
+</mapper>

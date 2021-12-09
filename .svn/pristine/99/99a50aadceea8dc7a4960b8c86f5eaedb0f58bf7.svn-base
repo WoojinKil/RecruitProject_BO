@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Bpcm2008Bpn">
+
+    
+  	<select id="selectCustSpec" parameterType="ParameterMap" resultType="Bpcm2001CustSpecVO"> 
+	SELECT /*BPN.Bpcm2008Bpn.selectCustSpec.00001(고객특성)*/
+	      A.etc_cd_1_val            AS gubun 
+	    , A.sort_seqno              AS gubun_seq 
+	    , A.etc_cd_2_val            AS gubun_cd 
+	    , A.etc_cd_2_nm             AS gubun_nm 
+	    , IFNULL(A.etc_cont,'')     AS gubun_nm2 
+	    , A.pch_cust_cnt            AS cust_cnt        /* 고객수 */
+	    , A.pch_cust_cnt_cmps_rto   AS cust_ratio      /* 고개수비중 */
+	    , A.pch_amt                 AS tym_gs_slng_amt /* 조회월매출 */
+	    , A.slng_cmps_rto           AS amt_ratio       /* 매출비중 */
+	    , A.slng_sequ_no            AS ratio_seq_asc   /* 매출비중 순서 */
+	    , A.etc_sequ_no             AS ratio_seq_desc  /* 매출비중 순서desc */
+	    , A.lyy_sam_ym_pch_amt      AS lym_gs_slng_amt /* 전년동월매출 */
+	    , A.lstm_pch_amt            AS tlm_gs_slng_amt /* 전월매출 */
+	    , A.lyy_sam_ym_ctrs_rto     AS yoy_rate        /* 전년동월  대비 신장률 */
+	    , A.lyy_sam_ym_ctrs_sequ_no AS yoy_rate_seq    /* 신장률 순서 */
+	    , A.lstm_ctrs_rto           AS mom_rate        /* 전월 대비 신장률 */
+	    , A.lstm_ctrs_sequ_no       AS mom_rate_seq    /* 전월 대비신장률 순서 */  
+	  FROM lpbpn.tb_bpcm_mmcustcharsanlz_s A /* BPCM_월고객특성분석집계 */
+	 WHERE A.std_ym = #{yyyyMm} 
+	   AND A.cstr_cd = #{cstrCd}
+	   AND A.brnd_cd = #{brndCd}
+	   AND A.on_off_cl_cd = #{onOffClCd}
+	 ORDER BY gubun, gubun_seq
+	</select>  
+	
+  	<select id="selectPurchaseSpec" parameterType="ParameterMap" resultType="Bpcm2001PurchaseSpecVO"> 
+	  SELECT /*BPN.Bpcm2008Bpn.selectPurchaseSpec.00001(구매특성)*/
+		       A.etc_cd_1_val            AS gubun
+		     , A.etc_cd_2_val            AS gubun_cd 
+		     , A.etc_cont                AS gubun_nm  
+		     , A.pch_amt                 AS gs_slng_amt     /* 구분별 매출 */
+		     , A.slng_cmps_rto           AS amt_ratio       /* 매출비중   */
+		     , A.slng_sequ_no            AS seq_ratio       /* 매출비중 순서desc */
+		     , A.pch_rnk                 AS pch_rank        /* 구매금액비중순위 */
+		FROM lpbpn.tb_bpcm_mmpchcharsanlz_s A /* BPCM_월구매특성분석집계 */
+	   WHERE A.std_ym = #{yyyyMm}
+	  	 AND A.cstr_cd = case when etc_cd_1_val = 'smlr_brnd' then A.cstr_cd else #{cstrCd} end
+	     AND A.brnd_cd = #{brndCd}
+	  	 AND A.on_off_cl_cd = #{onOffClCd}
+	  	 AND A.etc_cd_1_val NOT IN ('tmslt')
+	   UNION ALL
+	  SELECT   IFNULL(A.etc_cd_1_val,'tmslt')      AS gubun
+		     , stime                               AS gubun_cd 
+		     , A.etc_cont                          AS gubun_nm  
+		     , IFNULL(A.pch_amt,0)                 AS gs_slng_amt     /* 구분별 매출 */
+		     , IFNULL(A.slng_cmps_rto,0)           AS amt_ratio       /* 매출비중   */
+		     , IFNULL(A.slng_sequ_no,99)           AS seq_ratio       /* 매출비중 순서desc */
+		     , IFNULL(A.pch_rnk,99)                AS pch_rank        /* 구매금액비중순위 */
+		FROM lpbpn.tb_bpcm_mmpchcharsanlz_s A /* BPCM_월구매특성분석집계 */
+		     RIGHT OUTER JOIN 
+		     <choose>
+		     	<when test="onOffClCd eq '2'.toString()">
+		     (SELECT LPAD(@rownum := @rownum + 1,2,'0') as stime 
+			    FROM lpbpn.tb_bpcm_comncddtl_c AA JOIN (SELECT @rownum :=-1) T
+			   LIMIT 24) R
+		     	</when>
+				<otherwise>
+		     (SELECT LPAD(@rownum := @rownum + 1,2,'0') as stime 
+			    FROM lpbpn.tb_bpcm_comncddtl_c AA JOIN (SELECT @rownum :=9) T
+			   LIMIT 12) R
+				</otherwise>
+			</choose>
+		  ON A.etc_cd_2_val = R.stime		
+	     AND A.std_ym = #{yyyyMm}
+	  	 AND A.cstr_cd = #{cstrCd}
+	     AND A.brnd_cd = #{brndCd}
+	  	 AND A.on_off_cl_cd = #{onOffClCd}
+	  	 AND A.etc_cd_1_val = 'tmslt'
+	   ORDER BY gubun
+	          , (case when gubun in ('dayw', 'tmslt', 'stlm_mns') then gubun_cd end)
+	          , seq_ratio
+	</select>
+	
+  	<select id="selectCstr" parameterType="ParameterMap" resultType="Bpcm2008VO"> 
+	SELECT /*BPN.Bpcm2008Bpn.selectCstr.00001(점팝업조회)*/
+	       a.cstr_cd, b.cstr_nm
+	FROM tb_bcpc_stritmno_m a
+	     INNER JOIN tb_bcpc_str_m b
+	     ON a.cstr_cd = b.cstr_Cd
+	     AND b.stat_cl_cd = '0'
+	     AND b.str_cl_cd in ('0', '5', '6')
+	     AND b.us_yn = 'Y'
+	GROUP BY a.cstr_cd
+	</select>
+	
+  	<select id="selectBrnd" parameterType="ParameterMap" resultType="Bpcm2008VO"> 
+	SELECT /*BPN.Bpcm2008Bpn.selectBrnd.00001(브랜드팝업조회)*/
+	       a.brnd_cd, b.brnd_nm 
+	FROM tb_bcpc_stritmno_m a
+	     JOIN tb_bcpc_brnd_m b
+	     ON a.brnd_cd = b.brnd_cd
+	WHERE 1=1
+	  AND a.cstr_cd = #{cstr_cd}
+      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(brnd_cd)">
+      AND (UPPER(a.brnd_cd) LIKE CONCAT(UPPER(#{brnd_cd}), '%') OR UPPER(b.brnd_nm) LIKE CONCAT('%', UPPER(#{brnd_cd}), '%') )
+      </if>
+	GROUP BY a.brnd_cd
+	ORDER BY a.brnd_cd
+	</select>
+	
+</mapper>

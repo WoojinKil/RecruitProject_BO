@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsDocAddItmInfTrx">
+	
+	<insert id="insert" parameterType="TbbsDocAddItmInf">
+        /*[TbbsDocAddItmInf.xml][insert][TANINE]*/
+        INSERT INTO TBBS_DOC_ADD_ITM_INF
+		(
+			 MODL_SEQ
+		   , DOC_SEQ
+		   , DOC_ITM_VAL
+		   , EID
+		   , VAR_SEQ
+		   , LANG_CD
+		   , CD
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{modl_seq, jdbcType=NUMERIC}
+		   , #{doc_seq, jdbcType=NUMERIC}
+		   , #{doc_itm_val, jdbcType=LONGVARCHAR}
+		   , #{eid, jdbcType=VARCHAR}
+		   , #{var_seq, jdbcType=NUMERIC}
+		   , #{lang_cd, jdbcType=VARCHAR}
+		   , #{cd, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tbbsDocAddItmInf">
+        /*[TbbsDocAddItmInf.xml][update][TANINE]*/
+		UPDATE TBBS_DOC_ADD_ITM_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(doc_itm_val)">
+		     , DOC_ITM_VAL = #{doc_itm_val, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(eid)">
+		     , EID = #{eid, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cd)">
+		     , CD = #{cd, jdbcType=VARCHAR}
+		       </if>
+		WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC} 
+           AND LANG_CD = #{lang_cd, jdbcType=VARCHAR} 
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC} 
+           AND VAR_SEQ = #{var_seq, jdbcType=NUMERIC} 
+	</update>
+
+	<delete id="delete" parameterType="TbbsDocAddItmInf">
+        /*[TbbsDocAddItmInf.xml][delete][TANINE]*/
+		DELETE FROM TBBS_DOC_ADD_ITM_INF
+		 WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC} 
+           AND LANG_CD = #{lang_cd, jdbcType=VARCHAR} 
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC} 
+           AND VAR_SEQ = #{var_seq, jdbcType=NUMERIC} 
+	</delete>
+
+</mapper>

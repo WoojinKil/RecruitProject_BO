@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TdspTmplInf">
+
+	<sql id="select-one-sql">
+		/*[BaseTdspTmplInf.xml][select][템플릿 조회][TANINE]*/
+		SELECT TMPL_SEQ
+             , UP_TMPL_SEQ
+             , TMPL_NM
+             , TMPL_TP_CD
+             , TMPL_DTL_NM
+             , TMPL_URL
+             , DSPLY_NO
+             , DSPLY_YN
+             , MNU_SEQ
+             , MODL_SEQ
+             , MN_CTS_DESC
+             , LGN_ESN_YN
+             , US_YN
+             , CRTR_ID
+             , DATE_FORMAT(CRT_DTTM, '%Y%m%d%H%i%s')
+<!--              , CRT_DTTM -->
+             , UPDR_ID
+             , DATE_FORMAT(UPD_DTTM, '%Y%m%d%H%i%s')
+<!--              , UPD_DTTM -->
+          FROM TDSP_TMPL_INF
+		 WHERE TMPL_SEQ = #{tmpl_seq, jdbcType=NUMERIC}
+		 <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_tmpl_seq)">UP_TMPL_SEQ = #{up_tmpl_seq, jdbcType=VARCHAR}</if>
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TdspTmplInf">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    <!-- 2019-03-25 default값 null처리를 위해 up_tmpl_seq -> up_tmpl_seq, mnu_seq -> mnu_seq수정  -->
+	<insert id="insert" parameterType="TdspTmplInf">
+        /*[TdspTmplInf.xml][insert][TANINE]*/
+        INSERT INTO TDSP_TMPL_INF
+		(
+		     TMPL_NM
+		   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_tmpl_seq)">, UP_TMPL_SEQ</if>
+		   , TMPL_TP_CD
+		   , TMPL_DTL_NM
+		   , TMPL_URL
+		   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_no)">, DSPLY_NO</if>
+		   , DSPLY_YN
+		   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_seq)">, MNU_SEQ</if>
+		   , MODL_SEQ
+		   , MN_CTS_DESC
+		   , LGN_ESN_YN
+		   , US_YN
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+		     #{tmpl_nm, jdbcType=VARCHAR}
+		   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_tmpl_seq)">, #{up_tmpl_seq, jdbcType=NUMERIC}</if>
+		   , #{tmpl_tp_cd, jdbcType=VARCHAR}
+		   , #{tmpl_dtl_nm, jdbcType=VARCHAR}
+		   , #{tmpl_url, jdbcType=VARCHAR}
+		   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_no)">, #{dsply_no, jdbcType=NUMERIC}</if>
+		   , #{dsply_yn, jdbcType=VARCHAR}
+		   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_seq)">, #{mnu_seq, jdbcType=NUMERIC}</if>
+		   , #{modl_seq, jdbcType=NUMERIC}
+		   , #{mn_cts_desc, jdbcType=VARCHAR}
+		   , #{lgn_esn_yn, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TdspTmplInf">
+        /*[TdspTmplInf.xml][update][TANINE]*/
+		UPDATE TDSP_TMPL_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_tmpl_seq)">
+		     , UP_TMPL_SEQ = #{up_tmpl_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(tmpl_nm)">
+		     , TMPL_NM = #{tmpl_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(tmpl_tp_cd)">
+		     , TMPL_TP_CD = #{tmpl_tp_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(tmpl_dtl_nm)">
+		     , TMPL_DTL_NM = #{tmpl_dtl_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(tmpl_url)">
+		     , TMPL_URL = #{tmpl_url, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_no)">
+		     , DSPLY_NO = #{dsply_no, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_yn)">
+		     , DSPLY_YN = #{dsply_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_seq)">
+		     , MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_modl_seq)">
+		     , MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mn_cts_desc)">
+		     , MN_CTS_DESC = #{mn_cts_desc, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_esn_yn)">
+		     , LGN_ESN_YN = #{lgn_esn_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		WHERE TMPL_SEQ = #{tmpl_seq, jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delete" parameterType="TdspTmplInf">
+        /*[TdspTmplInf.xml][delete][TANINE]*/
+		DELETE
+		  FROM TDSP_TMPL_INF
+		 WHERE TMPL_SEQ = #{tmpl_seq, jdbcType=NUMERIC}
+	</delete>
+	
+
+	<!-- 템플릿 리스트 조회(그리드형) -->
+    <select id="selectTdspTmplInfGridList" parameterType="ParameterMap" resultType="TdspTmplInf">
+       
+       /* [TdspTmplInf.xml][selectTdspTmplInfGridList][템플릿 리스트 조회(그리드형)][TANINE] */
+        SELECT P.*
+          FROM (
+                SELECT CEIL(V2.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                       , CEIL(@row_number / #{rows, jdbcType=NUMERIC})   AS TOTAL_PAGE
+                       , @row_number                                     AS TOTAL_COUNT
+                       , V2.*
+                  FROM (
+                        SELECT V1.* 
+                               , ( @row_number := @row_number + 1 )      AS ID /* mysql ROWNUM */
+                          FROM (
+                                 SELECT TT.CD_NM                AS TMPL_TP_CD_NM     -- 템플릿유형코드명
+                                        , FM.MNU_NM             AS MNU_NM            -- 메뉴명
+                                        , ST.MNU_SEQ            AS MNU_SEQ           -- 메뉴순번
+                                        , ST.TMPL_SEQ           AS TMPL_SEQ          -- 템플릿순번
+                                        , ST.UP_TMPL_SEQ       AS UP_TMPL_SEQ      -- 상위템플릿순번
+                                        , ST.TMPL_NM            AS TMPL_NM           -- 템플릿명
+                                        , ST.TMPL_TP_CD         AS TMPL_TP_CD        -- 템플릿유형코드
+                                        , ST.TMPL_DTL_NM        AS TMPL_DTL_NM       -- 템플릿상세명
+                                        , ST.TMPL_URL           AS TMPL_URL          -- 템플릿URL
+                                        , ST.DSPLY_NO             AS DSPLY_NO            -- 전시번호
+                                        , ST.MN_CTS_DESC        AS MN_CTS_DESC       -- 메인컨텐츠설명
+                                        , ST.US_YN              AS US_YN             -- 사용여부
+                                        , ST.CRTR_ID            AS CRTR_ID           -- 생성자ID
+                                        , ST.CRT_DTTM           AS CRT_DTTM          -- 생성일시
+                                        , ST.UPDR_ID            AS UPDR_ID           -- 수정자ID
+                                        , ST.UPD_DTTM           AS UPD_DTTM          -- 수정일시
+                                        , UST.TMPL_NM           AS UP_TMPL_NM        -- 상위 템플릿명
+                                   FROM TDSP_TMPL_INF ST
+                                   LEFT JOIN  TDSP_TMPL_INF UST 
+                                     ON ST.UP_TMPL_SEQ = UST.TMPL_SEQ
+                                   LEFT JOIN (SELECT MNU_NM, MNU_SEQ FROM TSYS_ADM_MNU WHERE FRNT_YN = 'Y') FM 
+                                     ON FM.MNU_SEQ = ST.MNU_SEQ
+                                   LEFT JOIN (SELECT CD.CD_NM, CD.CD FROM TCMN_CD_DTL CD WHERE CD.MST_CD = 'TMP_TYPE') TT 
+                                     ON TT.CD = ST.TMPL_TP_CD
+                                  WHERE  1 = 1
+                                  <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(tmpl_tp_cd)">AND ST.TMPL_TP_CD = #{tmpl_tp_cd, jdbcType=VARCHAR}</if>
+                                  <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">  AND ST.US_YN   = #{us_yn, jdbcType=VARCHAR}</if>
+                                  <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(tmpl_nm)">  AND ST.TMPL_NM LIKE CONCAT('%',#{tmpl_nm ,jdbcType=VARCHAR},'%')</if>
+                               ) V1
+                                 , (SELECT @row_number := 0) RN /* mysql ROWNUM */
+                          WHERE  1 = 1
+                          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">AND V1.MNU_NM LIKE CONCAT('%',#{mnu_nm ,jdbcType=VARCHAR},'%')</if>
+                          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">     
+                          ORDER BY CONVERT(V1.TMPL_SEQ, unsigned)
+                          </if>
+                        ) V2
+               )P
+          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+          WHERE P.page = #{page ,jdbcType=NUMERIC}
+          </if>
+    </select>
+    
+    <!-- 템플릿 리스트 조회 (메뉴 매핑여부 포함) -->
+    <select id="selectTdspTmplInfMpnList" resultType="TdspTmplInf">
+        /* [TdspTmplInf.xml][selectTdspTmplInfMappingInfoList][템플릿 리스트 조회 (메뉴 매핑여부 포함)][TANINE] */
+        SELECT ST.MNU_SEQ                           AS MNU_SEQ
+               , ST.TMPL_SEQ                        AS TMPL_SEQ
+               , ST.UP_TMPL_SEQ                     AS UP_TMPL_SEQ
+               , ST.TMPL_NM                         AS TMPL_NM
+               , ST.TMPL_TP_CD                      AS TMPL_TP_CD
+               , ST.TMPL_URL                        AS TMPL_URL
+               , ST.DSPLY_NO                        AS DSPLY_NO
+               , ST.US_YN                           AS US_YN
+               , CASE WHEN TMPL_TP_CD = '1' AND MNU_SEQ = 0 THEN 'N'
+                      ELSE 
+                      CASE WHEN MNU_SEQ = 0 AND UP_TMPL_SEQ = 0 THEN 'N'
+                           ELSE 'Y'
+                       END
+                 END                                AS MAPPED_YN
+          FROM TDSP_TMPL_INF ST
+         WHERE ST.US_YN = 'Y'
+    </select>
+    
+    <!-- Front 템플릿 전시 메뉴 조회(1/2Depth) -->
+    <select id="selectTdspTmplInfDspFrntMnuList" resultType="TdspTmplInf">
+        /* [TdspTmplInf.xml][selectTdspTmplInfDispFrontMenuList][Front 템플릿 전시 메뉴 조회(1/2Depth)][TANINE] */
+        SELECT A.TMPL_SEQ
+               , A.UP_TMPL_SEQ
+               , A.TMPL_TP_CD
+               , A.MNU_SEQ
+               , A.MNU_NM
+               , A.MNU_DPH
+               , A.UP_DSPLY_NO
+               , A.DSPLY_NO
+               , A.TMPL_URL
+               , A.LGN_ESN_YN
+               , A.MNU_YN
+               , A.MNU_TP_CD
+               /* , A.SITE_NO  2019-02-17 pandora3.2에서 쓰이는 컬럼*/
+          FROM (
+                SELECT CAST(TY.REF_1 AS UNSIGNED)   AS MNU_DPH 
+                       , STU.DSPLY_NO                 AS UP_DSPLY_NO 
+                       , ST.DSPLY_NO                  AS DSPLY_NO
+                       , TY.MST_CD                  AS MST_CD
+                       , TY.CD                      AS CD
+                       , TY.REF_1                   AS REF_1
+                       , TY.REF_2                   AS REF_2
+                       , TY.REF_3                   AS REF_3
+                       , ST.TMPL_SEQ                AS TMPL_SEQ
+                       , ST.MODL_SEQ                AS MODL_SEQ
+                       , ST.DSPLY_YN                  AS DSPLY_YN
+                       , ST.MN_CTS_DESC             AS MN_CTS_DESC
+                       , ST.US_YN                   AS US_YN
+                       , ST.TMPL_TP_CD              AS TMPL_TP_CD
+                       , STU.TMPL_SEQ               AS UP_TMPL_SEQ 
+                       , STU.TMPL_TP_CD             AS UP_TMPL_TP_CD 
+                       , SM.MNU_NM                  AS MNU_NM
+                       , SM.TMPL_URL                AS TMPL_URL
+                       , ST.MNU_SEQ                 AS MNU_SEQ
+                       , ST.LGN_ESN_YN              AS LGN_ESN_YN
+                       , SM.MNU_YN                  AS MNU_YN
+                       , SM.MNU_TP_CD               AS MNU_TP_CD
+                       /* , SM.SITE_NO  pandora3.2에 쓰이는 컬럼 주석처리*/ 
+                  FROM TDSP_TMPL_INF ST 
+                  LEFT JOIN TDSP_TMPL_INF STU 
+                    ON STU.TMPL_SEQ = ST.UP_TMPL_SEQ 
+                  LEFT JOIN (SELECT MST_CD 
+                                    , CD 
+                                    , REF_1 
+                                    , REF_2 
+                                    , REF_3 
+                               FROM TCMN_CD_DTL 
+                              WHERE MST_CD = 'TMP_TYPE'
+                              ) TY 
+                    ON ( TY.CD = ST.TMPL_TP_CD AND ST.US_YN = 'Y'AND ST.DSPLY_YN = 'Y' ) 
+                  LEFT JOIN TSYS_ADM_MNU SM 
+                    ON SM.MNU_SEQ = ST.MNU_SEQ
+               ) A 
+         WHERE A.MNU_DPH <![CDATA[<]]> 3
+           AND A.MN_CTS_DESC IS NULL
+           AND A.MNU_SEQ IS NOT NULL
+           /* <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">AND A.SITE_NO = #{sys_cd, jdbcType=NUMERIC}</if> pandora3.2에 쓰이는 컬럼 주석 처리*/
+         ORDER BY A.MNU_DPH, A.UP_DSPLY_NO, A.DSPLY_NO
+    </select>
+    
+    <!-- Front 템플릿 전시 메뉴 조회(3Depth 한정) -->
+    <select id="selectTdspTmplInfDspFrntMnu3DptList" parameterType="int" resultType="TdspTmplInf">
+    /* [TdspTmplInf.xml][selectTdspTmplInfDispFrontMenu3DptList][Front 템플릿 전시 메뉴 조회(3Depth 한정)][TANINE] */
+        SELECT A.MNU_NM
+               , A.TMPL_SEQ
+               , A.TMPL_URL
+               , A.UP_TMPL_SEQ
+               , A.DSPLY_NO
+               , A.UP_MNU_NM
+               , A.LGN_ESN_YN
+               , A.TMPL_TP_CD
+               , A.UP_TMPL_TP_CD
+          FROM (  
+                 SELECT STU.DSPLY_NO                                                      AS UP_DSPLY_NO
+                        , STU.TMPL_TP_CD                                                AS UP_TMPL_TP_CD
+                        , ST.TMPL_TP_CD                                                 AS TMPL_TP_CD
+                        , ST.DSPLY_NO                                                     AS DSPLY_NO
+                        , ST.TMPL_NM                                                    AS TMPL_NM
+                        , ST.TMPL_SEQ                                                   AS TMPL_SEQ
+                        , SM.TMPL_URL                                                   AS TMPL_URL
+                        , ST.UP_TMPL_SEQ                                               AS UP_TMPL_SEQ
+                        , SM.MNU_SEQ                                                    AS MNU_SEQ
+                        , SM.MNU_NM                                                     AS MNU_NM
+                        , (SELECT MNU_NM FROM TSYS_ADM_MNU WHERE STU.MNU_SEQ = MNU_SEQ) AS UP_MNU_NM
+                        , ST.LGN_ESN_YN                                                 AS LGN_ESN_YN
+                   FROM TDSP_TMPL_INF ST
+                   LEFT JOIN TDSP_TMPL_INF STU 
+                     ON STU.TMPL_SEQ = ST.UP_TMPL_SEQ
+                   LEFT JOIN TSYS_ADM_MNU SM 
+                     ON SM.MNU_SEQ = ST.MNU_SEQ  
+                  WHERE 1=1 
+                    AND ST.US_YN = 'Y' 
+                    AND ST.DSPLY_YN = 'Y'
+                    AND SM.FRNT_YN = 'Y'
+                ) A
+        WHERE 1=1
+          AND A.UP_TMPL_SEQ = #{tmpl_seq ,JDBCTYPE=NUMERIC}
+        ORDER BY A.UP_DSPLY_NO, A.DSPLY_NO
+    </select>
+    
+    <!-- 이메일 받는 사람 조회 -->
+     <select id="selectTdspTmplInfRcpnEml" parameterType="String" resultType="String">
+    /* [TdspTmplInf.xml][selectTdspTmplInfRecipientEmail][이메일 받는 사람 조회][TANINE] */
+        SELECT DTL.REF_1 AS REF_1      
+          FROM TCMN_CD_MST MST
+               , TCMN_CD_DTL DTL 
+         WHERE MST.MST_CD = DTL.MST_CD
+           AND MST.MST_CD = 'REC_EMAIL'
+           AND DTL.CD = #{flg}
+         LIMIT 1
+    </select>
+    
+    <!-- 게시글 이동 정보 -->
+    <select id="selectTdspTmplInfDocLoc" parameterType="ParameterMap" resultType="TdspTmplInf">
+        /* [TdspTmplInf.xml][selectTdspTmplInfDocLocationInfo][게시글 이동 정보][TANINE] */
+        SELECT T.TMPL_SEQ
+               , T.TMPL_TP_CD
+               , CASE WHEN T.TMPL_TP_CD = 4 THEN NULL
+                      ELSE T.UP_TMPL_TP_CD
+                  END UP_TMPL_TP_CD
+               , CASE WHEN T.TMPL_TP_CD = 4 THEN NULL
+                      ELSE T.UP_TMPL_SEQ
+                  END UP_TMPL_SEQ
+               , T.TMPL_URL
+               , T.UP_TMPL_URL
+         FROM (
+               SELECT ST.TMPL_SEQ                                                               AS TMPL_SEQ
+                      , ST.TMPL_TP_CD                                                           AS TMPL_TP_CD
+                      , ST.UP_TMPL_SEQ                                                         AS UP_TMPL_SEQ
+                      , (SELECT TMPL_TP_CD FROM TDSP_TMPL_INF WHERE TMPL_SEQ = ST.UP_TMPL_SEQ) AS UP_TMPL_TP_CD
+                      , (SELECT TMPL_URL
+                           FROM TSYS_ADM_MNU 
+                          WHERE MNU_SEQ = (SELECT MNU_SEQ FROM TDSP_TMPL_INF WHERE TMPL_SEQ = ST.UP_TMPL_SEQ)
+                         )                                                                      AS UP_TMPL_URL
+                      , (SELECT S1.TMPL_URL FROM TSYS_ADM_MNU S1 WHERE S1.MNU_SEQ = ST.MNU_SEQ) AS TMPL_URL
+                 FROM TDSP_TMPL_INF ST
+                WHERE TMPL_SEQ = #{tmpl_seq ,JDBCTYPE=NUMERIC}
+               ) T
+    </select>     
+
+	<!-- 템플릿 리스트 조회(매핑여부/탬플릿유형별) -->
+    <select id="selectTdspTmplInfList" parameterType="ParameterMap" resultType="TdspTmplInf">
+    /* [TdspTmplInf.xml][selectTdspTmplInfList][ 템플릿 리스트 조회(매핑여부/탬플릿유형별)][TANINE] */
+    SELECT T.*
+      FROM (
+            SELECT ST.MNU_SEQ                                                           AS MNU_SEQ
+               , ST.TMPL_SEQ                                                            AS TMPL_SEQ
+               , ST.UP_TMPL_SEQ                                                        AS UP_TMPL_SEQ
+               , ST.TMPL_NM                                                             AS TMPL_NM
+               , ST.TMPL_TP_CD                                                          AS TMPL_TP_CD
+               , ST.TMPL_URL                                                            AS TMPL_URL
+               , ST.DSPLY_NO                                                              AS DSPLY_NO
+               , ST.US_YN                                                               AS US_YN
+               , CASE WHEN TMPL_TP_CD = '1' AND MNU_SEQ IS NULL THEN 'N'
+                  ELSE 
+                      CASE WHEN MNU_SEQ IS NULL AND UP_TMPL_SEQ IS NULL THEN 'N'
+                           ELSE 'Y'
+                       END
+                 END                                                                    AS MAPPED_YN
+               , (SELECT s1.MNU_NM FROM TSYS_ADM_MNU s1 WHERE s1.MNU_SEQ = ST.MNU_SEQ)  AS MNU_NM
+             FROM TDSP_TMPL_INF ST
+            WHERE ST.US_YN = 'Y'
+             <if test='isPage == "Y"'>
+              AND ST.TMPL_TP_CD IN (SELECT CD FROM TCMN_CD_DTL WHERE MST_CD = 'TMP_TYPE' AND REF_2 = 'N' AND REF_3 = 'N')
+             </if>
+             <if test='isPage == "N"'>
+              AND ST.TMPL_TP_CD IN (SELECT CD FROM TCMN_CD_DTL WHERE MST_CD = 'TMP_TYPE' AND REF_2 = 'N' AND REF_3 = 'Y')
+             </if>
+            ) T
+      WHERE 1=1
+        AND T.MAPPED_YN = #{mapped_yn ,jdbcType=VARCHAR}
+      ORDER BY T.MNU_NM
+    </select>
+	
+    <!-- 전시메뉴(하위) 리스트 조회(그리드형) -->
+    <select id="selectTdspTmplInfDwnDspMnuGridList" parameterType="ParameterMap" resultType="TdspTmplInf">
+    /* [TdspTmplInf.xml][selectTdspTmplInfDwnDspMnuGridList][ 전시메뉴(하위) 리스트 조회(그리드형)][TANINE] */
+    SELECT P.*
+      FROM (
+             SELECT CEIL(V2.id / #{rows, jdbcType=NUMERIC})           AS PAGE
+                    , CEIL(@row_number / #{rows, jdbcType=NUMERIC})   AS TOTAL_PAGE
+                    , @row_number                                     AS TOTAL_COUNT
+                    , V2.*
+               FROM (
+                      SELECT  V1.* 
+                              , ( @row_number := @row_number + 1 )    AS ID /* mysql ROWNUM */
+                        FROM (
+                               SELECT A.TMPL_SEQ                      AS TMPL_SEQ
+                                      , A.UP_TMPL_SEQ                AS UP_TMPL_SEQ
+                                      , A.MNU_SEQ                     AS MNU_SEQ
+                                      , A.TMPL_TP_CD                  AS TMPL_TP_CD
+                                      , (SELECT CD_NM                  
+                                           FROM TCMN_CD_DTL            
+                                          WHERE MST_CD = 'TMP_TYPE'  
+                                            AND CD = A.TMPL_TP_CD)    AS TMPL_TP_CD_NM
+                                      , A.TMPL_NM                     AS TMPL_NM
+                                      , A.DSPLY_NO                      AS DSPLY_NO
+                                      , A.DSPLY_YN                      AS DSPLY_YN
+                                      , B.URL                         AS TMPL_URL
+                                      , B.MNU_NM                      AS MNU_NM
+                                      , B.MNU_YN                      AS MNU_YN
+                                 FROM  TDSP_TMPL_INF A
+                                 LEFT JOIN TSYS_ADM_MNU B 
+                                   ON (A.MNU_SEQ = B.MNU_SEQ) 
+                                WHERE A.UP_TMPL_SEQ = #{up_tmpl_seq ,jdbcType=NUMERIC}
+                                  AND   A.MNU_SEQ IS NOT NULL
+                              ) V1
+                              , (SELECT @row_number := 0) RN /* mysql ROWNUM */
+                        WHERE 1 = 1
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">     
+                        ORDER BY V1.DSPLY_NO
+                        </if>
+                   ) V2
+            )P
+     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+     WHERE P.page = #{page ,jdbcType=NUMERIC}
+     </if>
+   </select>
+   
+   <!-- 모듈이 매핑가능한 템플릿 목록 조회 -->
+   <select id="selectTdspTmplInfMpnModlList" parameterType="ParameterMap" resultType="TdspTmplInf">
+		/* [TdspTmplInf.xml][selectTdspTmplInfMpnModlList][모듈이 매핑가능한 템플릿 목록 조회][TANINE] */
+		SELECT TMPL_SEQ
+		     , (SELECT T1.MNU_NM
+			      FROM TSYS_ADM_MNU T1
+			     WHERE T1.MNU_SEQ = S1.MNU_SEQ)  AS MNU_NM
+		  FROM TDSP_TMPL_INF S1
+		 WHERE 1 = 1
+		   AND S1.TMPL_TP_CD IN (4,6)
+		   AND S1.MNU_SEQ IS NOT NULL
+		   AND S1.MODL_SEQ IS NULL
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(modl_seq)">
+		UNION
+		SELECT S1.TMP_SEQ AS TMPL_SEQ
+		     , (SELECT T1.MNU_NM 
+			      FROM TSYS_ADM_MNU T1
+			     WHERE T1.MNU_SEQ = S2.MNU_SEQ)  AS MNU_NM
+		  FROM TBBS_MODL_INF S1
+		     , TDSP_TMPL_INF S2
+		 WHERE S1.TMP_SEQ = S2.TMPL_SEQ
+		   AND S1.MODL_SEQ = #{modl_seq ,jdbcType=NUMERIC}
+		</if>
+	</select>
+	
+	 <!-- 전시 메뉴 목록 조회 -->
+   <select id="selectTdspTmplInfDispTreeList" parameterType="ParameterMap" resultType="TdspTmplInfTree">
+   /* [TdspTmplInf.xml][selectTdspTmplInfDispTreeList][전시 메뉴 목록 조회][TANINE] */
+   SELECT ST.TMPL_TP_CD                                                                      AS TMPL_TP_CD     -- 템플릿유형코드
+          , (SELECT S1.TMPL_TP_CD FROM TDSP_TMPL_INF S1 WHERE S1.TMPL_SEQ = ST.UP_TMPL_SEQ) AS UPP_TMPL_TP_CD -- 상위 템플릿유형코드
+          , FM.URL                                                                           AS URL            -- 템플릿URL
+          , ST.TMPL_URL                                                                      AS TMPL_URL       -- 템플릿URL
+          , ST.DSPLY_NO                                                                        AS DSPLY_NO         -- 전시번호
+          , ST.DSPLY_YN                                                                        AS DSPLY_YN         -- 전시여부
+          , ST.MNU_SEQ                                                                       AS MNU_SEQ        -- 메뉴순번
+          , FM.MNU_YN                                                                        AS MNU_YN         -- 메뉴 여부
+          , CAST(TY.REF_1 AS UNSIGNED)                                                       AS MNU_DPH        -- 메뉴 레벨
+          , TY.REF_2                                                                         AS CHD_YN         -- 하위메뉴여부 
+          , ST.TMPL_SEQ                                                                      AS id             -- ZTREE REQUIRED
+          , ST.UP_TMPL_SEQ                                                                  AS pId            -- ZTREE REQUIRED
+          , FM.MNU_NM                                                                        AS name           -- ZTREE REQUIRED
+          , CASE WHEN CAST(TY.REF_1 AS UNSIGNED) <![CDATA[>]]> 1 THEN 'FALSE'
+                 ELSE 'TRUE' 
+             END                                                                             AS open           -- ZTREE REQUIRED
+          , CASE WHEN TY.REF_2 = 'Y' THEN 'TRUE'
+                 ELSE 'FALSE' 
+             END                                                                             AS isParent       -- ZTREE REQUIRED
+          , 'Y'                                                                              AS isSaved        -- DB저장 확인 플래그
+          , FM.SYS_CD
+          , FM.US_YN
+     FROM TDSP_TMPL_INF ST
+     LEFT JOIN (SELECT MNU_NM, MNU_SEQ, MNU_YN, URL, SYS_CD, US_YN FROM TSYS_ADM_MNU WHERE FRNT_YN = 'Y') FM 
+       ON FM.MNU_SEQ = ST.MNU_SEQ
+     LEFT JOIN (SELECT MST_CD, CD, REF_1, REF_2 FROM TCMN_CD_DTL WHERE MST_CD = 'TMP_TYPE') TY 
+       ON TY.CD = ST.TMPL_TP_CD
+    WHERE 1=1
+      AND ST.DSPLY_YN = 'Y'
+      AND IF( ST.TMPL_TP_CD = 1, 'Y', (SELECT S1.DSPLY_YN FROM TDSP_TMPL_INF S1 WHERE S1.TMPL_SEQ = ST.UP_TMPL_SEQ) ) = 'Y'
+      AND ST.MNU_SEQ IS NOT NULL 
+      AND FM.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+    ORDER BY CAST(TY.REF_1 AS UNSIGNED), ST.DSPLY_NO, ST.UP_TMPL_SEQ, ST.TMPL_SEQ
+   </select>
+   
+    <update id="updateTdspTmplInfMpn" parameterType="HashMap">
+     /* [TdspTmplInf.xml]["updateTdspTmplInfMpn"][템플릿 매핑 초기화 ][TANINE] */
+     UPDATE TDSP_TMPL_INF
+         SET UPD_DTTM = SYSDATE() 
+           , UPDR_ID = #{updr_id, jdbcType=VARCHAR} 
+           , UP_TMPL_SEQ = 0 
+           , MNU_SEQ = 0 
+           , DSPLY_NO = NULL 
+        WHERE TMPL_SEQ IN (
+                           SELECT B.tmpl_seq 
+                             FROM ( 
+                                   SELECT TMPL_SEQ
+                                     FROM TDSP_TMPL_INF 
+                                    WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+                                       OR UP_TMPL_SEQ IN (SELECT TMPL_SEQ 
+                                                            FROM (
+                                                                  SELECT TMPL_SEQ 
+                                                                    FROM TDSP_TMPL_INF 
+                                                                   WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}
+                                                                 ) AS tem_a
+                                                          )
+                                       OR UP_TMPL_SEQ IN (SELECT tmpl_seq 
+                                                            FROM (
+                                                                  SELECT tmpl_seq
+                                                                    FROM tdsp_tmpl_inf 
+                                                                   WHERE up_tmpl_seq IN (SELECT tmpl_seq 
+                                                                                           FROM tdsp_tmpl_inf 
+                                                                                          WHERE mnu_seq = #{mnu_seq, jdbcType=NUMERIC}
+                                                                                         )
+                                                                  ) AS tmp_b
+                                                          )
+                                  ) B
+                          )
+     </update>
+	
+	
+     <!-- 템플릿 매핑 초기화2(템플릿 변경 전 나머지 리셋 -->
+     <update id="updateTdspTmplInfMpnMnu" parameterType="HashMap">
+     /* [TdspTmplInf.xml][updateTdspTmplInfMpnMnu][템플릿 매핑 초기화 ][TANINE] */
+     UPDATE TDSP_TMPL_INF A
+        SET A.UPD_DTTM = SYSDATE() 
+          , A.UPDR_ID = #{updr_id, jdbcType=VARCHAR} 
+          , A.MNU_SEQ = NULL 
+          , A.UP_TMPL_SEQ = NULL 
+      WHERE 1=1
+        AND A.TMPL_SEQ != #{tmpl_seq, jdbcType=NUMERIC}  
+        AND A.MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}   
+     </update>
+	
+	 <!-- Front 메뉴 등록 -->
+     <insert id="insertTdspTmplInfCpy" parameterType="TdspTmplInf" useGeneratedKeys="true" keyProperty="tmpl_seq">
+     /* [TdspTmplInf.xml][insertTdspTmplInfCpy][Front 메뉴 등록 ][TANINE] */
+     INSERT INTO TDSP_TMPL_INF
+     (
+        TMPL_NM
+      , TMPL_TP_CD
+      , TMPL_DTL_NM
+      , TMPL_URL
+      , MN_CTS_DESC
+      , US_YN
+      , LGN_ESN_YN
+      , CRTR_ID 
+      , CRT_DTTM
+      , UPDR_ID
+      , UPD_DTTM
+      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_tmpl_seq)">,UP_TMPL_SEQ</if>
+      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_seq)">,MNU_SEQ</if>
+      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_yn)">,DSPLY_YN</if>
+      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_no)">,DSPLY_NO</if>
+     ) VALUES (
+       #{tmpl_nm, jdbcType=VARCHAR}
+     , #{tmpl_tp_cd, jdbcType=VARCHAR}
+     , #{tmpl_dtl_nm, jdbcType=VARCHAR}
+     , #{tmpl_url, jdbcType=VARCHAR}
+     , #{mn_cts_desc, jdbcType=VARCHAR}
+     , #{us_yn, jdbcType=VARCHAR}
+     , #{lgn_esn_yn, jdbcType=VARCHAR}
+     , #{crtr_id , jdbcType=VARCHAR}
+     , SYSDATE()
+     , #{updr_id, jdbcType=VARCHAR}
+     , SYSDATE()
+     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_tmpl_seq)">,#{up_tmpl_seq, jdbcType=VARCHAR}</if>
+     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_seq)">,#{mnu_seq, jdbcType=VARCHAR}</if>
+     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_yn)">,#{dsply_yn, jdbcType=VARCHAR}</if>
+     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_no)">,#{dsply_no, jdbcType=NUMERIC}</if>
+     )
+     </insert>
+     
+     <!-- 프론트 메뉴 목록 조회 -->
+   <select id="selectFrntMnuList" resultType="TdspTmplInf">
+       /* [TdspTmplInf.xml][selectFrntMnuList][프론트 메뉴 목록 조회][TANINE] */
+       SELECT T1.DSPLY_NO
+		    , T1.TMPL_SEQ
+		    , T1.UP_TMPL_SEQ
+		    , T2.MNU_NM
+		    , CAST(T3.REF_1 AS UNSIGNED) AS MNU_DPTH
+		    , T2.URL
+		 FROM TDSP_TMPL_INF T1
+		 LEFT JOIN (SELECT MNU_SEQ
+		                 , MNU_NM
+		                 , URL
+		                 , SYS_CD
+		              FROM TSYS_ADM_MNU
+		             WHERE FRNT_YN = 'Y'
+		               AND US_YN = 'Y') T2
+		   ON T1.MNU_SEQ = T2.MNU_SEQ
+		 LEFT JOIN (SELECT CD
+		                 , REF_1
+		              FROM TCMN_CD_DTL
+		             WHERE MST_CD = 'TMP_TYPE'
+		               AND US_YN = 'Y') T3
+		   ON T1.TMPL_TP_CD = T3.CD
+		WHERE 1 = 1
+		  AND T1.US_YN = 'Y'
+		  AND T1.DSPLY_YN = 'Y'
+		  AND T1.MNU_SEQ != ''
+		  AND T1.MNU_SEQ IS NOT NULL
+		  AND IFNULL(T1.MNU_SEQ, '') != ''
+		  AND (CASE WHEN T1.TMPL_TP_CD = 1 THEN 'Y'
+		            ELSE (SELECT IFNULL(S1.DSPLY_YN, 'N')
+		                    FROM TDSP_TMPL_INF S1
+			               WHERE S1.TMPL_SEQ = T1.UP_TMPL_SEQ)
+			    END) = 'Y'
+		  AND T3.REF_1 <![CDATA[>]]> 0
+		  AND T2.SYS_CD = #{sys_cd, jdbcType=NUMERIC}
+		  <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_tmpl_seq)">
+		  AND T1.UP_TMPL_SEQ = #{up_tmpl_seq, jdbcType=NUMERIC}
+		  </if>
+		ORDER BY CAST(T3.REF_1 AS UNSIGNED)
+		       , T1.DSPLY_NO
+		       , T1.UP_TMPL_SEQ
+		       , T1.TMPL_SEQ
+   </select>
+   
+   <!-- 1뎁스 메뉴 정보 조회 -->
+   <select id="select1DepthMnuInf" resultType="TdspTmplInf">
+       /* [TdspTmplInf.xml][select1DepthMnuInf][1뎁스 메뉴 정보 조회][TANINE] */
+       SELECT TT1.TMPL_SEQ AS UP_TMPL_SEQ
+		    , TT2.MNU_NM AS UP_MNU_NM
+		 FROM TDSP_TMPL_INF TT1
+		 LEFT JOIN (SELECT MNU_SEQ
+		                 , MNU_NM
+		                 , SYS_CD
+		              FROM TSYS_ADM_MNU
+				     WHERE FRNT_YN = 'Y'
+				       AND US_YN = 'Y') TT2
+	       ON TT1.MNU_SEQ = TT2.MNU_SEQ
+		 LEFT JOIN (SELECT CD
+			             , REF_1
+			          FROM TCMN_CD_DTL
+			         WHERE MST_CD = 'TMP_TYPE'
+			           AND US_YN = 'Y') TT3
+	       ON TT1.TMPL_TP_CD = TT3.CD
+		WHERE TT1.US_YN = 'Y'
+		  AND TT1.DSPLY_YN = 'Y'
+		  AND TT1.MNU_SEQ != ''
+		  AND TT1.MNU_SEQ IS NOT NULL
+		  AND IFNULL(TT1.MNU_SEQ, '') != ''
+		  AND (CASE WHEN TT1.TMPL_TP_CD = 1 THEN 'Y'
+		            ELSE (SELECT IFNULL(SS1.DSPLY_YN, 'N')
+				            FROM TDSP_TMPL_INF SS1
+				           WHERE SS1.TMPL_SEQ = TT1.UP_TMPL_SEQ)
+				END) = 'Y'
+		  AND TT3.REF_1 = '1'
+		  AND TT1.TMPL_SEQ 
+		   IN (SELECT T1.UP_TMPL_SEQ
+				 FROM TDSP_TMPL_INF T1
+				 LEFT JOIN (SELECT MNU_SEQ
+				                 , SYS_CD
+				              FROM TSYS_ADM_MNU
+				             WHERE FRNT_YN = 'Y'
+				               AND US_YN = 'Y') T2
+				   ON T1.MNU_SEQ = T2.MNU_SEQ
+				 LEFT JOIN (SELECT CD
+				                 , REF_1
+				              FROM TCMN_CD_DTL
+				             WHERE MST_CD = 'TMP_TYPE'
+				               AND US_YN = 'Y') T3
+				   ON T1.TMPL_TP_CD = T3.CD
+				WHERE T1.US_YN = 'Y'
+				  AND T1.DSPLY_YN = 'Y'
+				  AND T1.MNU_SEQ != ''
+				  AND T1.MNU_SEQ IS NOT NULL
+				  AND IFNULL(T1.MNU_SEQ, '') != ''
+				  AND (CASE WHEN T1.TMPL_TP_CD = 1 THEN 'Y'
+				            ELSE (SELECT IFNULL(S1.DSPLY_YN, 'N')
+				                    FROM TDSP_TMPL_INF S1
+					               WHERE S1.TMPL_SEQ = T1.UP_TMPL_SEQ)
+					    END) = 'Y'
+				  AND T3.REF_1 = '2'
+				  AND T2.SYS_CD = #{sys_cd, jdbcType=NUMERIC}
+				  AND T1.TMPL_SEQ = #{tmpl_seq, jdbcType=NUMERIC})
+		LIMIT 1
+   </select>
+</mapper>

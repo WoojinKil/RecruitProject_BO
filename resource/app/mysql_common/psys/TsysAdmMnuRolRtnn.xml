@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmMnuRolRtnn">
+
+	<!-- 권한 할당 조회 -->
+	<sql id="select-one-sql">
+		/*[TsysAdmMnuRolRtnn.xml][select][권한 할당 조회][TANINE]*/
+		SELECT MNU_SEQ
+             , ROL_ID
+             , ROL_DESC
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_MNU_ROL_RTNN
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<!-- 메뉴 권한 할당 resultType이 SysMenuRoleAssign일 경우 -->
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmMnuRolRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    <!-- 메뉴 권한 할당 resultType이 DataMap일 경우 -->
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+
+	<!-- 메뉴 권한 할당 그리드 리스트 조회 -->
+    <select id="selectTsysAdmMnuRolRtnnGridList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+    /*[TsysAdmMnuRolRtnn.xml][selectTsysAdmMnuRolRtnnGridList][메뉴 권한 할당 그리드 리스트 조회][TANINE]*/
+    	SELECT P.*
+          FROM (
+                 SELECT V.*
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                        , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                        , @ROW_NUMBER TOTAL_COUNT
+                        , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                       </if>
+                   FROM (
+	                     SELECT Y.*
+	                		    , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+	                       FROM (
+	                	         SELECT AM.MNU_SEQ                              AS MNU_SEQ         -- 메뉴아이디
+					                    , AM.UP_MNU_SEQ                         AS UP_MNU_SEQ      -- 상위메뉴아이디
+					                    , AM.MNU_NM                             AS MNU_NM          -- 메뉴명
+					                    , AM.MNU_DPTH                           AS MNU_DPTH        -- 메뉴뎁스
+					                    , AM.URL                                AS URL             -- url
+					                    , AM.MNU_TP_CD                        AS MNU_TYPE_CD     -- 메뉴유형코드
+					                    , AM.MNU_YN                             AS MNU_YN          -- 메뉴여부
+					                    , AM.US_YN                              AS US_YN           -- 사용여부
+					                    , AM.LST_MNU_YN                         AS LST_MNU_YN      -- 최하위메뉴여부
+					                    , AM.SRT_SEQ                            AS SRT_ORD         -- 정렬순서
+					                    , AM.MNUL_ID                          AS MANUAL_ID       -- 메뉴얼아이디
+					                    , MRA.CRTR_ID                           AS CRTR_ID         -- 등록자
+					                    , MRA.CRT_DTTM                          AS CRT_DTTM        -- 등록일시
+					                    , MRA.UPDR_ID                           AS UPDR_ID         -- 수정자
+					                    , MRA.UPD_DTTM                          AS UPD_DTTM        -- 수정일시
+					                    , DATE_FORMAT(MRA.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM      -- 변경일자
+					                    , MRA.ROL_ID                            AS ROL_ID          -- 역할아이디
+					                    , (SELECT ROL_NM FROM TSYS_ADM_ROL WHERE ROL_ID = MRA.ROL_ID) AS ROL_NM -- 권한명
+					                    , AM.SYS_CD                            AS SYS_CD         -- 사이트 번호
+					                    , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = AM.SYS_CD) AS SYS_NM -- 사이트명
+					                    , AM.PRN_INF_SCRN_YN						AS PRN_INF_SCRN_YN   -- 개인정보 화면 여부
+					                    , AM.VDI_SCRN_YN						AS VDI_SCRN_YN     -- vdi 화면 여부
+						          FROM TSYS_ADM_MNU AM
+						         INNER JOIN TSYS_ADM_MNU_ROL_RTNN MRA 
+						            ON AM.MNU_SEQ = MRA.MNU_SEQ
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_mnu_seq)">AND AM.UP_MNU_SEQ  = #{up_mnu_seq     ,jdbcType=VARCHAR}</if>
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_tp_cd)">AND AM.MNU_TYPE_CD  = #{mnu_type_cd   ,jdbcType=VARCHAR}</if>
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_dpth)">AND AM.MNU_DPTH      = #{mnu_dpth     ,jdbcType=NUMERIC}</if>
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">AND AM.US_YN            = #{us_yn         ,jdbcType=VARCHAR}</if>
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_yn)">AND AM.MNU_YN          = #{mnu_yn        ,jdbcType=VARCHAR}</if>
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">AND AM.MNU_NM LIKE  CONCAT('%',#{mnu_nm        ,jdbcType=VARCHAR},'%')</if>
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url)">AND AM.URL                = #{url            ,jdbcType=VARCHAR}</if>
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_id)">AND MRA.ROL_ID         = #{rol_id        ,jdbcType=VARCHAR}</if>
+	                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">AND AM.SYS_CD        = #{sys_cd     ,jdbcType=NUMERIC}</if>
+                                ) Y, (SELECT @ROW_NUMBER := 0) RN
+                        ) V
+                      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">     
+                      ORDER BY V.MNU_NM
+                      </if>           
+               ) P
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+         </if> 
+    </select>
+
+	<!-- 메뉴 권한 중복체크 조회 -->
+    <select id="selectTsysAdmMnuRolRtnnCnt" parameterType="TsysAdmMnuRolRtnn" resultType="int">
+    /*[TsysAdmMnuRolRtnn.xml][selectTsysAdmMnuRolRtnnCnt][메뉴 권한 중복체크 조회][TANINE]*/
+      SELECT COUNT(1)
+        FROM TSYS_ADM_MNU_ROL_RTNN
+       WHERE MNU_SEQ = #{mnu_seq ,jdbcType=NUMERIC}
+         AND ROL_ID  = #{rol_id ,jdbcType=NUMERIC}
+    </select>
+    
+    
+    <!-- 메뉴 권한 할당 등록 -->
+	<insert id="insert" parameterType="TsysAdmMnuRolRtnn">
+        /*[TsysAdmMnuRolRtnnTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_MNU_ROL_RTNN
+		(
+			 MNU_SEQ        -- 메뉴아이디
+		   , ROL_ID         -- 권한아이디
+		   , CRTR_ID        -- 등록자  
+		   , CRT_DTTM       -- 등록일시 
+		   , UPDR_ID        -- 수정자  
+		   , UPD_DTTM       -- 수정일시 
+		)
+		VALUES
+		(
+			 #{mnu_seq, jdbcType=NUMERIC}
+		   , #{rol_id, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+	
+	<!-- 메뉴 권한 할당 수정 -->
+	<update id="update" parameterType="TsysAdmMnuRolRtnn">
+        /*[TsysAdmMnuRolRtnnTrx.xml][update][메뉴권한할당수정][TANINE]*/
+		UPDATE TSYS_ADM_MNU_ROL_RTNN
+		   SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_desc)">
+		     , ROL_DESC = #{rol_desc, jdbcType=LONGVARCHAR}
+		       </if>
+		WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</update>
+	
+	<!-- 메뉴 권한 할당 삭제 -->
+	<delete id="delete" parameterType="TsysAdmMnuRolRtnn">
+        /*[TsysAdmMnuRolRtnnTrx.xml][delete][메뉴권한할당삭제][TANINE]*/
+		DELETE 
+		  FROM TSYS_ADM_MNU_ROL_RTNN
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</delete>
+</mapper>

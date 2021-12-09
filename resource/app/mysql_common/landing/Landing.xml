@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Landing">
+
+    
+    <select id="getWeather" parameterType="ParameterMap" resultType="TbBcpcWthr">
+    /*[Landing.xml][getWeater][랜딩 날씨 조회 ]*/
+       SELECT STD_DT
+            , WTHR_TM
+            , CSTR_CD
+            , CSTR_NM
+            , DAYW_ABRV_NM
+            , MCTY_CD
+            , MCTY_NM
+            , SIGUNGU_NM
+            , SIGUNGU_CD
+            , NOW_ATMPR
+            , FL_ATMPR
+            , NOW_RANFL
+            , WTHR_ICON_CD
+            , WTHR_CL_NM
+            , FN_DST_CNCT
+            , UTRFN_DST_CNCT
+         FROM TB_BCPC_WTHR
+        WHERE CSTR_CD = #{cstr_cd}
+     ORDER BY STD_DT DESC, CAST(SUBSTRING_INDEX(WTHR_TM,":",1) AS UNSIGNED) DESC
+        LIMIT 1
+    </select>       
+
+</mapper>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsWikiCtegry">
+
+    <!-- 2020-04-06, 위키카테고리 트리 조회 -->
+    <select id="getPbbs5001List01" parameterType="ParameterMap" resultType="hashmap">
+    /*[TbbsWikiCtegry.xml][getPbbs5001List01][위키 트리조회 ][TANINE]*/
+    SELECT 0               AS id           /*zTree 노드(자신)*/
+         , 0               AS pId          /*zTree 노드(부모)*/
+         , '전체'            AS name         /*zTree 노드이름*/
+         , 0               AS mnu_dpth     /*층계*/
+         , 'Y'             AS us_yn       /*사용여부*/
+         , 'TRUE'          AS open         /*zTree 펼침여부*/
+         , 'TRUE'          AS isParent     /*zTree 폴더여부*/
+         , 'Y'             AS isSaved      /*DB저장 여부*/
+         , 0               AS srt_seq /*정렬순서*/
+    UNION ALL
+    SELECT MN.WIKI_CTEGRY_SEQ
+         , MN.UP_WIKI_CTEGRY_SEQ
+         , MN.WIKI_CTEGRY_NM
+         , M.LEV
+         , MN.US_YN
+         , CASE WHEN M.LEV = 3 THEN 'FALSE' ELSE 'TRUE' END
+         , CASE WHEN M.LEV = 3 THEN 'FALSE' ELSE 'TRUE' END
+         , 'Y'
+         , MN.SRT_SEQ
+      FROM (
+            SELECT GET_TREE_WIKICTEGRY(WIKI_CTEGRY_SEQ) AS WIKI_CTEGRY_SEQ
+                 , @LEVEL AS LEV
+                 , WIKI_CTEGRY_NM
+              FROM (SELECT @START_WITH := 0, @ID := @START_WITH, @LEVEL := 0) VARS
+                 , TBBS_WIKI_CTEGRY
+             WHERE @ID IS NOT NULL
+           ) M
+      JOIN TBBS_WIKI_CTEGRY MN ON MN.WIKI_CTEGRY_SEQ  = M.WIKI_CTEGRY_SEQ
+    </select>
+
+    <!-- 위키 카테고리 자식 조회 -->
+    <sql id="wikictegryChild">
+    SELECT MN.wiki_ctegry_seq
+      FROM (
+            SELECT GET_TREE_WIKICTEGRY(WIKI_CTEGRY_SEQ) AS WIKI_CTEGRY_SEQ
+                 , @LEVEL AS LEV
+              FROM (
+                    SELECT @START_WITH := #{id}
+                         , @ID := @START_WITH
+                         , @LEVEL := 0
+                   ) VARS
+                 , TBBS_WIKI_CTEGRY
+             WHERE @ID IS NOT NULL
+           ) M
+      JOIN TBBS_WIKI_CTEGRY MN ON MN.WIKI_CTEGRY_SEQ  = M.WIKI_CTEGRY_SEQ
+    </sql>
+
+    <!-- 2020-04-07, 위키트리 특정ID 목록 조회 (하위포함) -->
+    <select id="getPbbs5001List02" parameterType="ParameterMap" resultType="hashmap">
+    /*[TbbsWikiCtegry.xml][getPbbs5001List02][위키트리 특정ID 목록 조회 (하위포함)][TANINE]*/
+    SELECT wiki_ctegry_seq
+      FROM TBBS_WIKI_CTEGRY
+     WHERE wiki_ctegry_seq  = #{id}
+ UNION ALL
+    <include refid="wikictegryChild"></include>
+    </select>
+
+    <!-- 2020-04-07, 위키트리 특정ID 목록 조회 (하위만) -->
+    <select id="getPbbs5001List03" parameterType="ParameterMap" resultType="hashmap">
+    /*[TbbsWikiCtegry.xml][getPbbs5001List03][위키트리 특정ID 목록 조회 (하위만)][TANINE]*/
+    <include refid="wikictegryChild"></include>
+    </select>
+
+    <!-- 2020-04-07, 위키트리 신규 카테고리CD -->
+    <select id="getPbbs5001CtegryCd" parameterType="ParameterMap" resultType="int">
+    /*[TbbsWikiCtegry.xml][getPbbs5001CtegryCd][위키트리 신규 카테고리CD][TANINE]*/
+    SELECT ifnull(MAX(wiki_ctegry_seq) + 1, 1) as wiki_ctegry_seq FROM TBBS_WIKI_CTEGRY
+    </select>
+
+    <!-- 2020-04-07, 위키트리  카테고리/명 -->
+    <select id="getPbbs5002List01" parameterType="ParameterMap" resultType="hashmap">
+    /*[TbbsWikiCtegry.xml][getPbbs5002List01][위키트리  카테고리/명][TANINE]*/
+    SELECT C.id
+         , C.pId
+         , C.name
+         , C.open
+         , C.isParent
+         , C.LEV
+      FROM (
+           SELECT W.WIKI_CTEGRY_SEQ     as id
+                , W.UP_WIKI_CTEGRY_SEQ  as pId
+                , W.WIKI_CTEGRY_NM     as name
+                , W.US_YN
+                , FN.LEV
+                , CASE WHEN FN.LEV = 3 THEN 'FALSE' ELSE 'TRUE' END AS open
+                , CASE WHEN FN.LEV = 3 THEN 'FALSE' ELSE 'TRUE' END AS isParent
+                , @rownum:=@rownum+1 as SRT_SEQ
+             FROM (
+                   SELECT GET_TREE_WIKICTEGRY(WIKI_CTEGRY_SEQ) AS WIKI_CTEGRY_SEQ
+                        , @LEVEL AS LEV
+                        , WIKI_CTEGRY_NM
+                     FROM (SELECT @START_WITH := 0, @ID := @START_WITH, @LEVEL := 0) VARS
+                        , TBBS_WIKI_CTEGRY
+                    WHERE @ID IS NOT NULL
+                  ) FN
+             JOIN TBBS_WIKI_CTEGRY W
+               ON W.WIKI_CTEGRY_SEQ = FN.WIKI_CTEGRY_SEQ
+                , (select @rownum:=0) r
+           ) C
+     WHERE 1=1
+       AND C.US_YN = 'Y'
+     ORDER BY C.SRT_SEQ
+    </select>
+    
+     <!-- 2020.04.07 위키 카테고리 복수 삭제 -->
+    <delete id="deletePbbs5001List01" parameterType="ParameterMap">
+    /* [TbbsWikiCtegryTrx.xml][deletePbbs5001List01][위키 카테고리 복수 삭제][TANINE] */
+    DELETE
+      FROM TBBS_WIKI_CTEGRY
+     WHERE 1=1
+       AND WIKI_CTEGRY_SEQ IN<foreach collection="wiki_ctegry_seq_list" item="list" separator="," open="(" close=")">#{list}</foreach>
+    </delete>
+
+    <!-- 2020.04.07 위키 카테고리 둥록 -->
+    <insert id="insertPbbs5001One" parameterType="ParameterMap">
+    /* [TbbsWikiCtegryTrx.xml][insertPbbs5001One][위키 카테고리 둥록][TANINE] */
+    INSERT INTO TBBS_WIKI_CTEGRY (
+           WIKI_CTEGRY_SEQ
+         , UP_WIKI_CTEGRY_SEQ
+         , WIKI_CTEGRY_NM
+         , SRT_SEQ
+         , US_YN
+         , CRTR_ID
+         , CRT_DTTM
+         , UPDR_ID
+         , UPD_DTTM
+         ) VALUES (
+           #{wiki_ctegry_seq   ,jdbcType=NUMERIC}
+         , #{up_wiki_ctegry_seq,jdbcType=NUMERIC}
+         , #{wiki_ctegry_nm      ,jdbcType=NUMERIC}
+         , if(#{srt_seq}='',(SELECT ifnull(MAX(S1.SRT_SEQ) + 1, 0)
+                                    FROM TBBS_WIKI_CTEGRY S1
+                                   WHERE S1.UP_WIKI_CTEGRY_SEQ  = #{up_wiki_ctegry_seq,jdbcType=NUMERIC}), #{srt_seq})
+         , #{us_yn         ,jdbcType=VARCHAR}
+         , #{crtr_id        ,jdbcType=VARCHAR}
+         , SYSDATE()
+         , #{updr_id        ,jdbcType=VARCHAR}
+         , SYSDATE()
+    )
+    </insert>
+
+    <!-- 2020.04.07 위키 카테고리 수정-->
+    <update id="updatePbbs5001One" parameterType="ParameterMap">
+    /* [TbbsWikiCtegryTrx.xml][updatePbbs5001One][위키 카테고리 수정][TANINE] */
+    UPDATE TBBS_WIKI_CTEGRY
+       SET
+           UP_WIKI_CTEGRY_SEQ = #{up_wiki_ctegry_seq,jdbcType=NUMERIC}
+         , WIKI_CTEGRY_NM       = #{wiki_ctegry_nm      ,jdbcType=VARCHAR}
+         , SRT_SEQ    = #{srt_seq   ,jdbcType=NUMERIC}
+         , US_YN          = #{us_yn         ,jdbcType=VARCHAR}
+         , UPDR_ID        = #{updr_id        ,jdbcType=VARCHAR}
+         , UPD_DTTM         = SYSDATE()
+     WHERE WIKI_CTEGRY_SEQ  = #{wiki_ctegry_seq,jdbcType=NUMERIC}
+    </update>
+
+    <update id="updatePbbs5001List01" parameterType="ParameterMap">
+    /* [TbbsWikiCtegryTrx.xml][updatePbbs5001List01][위키 카테고리 복수 수정][TANINE] */
+    UPDATE TBBS_WIKI_CTEGRY
+       SET US_YN   = #{us_yn ,jdbcType=VARCHAR}
+         , UPDR_ID = #{updr_id,jdbcType=VARCHAR}
+         , UPD_DTTM  = SYSDATE()
+     WHERE 1=1
+       AND WIKI_CTEGRY_SEQ IN<foreach collection="wiki_ctegry_seq_list" item="list" separator="," open="(" close=")">#{list}</foreach>
+    </update>
+
+</mapper>

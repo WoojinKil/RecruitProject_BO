@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmOrgGrpRolRtnn">
+	
+	<sql id="select-one-sql">
+		/*[TsysAdmOrgGrpRolRtnn.xml][select][TANINE]*/
+		SELECT ORG_CD
+             , GRP_ROL_ID
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_ORG_GRP_ROL_RTNN
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND ORG_CD = #{org_cd, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmOrgGrpRolRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

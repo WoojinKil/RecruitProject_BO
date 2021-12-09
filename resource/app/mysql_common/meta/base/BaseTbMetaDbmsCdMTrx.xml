@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMetaDbmsCdMTrx">
+	
+	<insert id="insert" parameterType="TbMetaDbmsCdM">
+        /*[TbMetaDbmsCdM.xml][insert][TANINE]*/
+        INSERT INTO TB_META_DBMS_CD_M
+		(
+			 CMPNY_CD
+		   , DBMS_CD
+		   , DBMS_NM
+		   , DBMS_CNTS
+		   , DBMS_RMK
+		   , REGRT_EMPNO
+		   , REG_DTM
+		   , US_YN
+		   , CRT_DTM
+		   , CRT_ID
+		   , MDF_DTM
+		   , MDF_ID
+		)
+		VALUES
+		(
+			 #{cmpny_cd, jdbcType=VARCHAR}
+		   , #{dbms_cd, jdbcType=VARCHAR}
+		   , #{dbms_nm, jdbcType=VARCHAR}
+		   , #{dbms_cnts, jdbcType=VARCHAR}
+		   , #{dbms_rmk, jdbcType=VARCHAR}
+		   , #{regrt_empno, jdbcType=VARCHAR}
+		   , #{reg_dtm, jdbcType=TIMESTAMP}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crt_dtm, jdbcType=TIMESTAMP}
+		   , #{crt_id, jdbcType=VARCHAR}
+		   , #{mdf_dtm, jdbcType=TIMESTAMP}
+		   , #{mdf_id, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="tbMetaDbmsCdM">
+        /*[TbMetaDbmsCdM.xml][update][TANINE]*/
+		UPDATE TB_META_DBMS_CD_M
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dbms_nm)">
+		       DBMS_NM = #{dbms_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dbms_cnts)">
+		     , DBMS_CNTS = #{dbms_cnts, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dbms_rmk)">
+		     , DBMS_RMK = #{dbms_rmk, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(regrt_empno)">
+		     , REGRT_EMPNO = #{regrt_empno, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(reg_dtm)">
+		     , REG_DTM = #{reg_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dtm)">
+		     , CRT_DTM = #{crt_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_id)">
+		     , CRT_ID = #{crt_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_dtm)">
+		     , MDF_DTM = #{mdf_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_id)">
+		     , MDF_ID = #{mdf_id, jdbcType=VARCHAR}
+		       </if>
+		WHERE DBMS_CD = #{dbms_cd, jdbcType=VARCHAR} 
+           AND CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TbMetaDbmsCdM">
+        /*[TbMetaDbmsCdM.xml][delete][TANINE]*/
+		DELETE FROM TB_META_DBMS_CD_M
+		 WHERE DBMS_CD = #{dbms_cd, jdbcType=VARCHAR} 
+           AND CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+	</delete>
+
+</mapper>

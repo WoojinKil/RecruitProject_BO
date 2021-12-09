@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PsysCommon">
+
+    <!-- [sample] -->
+    <select id="selectPsysList" parameterType="ParameterMap" resultType="CommonInfo">
+        SELECT CM.MST_CD    AS CODE_CD
+              ,CM.MST_CD_NM AS CODE_NM 
+              ,CD.CD        AS CODE_CD1           
+              ,CD.CD_NM     AS CODE_NM1    
+              ,CD.REF_1     AS CODE_ETC1
+              ,CD.REF_2     AS CODE_ETC2             
+              ,CD.REF_3     AS CODE_ETC3             
+          FROM TCMN_CD_DTL CD
+              ,TCMN_CD_MST CM
+         WHERE CD.MST_CD = CM.MST_CD
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(p1 )">AND CM.MST_CD = #{p1, jdbcType=VARCHAR}</if>
+         ORDER BY CD.SRT_SEQ
+    </select>
+    
+    <!-- 파라미터 시간 유효성 검사 (10분) -->
+    <select id="selectAvailabilityTime" parameterType="String" resultType="int">
+        SELECT TIMESTAMPDIFF(SECOND, DATE_FORMAT(#{checkTime, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i:%s'),DATE_FORMAT(UTC_TIMESTAMP(), '%Y-%m-%d %H:%i:%s')) AS AVAILABILITY_TIME
+    </select>
+    
+    <!-- 현재 시간 -->
+    <select id="selectNowTime" resultType="String">
+        SELECT DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') AS NOW_TIME
+    </select>
+    
+    <select id="selectShopGrdeCdOne" resultType="String">
+        SELECT IFNULL(SHOP_GRDE_CD, '') AS SHOP_GRDE_CD
+          FROM TB_BCPC_USPRATHR_M 
+         WHERE MSTRS_USPR_ID IS NOT NULL
+           AND USR_ID = #{user_id, jdbcType=VARCHAR} 
+         LIMIT 1
+    </select>
+    
+</mapper>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="pandora3">
+	<!-- ######################################################### -->
+	<!-- properties configuration for build                        -->
+	<!-- ######################################################### -->
+	<property environment="env" />
+	<property name="system.name"                   value="pandora3" />
+	<property name="project.name"                  value="pandora3" />
+	<property name="jenkins.workspace"             value="C:/work/99.dev/project" />
+	<property name="system.package.name"           value="${system.name}Package"/>                                     <!-- erikPackage -->
+	<property name="system.library.name"           value="${system.name}Library"/>                                     <!-- ecfcLibrary -->
+	<property name="system.batch.name"             value="${system.name}Batch"/>                                       <!-- ecfcBatch   -->
+
+    <property name="working.dir"                   value="${jenkins.workspace}"/>                                      <!-- /apps/ecfc -->
+    <property name="source.dir"                    value="${jenkins.workspace}/${project.name}"/>         <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO -->
+    <property name="file.path.war"                 value="${working.dir}/${project.name}"/>                            <!-- /apps/ecfc/ecfcBO -->
+	<property name="file.path.package"             value="${working.dir}/${system.package.name}"/>                     <!-- /apps/ecfc/erikPackage -->
+    <property name="file.path.library"             value="${working.dir}/${system.library.name}" />                    <!-- /apps/ecfc/ecfcLibrary -->
+	
+	<property name="build.dir"                     value="C:/work/99.dev/deploy"/>                               <!-- /apps/ecfc -->
+	
+	<property name="source.dir.archive"            value="${source.dir}/archive" />                                    <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/archive -->
+	<property name="source.dir.build"              value="${source.dir}/build" />                                      <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/build -->
+	<property name="source.dir.res"                value="${source.dir}/resource" />                                   <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/resource -->
+	<property name="source.dir.app"                value="${source.dir.res}/app" />                                    <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/resource/app -->
+    <property name="source.dir.mybatis"            value="${source.dir.app}/mybatis" />                                <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/resource/app/mybatis-->
+    <property name="source.dir.postgres"           value="${source.dir.app}/postgres" />                               <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/resource/app/postgres-->
+	<property name="source.dir.spring"             value="${source.dir.res}/spring" />                                 <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/resource/spring -->
+    <property name="source.dir.appservlet"         value="${source.dir.spring}/appServlet" />                          <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/resource/spring/appServlet -->
+	<property name="source.dir.src"                value="${source.dir}/src/kr/co/ta9/${system.name}" />            <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/src/kr/co/ta9/ecfc -->
+	
+	<property name="source.dir.package.src"         value="${file.path.package}/src/kr/co/ta9/${system.name}" />            <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/src/kr/co/ta9/ecfc -->
+	
+	<property name="source.dir.webcontent"         value="${source.dir}/WebContent" />                                 <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/WebContent -->
+    <property name="source.dir.webinf"             value="${source.dir.webcontent}/WEB-INF" />                         <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/WebContent/WEB-INF -->
+    <property name="source.dir.lib"                value="${source.dir.webinf}/lib" />                                 <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/WebContent/WEB-INF/lib -->
+    <property name="source.dir.views"              value="${source.dir.webinf}/views" />                               <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/WebContent/WEB-INF/views -->
+    <property name="source.dir.resources"          value="${source.dir.webcontent}/resources" />                       <!-- /apps/jenkins/working/workspace/sourceUpdate/ecfcBO/WebContent/resources/erik -->
+	
+	<property name="build.dest.webinf"             value="${build.dir}/WEB-INF" />                              <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF -->
+	
+	<!--property name="build.dest.webinf"             value="${source.dir.build}/WEB-INF" / -->                              <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF -->	
+    <property name="build.dest.classes"            value="${build.dest.webinf}/classes" />                             <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/classes -->
+	<property name="build.dest.app"                value="${build.dest.classes}/app" />                                <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/classes/app -->
+	<property name="build.dest.mybatis"            value="${build.dest.app}/mybatis" />                                <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/classes/app/mybatis -->
+	<property name="build.dest.postgres"           value="${build.dest.app}/postgres" />                               <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/classes/app/postgres -->
+	<property name="build.dest.src"                value="${build.dest.classes}/kr/co/ta9/${system.name}" />        <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/classes/kr/co/ta9/ecfc -->
+	<property name="build.dest.spring"             value="${build.dest.classes}/spring" />                             <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/classes/spring -->
+	<property name="build.dest.appservlet"         value="${build.dest.spring}/appServlet" />                          <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/classes/spring/appServlet -->
+    <property name="build.dest.lib"                value="${build.dest.webinf}/lib" />                                 <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/lib -->	
+    <property name="build.dest.views"              value="${build.dest.webinf}/views" />                               <!-- /apps/jenkins/working/workspace/ecfcBO/build/WEB-INF/views -->
+	<property name="build.dest.resources"          value="${build.dest}/resources" />                                  <!-- /apps/jenkins/working/workspace/ecfcBO/build/resources/erik -->
+	
+	
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+	<property name="src.dir" value="${source.dir.src}" />
+	<property name="src.package.dir" value="${source.dir.package.src}" />
+	<property name="resource.dir" value="${source.dir.res}" />
+	<property name="archive.name" value="${project.name}.war" />
+	
+	<path id="Project.classpath">
+		<pathelement location="${file.path.package}" />
+		<fileset dir="${file.path.library}/library" includes="**/*.jar" />
+	</path>
+
+	<!-- ######################################################### -->
+	<!-- endpoint targets                                          -->
+	<!-- ######################################################### -->
+	
+	<target name="build" depends="init, copy-webcontent,build-project-package,  build-project,build-nonclass, make-war " />
+
+	<target name="init">
+		<delete includeemptydirs="true" quiet="true">
+			<fileset dir="${build.dir}" includes="**/*" />
+		</delete>
+		<delete includeemptydirs="true" quiet="true">
+            <fileset dir="${sbuild.dir.archive}" includes="**/*">
+            </fileset>
+        </delete>
+	</target>
+	
+	<target name="copy-webcontent">
+		<copy todir="${build.dir}" includeemptydirs="true" verbose="true" overwrite="true">
+			<fileset dir="${source.dir.webcontent}" excludes="**/META-INF/**,**/build/**">
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="build-project-package">
+			<mkdir dir="${build.dest.classes}"/>
+			<javac includeantruntime="true" fork="yes" deprecation="false" debug="true" debuglevel="${debuglevel}" destdir="${build.dest.classes}" source="${source}" 
+				target="${target}" encoding="UTF-8">
+				<src path="${src.package.dir}" />
+				<classpath refid="Project.classpath" />
+			</javac>
+   </target>
+	
+	<target name="build-project">
+		<mkdir dir="${build.dest.classes}"/>
+		<javac includeantruntime="true" fork="yes" deprecation="false" debug="true" debuglevel="${debuglevel}" destdir="${build.dest.classes}" source="${source}" 
+			target="${target}" encoding="UTF-8">
+			<src path="${src.dir}" />
+			<classpath refid="Project.classpath" />
+		</javac>
+	</target>
+	
+	<target name="build-nonclass">
+		<copy includeemptydirs="true" todir="${build.dest.classes}">
+			<fileset dir="src" excludes="**/*.java" />
+			<fileset dir="${source.dir.res}"/>
+		</copy>
+		<copy includeemptydirs="true" todir="${build.dest.lib}">
+			<fileset dir="${file.path.library}/library" includes="**/*.jar" />
+		</copy>
+	</target>
+	
+	<target name="make-war">
+		<war destfile="${source.dir.archive}/${archive.name}">
+			<fileset dir="${source.dir.build}" />
+			<exclude name="web.xml" />
+		</war>
+		<copy file="${source.dir.archive}/${archive.name}" tofile="${file.path.war}/${archive.name}"/>
+	</target>
+	
+	<!--
+	###########################################
+					end target
+	###########################################
+	-->
+</project>

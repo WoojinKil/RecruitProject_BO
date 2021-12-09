@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsDocAddItmInf">
+	
+	<sql id="select-one-sql">
+		/*[TbbsDocAddItmInf.xml][select][TANINE]*/
+		SELECT MODL_SEQ
+             , DOC_SEQ
+             , DOC_ITM_VAL
+             , EID
+             , VAR_SEQ
+             , LANG_CD
+             , CD
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TBBS_DOC_ADD_ITM_INF
+		 WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC} 
+           AND LANG_CD = #{lang_cd, jdbcType=VARCHAR} 
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC} 
+           AND VAR_SEQ = #{var_seq, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbbsDocAddItmInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

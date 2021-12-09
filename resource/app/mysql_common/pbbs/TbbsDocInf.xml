@@ -1,0 +1,2508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsDocInf">
+
+	<sql id="select-one-sql">
+		/*[BaseTbbsDocInf.xml][select][TANINE]*/
+		SELECT DOC_SEQ
+             , MODL_SEQ
+             , CTEGRY_DTL_CD
+             , NOTC_YN
+             , TITL
+             , CTS
+             , INQ_CNT
+             , CMT_CNT
+             , SCP_CNT
+             , DEL_YN
+             , LGN_ID
+             , IP_ADDR
+             , SCP_PMS_YN
+             , CMT_PMS_STAT
+             , NICKNAME
+             , OTP_STAT
+             , UPL_CNT
+             , URL_INF
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TBBS_DOC_INF
+		 WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TbbsDocInf">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+
+	<insert id="insert" parameterType="TbbsDocInf">
+        /*[BaseTbbsDocInfTrx.xml][insert][TANINE]*/
+        INSERT INTO TBBS_DOC_INF
+		(
+			 DOC_SEQ
+		   , MODL_SEQ
+		   , CTEGRY_DTL_CD
+		   , NOTC_YN
+		   , TITL
+		   , CTS
+		   , INQ_CNT
+		   , CMT_CNT
+		   , SCP_CNT
+		   , DEL_YN
+		   , LGN_ID
+		   , IP_ADDR
+		   , SCP_PMS_YN
+		   , CMT_PMS_STAT
+		   , NICKNAME
+		   , OTP_STAT
+		   , UPL_CNT
+		   , URL_INF
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{doc_seq, jdbcType=NUMERIC}
+		   , #{modl_seq, jdbcType=NUMERIC}
+		   , #{ctegry_dtl_cd, jdbcType=NUMERIC}
+		   , #{notc_yn, jdbcType=VARCHAR}
+		   , #{titl, jdbcType=VARCHAR}
+		   , #{cts, jdbcType=LONGVARCHAR}
+		   , #{inq_cnt, jdbcType=NUMERIC}
+		   , #{cmt_cnt, jdbcType=NUMERIC}
+		   , #{scp_cnt, jdbcType=NUMERIC}
+		   , #{del_yn, jdbcType=VARCHAR}
+		   , #{lgn_id, jdbcType=VARCHAR}
+		   , #{ip_addr, jdbcType=VARCHAR}
+		   , #{scp_pms_yn, jdbcType=VARCHAR}
+		   , #{cmt_pms_stat, jdbcType=VARCHAR}
+		   , #{nickname, jdbcType=VARCHAR}
+		   , #{otp_stat, jdbcType=VARCHAR}
+		   , #{upl_cnt, jdbcType=NUMERIC}
+		   , #{url_inf, jdbcType=LONGVARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TbbsDocInf">
+        /*[BaseTbbsDocInfTrx.xml][update][TANINE]*/
+		UPDATE TBBS_DOC_INF
+		   SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_modl_seq)">
+		     , MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_ctegry_dtl_cd)">
+		     , CTEGRY_DTL_CD = #{ctegry_dtl_cd, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(notc_yn)">
+		     , NOTC_YN = #{notc_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(titl)">
+		     , TITL = #{titl, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cts)">
+		     , CTS = #{cts, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_inq_cnt)">
+		     , INQ_CNT = #{inq_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_cmt_cnt)">
+		     , CMT_CNT = #{cmt_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_scp_cnt)">
+		     , SCP_CNT = #{scp_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(del_yn)">
+		     , DEL_YN = #{del_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+		     , LGN_ID = #{lgn_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ip_addr)">
+		     , IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(scp_pms_yn)">
+		     , SCP_PMS_YN = #{scp_pms_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cmt_pms_stat)">
+		     , CMT_PMS_STAT = #{cmt_pms_stat, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(nickname)">
+		     , NICKNAME = #{nickname, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(otp_stat)">
+		     , OTP_STAT = #{otp_stat, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_upl_cnt)">
+		     , UPL_CNT = #{upl_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url_inf)">
+		     , URL_INF = #{url_inf, jdbcType=LONGVARCHAR}
+		       </if>
+		WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delete" parameterType="TbbsDocInf">
+        /*[BaseTbbsDocInfTrx.xml][delete][TANINE]*/
+		DELETE FROM TBBS_DOC_INF
+		 WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+	</delete>
+
+    <!-- 게시판 목록 조회 : TYPE 1 -->
+    <select id="selectTbbsDocInfType1List" parameterType="ParameterMap" resultType="TbbsDocInf">
+        /*{TbbsDocInf.selectTbbsDocInfType1List}*/
+        SELECT allc.*
+             , (SELECT GROUP_CONCAT(s1.FL_SEQ ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_SEQ
+             , (SELECT GROUP_CONCAT(s1.ORI_FL_NM ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS ORI_FL_NM
+             , (SELECT GROUP_CONCAT(s1.FL_EXT ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_EXT
+             , (SELECT COUNT(1)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_CNT
+        FROM   (
+                SELECT noti.*
+                FROM   (
+                        SELECT 0 AS PAGE
+                             , 0 AS TOTAL_PAGE
+                             , 0 AS TOTAL_COUNT
+                             , 0 AS ROW_NUM
+                             , a.DOC_SEQ
+                             , a.MODL_SEQ
+                             , a.NOTC_YN
+                             , a.TITL
+                             , (SELECT s1.DOC_ITM_VAL
+                                FROM   TBBS_DOC_ADD_ITM_INF s1
+                                WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                                AND    s1.DOC_SEQ = a.DOC_SEQ
+                                AND    s1.EID = 'author') AS AUTHOR
+                             , (SELECT s1.DOC_ITM_VAL
+                                FROM   TBBS_DOC_ADD_ITM_INF s1
+                                WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                                AND    s1.DOC_SEQ = a.DOC_SEQ
+                                AND    s1.EID = 'pbl_date') AS PBL_DATE
+                             , a.INQ_CNT
+                        FROM   TBBS_DOC_INF a
+                        WHERE  a.NOTC_YN = 'Y'
+                        AND    a.DEL_YN = 'N'
+                        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                        ORDER BY a.CRT_DTTM DESC
+                       ) noti
+                UNION ALL
+                SELECT basc.*
+                FROM   (
+                        SELECT CEIL(ttt1.ROW_NUM / #{rows, jdbcType=NUMERIC}) AS PAGE
+                             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE
+                             , @ROW_NUMBER AS TOTAL_COUNT
+                             , ttt1.*
+                        FROM   (
+                                SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS ROW_NUM
+                                     , tt1.*
+                                FROM   (
+                                        SELECT b.DOC_SEQ
+                                             , b.MODL_SEQ
+                                             , b.NOTC_YN
+                                             , b.TITL
+                                             , b.AUTHOR
+                                             , b.PBL_DATE
+                                             , b.INQ_CNT
+                                        FROM   (
+                                                SELECT a.DOC_SEQ
+                                                     , a.MODL_SEQ
+                                                     , a.CTEGRY_DTL_CD
+                                                     , a.NOTC_YN
+                                                     , a.TITL
+                                                     , (SELECT s1.DOC_ITM_VAL
+                                                        FROM   TBBS_DOC_ADD_ITM_INF s1
+                                                        WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                                                        AND    s1.DOC_SEQ = a.DOC_SEQ
+                                                        AND    s1.EID = 'author') AS AUTHOR
+                                                     , (SELECT s1.DOC_ITM_VAL
+                                                        FROM   TBBS_DOC_ADD_ITM_INF s1
+                                                        WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                                                        AND    s1.DOC_SEQ = a.DOC_SEQ
+                                                        AND    s1.EID = 'pbl_date') AS PBL_DATE
+                                                     , a.INQ_CNT
+                                                     , a.CTS
+                                                FROM   TBBS_DOC_INF a
+                                                WHERE  a.NOTC_YN = 'N'
+                                                AND    a.DEL_YN = 'N'
+                                                AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                                                AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                                                ORDER BY a.CRT_DTTM DESC
+                                               ) b
+                                        WHERE  1 = 1
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_year)">
+                                        AND    SUBSTRING(b.PBL_DATE, 1, 4) = #{sch_year, jdbcType=VARCHAR}
+                                        </if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_dtl_cd)">
+                                        AND    b.CTEGRY_DTL_CD = #{ctegry_dtl_cd, jdbcType=NUMERIC}
+                                        </if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+                                        <choose>
+                                        <when test='sch_type == "1"'>
+                                        AND    b.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "2"'>
+                                        AND    b.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "3"'>
+                                        AND    b.AUTHOR LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <otherwise>
+                                        AND    b.PBL_DATE LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </otherwise>
+                                        </choose>
+                                        </if>
+                                       ) tt1
+                                     , (SELECT @ROW_NUMBER := 0) tt2
+                               ) ttt1
+                       ) basc
+                WHERE  basc.PAGE = #{page, jdbcType=NUMERIC}
+               ) allc
+    </select>
+
+    <!-- 게시판 목록 조회 : TYPE 2 -->
+    <select id="selectTbbsDocInfType2List" parameterType="ParameterMap" resultType="TbbsDocInf">
+        /*{TbbsDocInf.selectTbbsDocInfType2List}*/
+        SELECT allc.*
+             , (SELECT GROUP_CONCAT(s1.FL_SEQ ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_SEQ
+             , (SELECT GROUP_CONCAT(s1.ORI_FL_NM ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS ORI_FL_NM
+             , (SELECT GROUP_CONCAT(s1.FL_EXT ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_EXT
+             , (SELECT COUNT(1)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_CNT
+             , (SELECT replace(s1.UPL_FL_NM, './', '/')
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('jpg','jpeg','png','gif','bmp')
+                ORDER
+                BY     s1.FL_SEQ
+                limit  1
+                ) as UPL_IMG_FL_NM
+        FROM   (
+                SELECT noti.*
+                FROM   (
+                        SELECT 0 AS page
+                             , 0 AS total_page
+                             , 0 AS total_count
+                             , 0 AS row_num
+                             , a.DOC_SEQ
+                             , a.MODL_SEQ
+                             , a.NOTC_YN
+                             , a.TITL
+                             , a.LGN_ID
+                             , a.CRT_DTTM
+                             , a.INQ_CNT
+                        FROM   TBBS_DOC_INF a
+                        WHERE  a.NOTC_YN = 'Y'
+                        AND    a.DEL_YN = 'N'
+                        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                        ORDER BY a.CRT_DTTM DESC
+                       ) noti
+                UNION ALL
+                SELECT basc.*
+                FROM   (
+                        SELECT CEIL(ttt1.row_num / #{rows, jdbcType=NUMERIC}) AS page
+                             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS total_page
+                             , @ROW_NUMBER AS total_count
+                             , ttt1.*
+                        FROM   (
+                                SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS row_num
+                                     , tt1.*
+                                FROM   (
+                                        SELECT a.DOC_SEQ
+                                             , a.MODL_SEQ
+                                             , a.NOTC_YN
+                                             , a.TITL
+                                             , a.LGN_ID
+                                             , a.CRT_DTTM
+                                             , a.INQ_CNT
+                                        FROM   TBBS_DOC_INF a
+                                        WHERE  a.NOTC_YN = 'N'
+                                        AND    a.DEL_YN = 'N'
+                                        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                                        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+                                        <choose>
+                                        <when test='sch_type == "1"'>
+                                        AND    a.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "2"'>
+                                        AND    a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "3"'>
+                                        AND    (a.TITL   LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%') OR
+                                                a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+                                        </when>
+                                        <otherwise>
+                                        AND    a.LGN_ID LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </otherwise>
+                                        </choose>
+                                        </if>
+                                        ORDER BY a.CRT_DTTM DESC
+                                       ) tt1
+                                     , (SELECT @ROW_NUMBER := 0) tt2
+                               ) ttt1
+                       ) basc
+                WHERE  basc.page = #{page, jdbcType=NUMERIC}
+               ) allc
+    </select>
+
+    <!-- 게시판 목록 조회 : TYPE 3 -->
+    <select id="selectTbbsDocInfType3List" parameterType="ParameterMap" resultType="TbbsDocInf">
+        /*{TbbsDocInf.selectTbbsDocInfType3List}*/
+        SELECT allc.*
+        FROM   (
+                SELECT noti.*
+                FROM   (
+                        SELECT 0 AS page
+                             , 0 AS total_page
+                             , 0 AS total_count
+                             , 0 AS row_num
+                             , a.DOC_SEQ
+                             , a.MODL_SEQ
+                             , a.NOTC_YN
+                             , a.TITL
+                             , a.LGN_ID
+                             , a.CRT_DTTM
+                             , a.INQ_CNT
+                             , a.OTP_STAT
+                             , '0' AS treatment_cd
+                        FROM   TBBS_DOC_INF a
+                        WHERE  a.NOTC_YN = 'Y'
+                        AND    a.DEL_YN = 'N'
+                        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                        ORDER BY a.CRT_DTTM DESC
+                       ) noti
+                UNION ALL
+                SELECT basc.*
+                FROM   (
+                        SELECT CEIL(ttt1.row_num / #{rows, jdbcType=NUMERIC}) AS page
+                             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS total_page
+                             , @ROW_NUMBER AS total_count
+                             , ttt1.*
+                        FROM   (
+                                SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS row_num
+                                     , tt1.*
+                                FROM   (
+                                        SELECT a.DOC_SEQ
+                                             , a.MODL_SEQ
+                                             , a.NOTC_YN
+                                             , a.TITL
+                                             , a.LGN_ID
+                                             , a.CRT_DTTM
+                                             , a.INQ_CNT
+                                             , a.OTP_STAT
+                                             , (SELECT s1.CD
+                                                FROM   TBBS_DOC_ADD_ITM_INF s1
+                                                WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                                                AND    s1.DOC_SEQ = a.DOC_SEQ
+                                                AND    s1.EID = 'treatment') AS treatment_cd
+                                        FROM   TBBS_DOC_INF a
+                                        WHERE  a.NOTC_YN = 'N'
+                                        AND    a.DEL_YN = 'N'
+                                        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                                        AND    a.MODL_SEQ = #{MODL_SEQ, jdbcType=NUMERIC}
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+                                        <choose>
+                                        <when test='sch_type == "1"'>
+                                        AND    a.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "2"'>
+                                        AND    a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "3"'>
+                                        AND    (a.TITL   LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%') OR
+                                                a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+                                        </when>
+                                        <when test='sch_type == "4"'>
+                                        AND    a.LGN_ID LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <otherwise>
+                                        AND    a.NICKNAME LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </otherwise>
+                                        </choose>
+                                        </if>
+                                        ORDER BY a.CRT_DTTM DESC
+                                       ) tt1
+                                     , (SELECT @ROW_NUMBER := 0) tt2
+                               ) ttt1
+                       ) basc
+                WHERE  basc.page = #{page, jdbcType=NUMERIC}
+               ) allc
+    </select>
+
+
+    <!-- 게시판 목록 조회 : TYPE 5 -->
+    <select id="selectTbbsDocInfType5List" parameterType="ParameterMap" resultType="TbbsDocInf">
+        /*{TbbsDocInf.selectTbbsDocInfType5List}*/
+        SELECT allc.*
+             , (SELECT GROUP_CONCAT(s1.FL_SEQ ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_SEQ
+             , (SELECT GROUP_CONCAT(s1.ORI_FL_NM ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS ORI_FL_NM
+             , (SELECT GROUP_CONCAT(s1.FL_EXT ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_EXT
+             , (SELECT COUNT(1)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('doc', 'docx', 'xls', 'xlsx', 'hwp', 'pdf', 'zip')) AS FL_CNT
+             , (SELECT replace(s1.UPL_FL_NM, './', '/')
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('jpg','jpeg','png','gif','bmp')
+                ORDER
+                BY     s1.FL_SEQ desc
+                limit  1
+                ) as UPL_IMG_FL_NM
+        FROM   (
+                SELECT noti.*
+                FROM   (
+                        SELECT 0 AS page
+                             , 0 AS total_page
+                             , 0 AS total_count
+                             , 0 AS row_num
+                             , a.DOC_SEQ
+                             , a.MODL_SEQ
+                             , a.NOTC_YN
+                             , a.TITL
+                             , a.CTS
+                             , a.LGN_ID
+                             , a.CRT_DTTM
+                             , a.INQ_CNT
+                             , a.URL_INF
+                        FROM   TBBS_DOC_INF a
+                        WHERE  a.NOTC_YN = 'Y'
+                        AND    a.DEL_YN = 'N'
+                        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                        ORDER BY a.CRT_DTTM DESC
+                       ) noti
+                UNION ALL
+                SELECT basc.*
+                FROM   (
+                        SELECT CEIL(ttt1.row_num / #{rows, jdbcType=NUMERIC}) AS page
+                             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS total_page
+                             , @ROW_NUMBER AS total_count
+                             , ttt1.*
+                        FROM   (
+                                SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS row_num
+                                     , tt1.*
+                                FROM   (
+                                        SELECT a.DOC_SEQ
+                                             , a.MODL_SEQ
+                                             , a.NOTC_YN
+                                             , a.TITL
+                                             , a.CTS
+                                             , a.LGN_ID
+                                             , a.CRT_DTTM
+                                             , a.INQ_CNT
+                                             , a.URL_INF
+                                        FROM   TBBS_DOC_INF a
+                                        WHERE  a.NOTC_YN = 'N'
+                                        AND    a.DEL_YN = 'N'
+                                        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                                        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+                                        <choose>
+                                        <when test='sch_type == "1"'>
+                                        AND    a.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "2"'>
+                                        AND    a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "3"'>
+                                        AND    (a.TITL   LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%') OR
+                                                a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+                                        </when>
+                                        <otherwise>
+                                        AND    a.LGN_ID LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </otherwise>
+                                        </choose>
+                                        </if>
+                                        ORDER BY a.CRT_DTTM DESC
+                                       ) tt1
+                                     , (SELECT @ROW_NUMBER := 0) tt2
+                               ) ttt1
+                       ) basc
+                WHERE  basc.page = #{page, jdbcType=NUMERIC}
+               ) allc
+    </select>
+
+
+    <!-- 게시판 상세 정보 조회 : TYPE 1 -->
+    <select id="selectTbbsDocInfType1View" parameterType="ParameterMap" resultType="TbbsDocInf">
+        /*{TbbsDocInf.selectTbbsDocInfType1View}*/
+        SELECT a.MODL_SEQ
+             , a.DOC_SEQ
+             , a.TITL
+             , (SELECT s1.DOC_ITM_VAL
+                FROM   TBBS_DOC_ADD_ITM_INF s1
+                WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                AND    s1.DOC_SEQ = a.DOC_SEQ
+                AND    s1.EID = 'author') AS AUTHOR
+             , (SELECT s1.DOC_ITM_VAL
+                FROM   TBBS_DOC_ADD_ITM_INF s1
+                WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                AND    s1.DOC_SEQ = a.DOC_SEQ
+                AND    s1.EID = 'pbl_date') AS PBL_DATE
+             , (SELECT s1.DOC_ITM_VAL
+                FROM   TBBS_DOC_ADD_ITM_INF s1
+                WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                AND    s1.DOC_SEQ = a.DOC_SEQ
+                AND    s1.EID = 'total_page_num') AS TOTAL_PAGE_NUM
+             , (SELECT GROUP_CONCAT(s1.FL_SEQ ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = a.DOC_SEQ) AS FL_SEQ
+             , (SELECT GROUP_CONCAT(s1.ORI_FL_NM ORDER BY s1.CRT_DTTM)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = a.DOC_SEQ) AS ORI_FL_NM
+             , (SELECT COUNT(1)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = a.DOC_SEQ) AS FL_CNT
+             , a.cts
+             , (SELECT s1.DOC_ITM_VAL
+                FROM   TBBS_DOC_ADD_ITM_INF s1
+                WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                AND    s1.DOC_SEQ = a.DOC_SEQ
+                AND    s1.EID = 'contents_table') AS CONTENTS_TABLE
+             , a.CRTR_ID
+             , a.CRT_DTTM
+             , a.OTP_STAT
+             , a.CMT_PMS_STAT
+             , IFNULL((select s1.USR_NM from TMBR_USR_INF s1 where s1.USR_ID = a.CRTR_ID)
+                     ,(select s1.USR_NM from TMBR_ADM_LGN_INF s1 where s1.USR_ID = a.CRTR_ID)) as USR_NM
+             , a.CTEGRY_DTL_CD
+             , a.NOTC_YN
+             , a.LGN_ID
+             , a.DSPLY_YN
+             , a.DSPLY_ST_DTTM
+             , a.DSPLY_ED_DTTM
+             , DATE_FORMAT(a.DSPLY_ST_DTTM, '%Y-%m-%d %H:%i') AS F_DSPLY_ST_DTTM
+             , DATE_FORMAT(a.DSPLY_ED_DTTM, '%Y-%m-%d %H:%i') AS F_DSPLY_ED_DTTM
+        FROM   TBBS_DOC_INF a
+        WHERE  a.OTP_STAT IN ('PUBLIC', 'SECRET')
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(del_yn)">
+        AND    a.DEL_YN = #{del_yn, jdbcType=VARCHAR}
+        </if>
+        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    a.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </select>
+
+    <!-- 게시판 상세 정보 조회 : TYPE 2 -->
+    <select id="selectTbbsDocInfType2View" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfType2View][게시판 상세 정보 조회 : TYPE 2][TANINE]*/
+        SELECT a.MODL_SEQ
+             , a.DOC_SEQ
+             , a.TITL
+             , a.LGN_ID
+             , a.CRT_DTTM
+             , a.INQ_CNT
+             , (SELECT COUNT(1)
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = a.DOC_SEQ) AS FL_CNT
+             , a.CTS
+             , a.CRTR_ID
+             , a.OTP_STAT
+             , a.CMT_PMS_STAT
+             , (select s1.USR_NM from TMBR_ADM_LGN_INF s1 where s1.USR_ID = a.CRTR_ID) as USR_NM
+             , a.NOTC_YN
+             , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = (SELECT SYS_CD FROM TBBS_MODL_INF WHERE MODL_SEQ = a.MODL_SEQ)) AS SYS_NM
+             , a.CTEGRY_MST_CD
+             , (SELECT CTEGRY_DTL_NM FROM TBBS_CTEGRY_DTL WHERE CTEGRY_MST_CD = a.CTEGRY_MST_CD AND CTEGRY_DTL_CD = a.CTEGRY_DTL_CD) AS CTEGRY_DTL_NM
+             , a.CTEGRY_DTL_CD
+             , b.FL_SEQ
+             , b.ORI_FL_NM
+             , a.DSPLY_YN
+             , a.DSPLY_ST_DTTM
+             , a.DSPLY_ED_DTTM
+             , DATE_FORMAT(a.DSPLY_ST_DTTM, '%Y-%m-%d %H:%i') AS F_DSPLY_ST_DTTM
+             , DATE_FORMAT(a.DSPLY_ED_DTTM, '%Y-%m-%d %H:%i') AS F_DSPLY_ED_DTTM
+        FROM   TBBS_DOC_INF a LEFT JOIN TBBS_FL_INF b
+          ON   a.DOC_SEQ  = b.DOC_SEQ AND b.THUMB_YN = 'Y'
+        WHERE  a.OTP_STAT IN ('PUBLIC', 'SECRET')
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(del_yn)">
+        AND    a.DEL_YN = #{del_yn, jdbcType=VARCHAR}
+        </if>
+        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    a.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </select>
+
+    <!-- 게시판 상세 정보 조회 : TYPE 3 -->
+    <select id="selectTbbsDocInfType3View" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfType3View][게시판 상세 정보 조회 : TYPE 3][TANINE]*/
+        SELECT A.MODL_SEQ
+             , A.DOC_SEQ
+             , A.TITL
+             , A.LGN_ID
+             , DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+             , A.INQ_CNT
+             , (SELECT S1.DOC_ITM_VAL
+                FROM   TBBS_DOC_ADD_ITM_INF S1
+                WHERE  S1.MODL_SEQ = A.MODL_SEQ
+                AND    S1.DOC_SEQ = A.DOC_SEQ
+                AND    S1.EID = 'treatment') AS TREATMENT
+             , (SELECT S1.CD
+                FROM   TBBS_DOC_ADD_ITM_INF S1
+                WHERE  S1.MODL_SEQ = A.MODL_SEQ
+                AND    S1.DOC_SEQ = A.DOC_SEQ
+                AND    S1.EID = 'treatment') AS TREATMENT_CD
+             , (SELECT GROUP_CONCAT(S1.FL_SEQ ORDER BY S1.CRT_DTTM)
+                FROM   TBBS_FL_INF S1
+                WHERE  S1.DOC_SEQ = A.DOC_SEQ) AS FL_SEQ
+             , (SELECT GROUP_CONCAT(S1.ORI_FL_NM ORDER BY S1.CRT_DTTM)
+                FROM   TBBS_FL_INF S1
+                WHERE  S1.DOC_SEQ = A.DOC_SEQ) AS ORI_FL_NM
+             , (SELECT COUNT(1)
+                FROM   TBBS_FL_INF S1
+                WHERE  S1.DOC_SEQ = A.DOC_SEQ) AS FL_CNT
+             , A.CTS
+             , A.CRTR_ID
+             , A.OTP_STAT
+             , (SELECT S1.USR_NM FROM TMBR_ADM_LGN_INF S1 WHERE S1.USR_ID = A.CRTR_ID) AS USR_NM
+             , A.CMT_PMS_STAT
+        FROM   TBBS_DOC_INF A
+        WHERE  A.OTP_STAT IN ('PUBLIC', 'SECRET')
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(del_yn)">
+        AND    A.DEL_YN = #{del_yn, jdbcType=VARCHAR}
+        </if>
+        AND    A.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    A.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </select>
+
+    <!-- 게시판 상세 정보 조회 : TYPE 4 -->
+    <select id="selectTbbsDocInfType4View" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfType4View][게시판 상세 정보 조회 : TYPE 4][TANINE]*/
+        SELECT A.MODL_SEQ
+             , A.DOC_SEQ
+             , A.TITL
+             , A.LGN_ID
+             , DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+             , A.INQ_CNT
+             , (SELECT S1.DOC_ITM_VAL
+                FROM   TBBS_DOC_ADD_ITM_INF S1
+                WHERE  S1.MODL_SEQ = A.MODL_SEQ
+                AND    S1.DOC_SEQ = A.DOC_SEQ
+                AND    S1.EID = 'treatment') AS TREATMENT
+             , (SELECT S1.CD
+                FROM   TBBS_DOC_ADD_ITM_INF S1
+                WHERE  S1.MODL_SEQ = A.MODL_SEQ
+                AND    S1.DOC_SEQ = A.DOC_SEQ
+                AND    S1.EID = 'treatment') AS TREATMENT_CD
+             , (SELECT GROUP_CONCAT(S1.FL_SEQ ORDER BY S1.CRT_DTTM)
+                FROM   TBBS_FL_INF S1
+                WHERE  S1.DOC_SEQ = A.DOC_SEQ) AS FL_SEQ
+             , (SELECT GROUP_CONCAT(S1.ORI_FL_NM ORDER BY S1.CRT_DTTM)
+                FROM   TBBS_FL_INF S1
+                WHERE  S1.DOC_SEQ = A.DOC_SEQ) AS ORI_FL_NM
+             , (SELECT COUNT(1)
+                FROM   TBBS_FL_INF S1
+                WHERE  S1.DOC_SEQ = A.DOC_SEQ) AS FL_CNT
+             , A.CTS
+             , A.CRTR_ID
+             , A.OTP_STAT
+             , IFNULL((SELECT S1.USR_NM FROM TMBR_USR_INF S1 WHERE S1.USR_ID = A.CRTR_ID)
+                     ,(SELECT S1.USR_NM FROM TMBR_ADM_LGN_INF S1 WHERE S1.USR_ID = A.CRTR_ID)) AS USR_NM
+             , A.CMT_PMS_STAT
+        FROM   TBBS_DOC_INF A
+        WHERE  A.OTP_STAT IN ('PUBLIC', 'SECRET')
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(del_yn)">
+        AND    A.DEL_YN = #{del_yn, jdbcType=VARCHAR}
+        </if>
+        AND    A.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    A.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </select>
+
+    <!-- Q & A 코멘트 목록 조회 -->
+    <select id="selectTbbsQaCmtInfList" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsQaCmtInfList][QA코멘트 목록 조회][TANINE]*/
+        SELECT a.LGN_ID
+             , a.CRT_DTTM
+             , a.CTS
+        FROM   TBBS_QA_CMT_INF a
+        WHERE  a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    a.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+        ORDER BY a.CRT_DTTM DESC
+    </select>
+
+    <!-- 게시판 상세 이전, 다음글 정보 조회 -->
+    <select id="selectTbbsDocInfPrvNxtList" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfPrvNxtList][게시판 상세 이전, 다음글 정보 조회][TANINE]*/
+        <choose>
+        <when test='modl_tp == "B_TYPE1"'>
+        (
+        SELECT t.TP
+             , t.MODL_SEQ
+             , t.DOC_SEQ
+             , t.TITL
+        FROM   (
+                SELECT 'PRV' AS TP
+                     , a.MODL_SEQ
+                     , a.DOC_SEQ
+                     , a.CTEGRY_DTL_CD
+                     , a.TITL
+                     , a.CTS
+                     , (SELECT s1.DOC_ITM_VAL
+                        FROM   TBBS_DOC_ADD_ITM_INF s1
+                        WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                        AND    s1.DOC_SEQ = a.DOC_SEQ
+                        AND    s1.EID = 'author') AS AUTHOR
+                     , (SELECT s1.VALUE
+                        FROM   TBBS_DOC_ADD_ITM_INF s1
+                        WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                        AND    s1.DOC_SEQ = a.DOC_SEQ
+                        AND    s1.EID = 'pbl_date') AS PBL_DATE
+                     , a.CRT_DTTM
+                FROM   TBBS_DOC_INF a
+                WHERE  a.NOTC_YN = 'N'
+                AND    a.DEL_YN = 'N'
+                AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                AND    a.CRT_DTTM <![CDATA[>]]> #{crt_dttm, jdbcType=VARCHAR}
+               ) t
+        WHERE  1 = 1
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_year)">
+        AND    SUBSTRING(t.PBL_DATE, 1, 4) = #{sch_year, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_dtl_cd)">
+        AND    t.CTEGRY_DTL_CD = #{ctegry_dtl_cd, jdbcType=NUMERIC}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+        <choose>
+        <when test='sch_type == "1"'>
+        AND    t.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <when test='sch_type == "2"'>
+        AND    t.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <when test='sch_type == "3"'>
+        AND    t.AUTHOR LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <otherwise>
+        AND    t.PBL_DATE LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </otherwise>
+        </choose>
+        </if>
+        ORDER BY t.CRT_DTTM ASC
+        LIMIT 1
+        )
+        UNION ALL
+        (
+        SELECT t.TP
+             , t.MODL_SEQ
+             , t.DOC_SEQ
+             , t.TITL
+        FROM   (
+                SELECT 'NXT' AS TP
+                     , a.MODL_SEQ
+                     , a.DOC_SEQ
+                     , a.CTEGRY_DTL_CD
+                     , a.TITL
+                     , a.CTS
+                     , (SELECT s1.DOC_ITM_VAL
+                        FROM   TBBS_DOC_ADD_ITM_INF s1
+                        WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                        AND    s1.DOC_SEQ = a.DOC_SEQ
+                        AND    s1.EID = 'author') AS AUTHOR
+                     , (SELECT s1.VALUE
+                        FROM   TBBS_DOC_ADD_ITM_INF s1
+                        WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                        AND    s1.DOC_SEQ = a.DOC_SEQ
+                        AND    s1.EID = 'pbl_date') AS PBL_DATE
+                     , a.CRT_DTTM
+                FROM   TBBS_DOC_INF a
+                WHERE  a.NOTC_YN = 'N'
+                AND    a.DEL_YN = 'N'
+                AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+                AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                AND    a.CRT_DTTM <![CDATA[<]]> #{crt_dttm, jdbcType=VARCHAR}
+               ) t
+        WHERE  1 = 1
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_year)">
+        AND    SUBSTRING(t.PBL_DATE, 1, 4) = #{sch_year, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_dtl_cd)">
+        AND    t.CTEGRY_DTL_CD = #{ctegry_dtl_cd, jdbcType=NUMERIC}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+        <choose>
+        <when test='sch_type == "1"'>
+        AND    t.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <when test='sch_type == "2"'>
+        AND    t.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <when test='sch_type == "3"'>
+        AND    t.AUTHOR LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <otherwise>
+        AND    t.PBL_DATE LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </otherwise>
+        </choose>
+        </if>
+        ORDER BY t.CRT_DTTM DESC
+        LIMIT 1
+        )
+        </when>
+        <otherwise>
+        (
+        SELECT 'PRV' AS TP
+             , a.MODL_SEQ
+             , a.DOC_SEQ
+             , a.TITL
+        FROM   TBBS_DOC_INF a
+        WHERE  a.NOTC_YN = 'N'
+        AND    a.DEL_YN = 'N'
+        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    a.CRT_DTTM <![CDATA[>]]> #{CRT_DTTM, jdbcType=VARCHAR}
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+        <choose>
+        <when test='sch_type == "1"'>
+        AND    a.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <when test='sch_type == "2"'>
+        AND    a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <when test='sch_type == "3"'>
+        AND    (a.TITL   LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%') OR
+                a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+        </when>
+        <when test='sch_type == "4"'>
+        AND    a.LGN_ID LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <otherwise>
+        AND    a.NICKNAME LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </otherwise>
+        </choose>
+        </if>
+        ORDER BY a.CRT_DTTM ASC
+        LIMIT 1
+        )
+        UNION ALL
+        (
+        SELECT 'NXT' AS TP
+             , a.MODL_SEQ
+             , a.DOC_SEQ
+             , a.TITL
+        FROM   TBBS_DOC_INF a
+        WHERE  a.NOTC_YN = 'N'
+        AND    a.DEL_YN = 'N'
+        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    a.CRT_DTTM <![CDATA[<]]> #{CRT_DTTM, jdbcType=VARCHAR}
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+        <choose>
+        <when test='sch_type == "1"'>
+        AND    a.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <when test='sch_type == "2"'>
+        AND    a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <when test='sch_type == "3"'>
+        AND    (a.TITL   LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%') OR
+                a.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+        </when>
+        <when test='sch_type == "4"'>
+        AND    a.LGN_ID LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </when>
+        <otherwise>
+        AND    a.NICKNAME LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+        </otherwise>
+        </choose>
+        </if>
+        ORDER BY a.CRT_DTTM DESC
+        LIMIT 1
+        )
+        </otherwise>
+        </choose>
+    </select>
+
+    <!-- 연구보고서 목록 콤보 조회 : 년도 -->
+    <select id="selectTbbsDocInfSchYearList" parameterType="ParameterMap" resultType="TbbsDocInf">
+       /*[TbbsDocInf.xml][selectTbbsDocInfSchYearList][연구보고서 목록 콤보 조회][TANINE]*/
+        SELECT SUBSTRING(b.DOC_ITM_VAL, 1, 4) AS F_Y
+             , CONCAT(SUBSTRING(b.VALUE, 1, 4), '년') AS F_Y_NM
+        FROM   TBBS_DOC_INF a
+             , TBBS_DOC_ADD_ITM_INF b
+        WHERE  a.MODL_SEQ = b.MODL_SEQ
+        AND    a.DOC_SEQ = b.DOC_SEQ
+        AND    a.OTP_STAT IN ('PUBLIC', 'SECRET')
+        AND    a.DEL_YN = 'N'
+        AND    b.EID = 'pbl_date'
+        AND    a.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        GROUP BY SUBSTRING(b.DOC_ITM_VAL, 1, 4)
+        ORDER BY SUBSTRING(b.DOC_ITM_VAL, 1, 4) DESC
+    </select>
+
+    <!-- 스크랩 게시글 목록 조회 -->
+    <select id="selectTbbsDocInfMyPageScrapList" parameterType="ParameterMap" resultType="TbbsDocInf">
+        /*[TbbsDocInf.xml][selectTbbsDocInfMyPageScrapList][스크랩 게시글 목록 조회 조회][TANINE]*/
+        SELECT p.*
+        FROM
+            (SELECT   Ceil(v2.id / #{rows, jdbcType=NUMERIC})           page,
+                      Ceil(@row_number / #{rows, jdbcType=NUMERIC})     total_page,
+                      v2.*,
+                      @row_number as total_count
+               FROM   (SELECT v1.*,
+                              ( @row_number := @row_number + 1 ) AS ID
+                       FROM   (
+                                SELECT
+                                    m.MODL_TP
+                                    ,m.TMP_SEQ
+                                    ,d.TITL
+                                    ,d.CTS
+                                    ,d.CRT_DTTM
+                                    ,d.MODL_SEQ
+                                    ,d.DOC_SEQ
+                                    ,m.MODL_NM
+                                FROM TBBS_DOC_USR_RTNN dus
+                                left outer join TBBS_DOC_INF d on (d.DOC_SEQ = dus.DOC_SEQ)
+                                left outer join TBBS_MODL_INF m on (dus.MODL_SEQ = m.MODL_SEQ)
+                                where dus.UPDR_ID = #{updr_id, jdbcType=NUMERIC}
+                               ) v1, (SELECT @row_number := 0) RN
+                       WHERE  1 = 1
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+                       <choose>
+                       <when test='sch_type == "1"'>
+                       AND    v1.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                       </when>
+                       <when test='sch_type == "2"'>
+                       AND    v1.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                       </when>
+                       <otherwise>
+                       AND    (v1.TITL   LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%') OR
+                               v1.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+                       </otherwise>
+                       </choose>
+                       </if>
+                       ORDER by v1.CRT_DTTM DESC
+                      ) v2
+            )p
+        WHERE  p.page = #{page, jdbcType=NUMERIC}
+    </select>
+
+    <!-- 게시판 글 존재 여부 조회 -->
+    <select id="selectTbbsDocInfExistYn" parameterType="ParameterMap" resultType="String">
+    /*[TbbsDocInf.xml][selectTbbsDocInfExistYn][게시판 글 존재 여부 조회][TANINE]*/
+        SELECT IF(COUNT(1) = 0, 'N', 'Y') AS EXISTYN
+        FROM   TBBS_DOC_INF
+        WHERE  DEL_YN = 'N'
+        AND    DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+        AND    MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+    </select>
+
+    <!--  통합검색(문서) -->
+    <select id="selectTbbsDocInfTotResearchDoc" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfTotResearchDoc][통합검색(문서)][TANINE]*/
+         SELECT allc.*
+             , (SELECT replace(s1.UPL_FL_NM, './', '/')
+                FROM   TBBS_FL_INF s1
+                WHERE  s1.DOC_SEQ = allc.DOC_SEQ
+                AND    LOWER(s1.FL_EXT) IN ('jpg','jpeg','png','gif','bmp')
+                ORDER
+                BY     s1.FL_SEQ
+                limit  1
+                ) as UPL_IMG_FL_NM
+         FROM   (
+                SELECT basc.*
+                FROM   (
+                        SELECT CEIL(ttt1.row_num / #{rows, jdbcType=NUMERIC}) AS page
+                             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS total_page
+                             , @ROW_NUMBER AS total_count
+                             , ttt1.*
+                        FROM   (
+                                SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS row_num
+                                     , tt1.*
+                                FROM   (
+                                        SELECT *
+                                        FROM(
+                                                SELECT a.DOC_SEQ
+                                                     , a.MODL_SEQ
+                                                     , a.TITL
+                                                     , a.CTS
+                                                     , a.LGN_ID
+                                                     , a.CRT_DTTM
+                                                     , a.INQ_CNT
+                                                     , a.OTP_STAT
+                                                     , a.CRTR_ID
+                                                     , m.MODL_TP
+                                                     , m.MODL_NM
+                                                     , m.TMP_SEQ
+                                                FROM   TBBS_DOC_INF a
+                                                left outer join TBBS_MODL_INF m on (a.MODL_SEQ = m.MODL_SEQ)
+                                                WHERE  a.DEL_YN = 'N'
+                                                AND    m.TMP_SEQ is not null
+                                                AND    a.OTP_STAT IN ( 'PUBLIC'
+                                                                    <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(user_auth_type)">
+                                                                    ,'SECRET'
+                                                                    </if>
+                                                                   )
+                                                <if test='user_auth_type == "" or user_auth_type == "30"'>
+                                                AND    m.TMP_SEQ NOT IN (SELECT CD FROM TCMN_CD_DTL WHERE MST_CD = 'INTRA')
+                                                </if>
+                                                ORDER BY a.CRT_DTTM DESC
+                                            )a1
+                                            where 1=1
+                                            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(totSearchKey)">
+                                            AND    (a1.TITL   LIKE CONCAT('%', #{totSearchKey, jdbcType=VARCHAR}, '%') OR
+                                                    a1.CTS LIKE CONCAT('%', #{totSearchKey, jdbcType=VARCHAR}, '%'))
+                                            </if>
+                                            <if test='@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id) and user_auth_type != "10"'>
+                                            AND (('SECRET' = a1.OTP_STAT ) AND (a1.CRTR_ID = #{crtr_id, jdbcType=NUMERIC}) OR ('PUBLIC' = a1.OTP_STAT ))
+                                            </if>
+                                       ) tt1
+                                     , (SELECT @ROW_NUMBER := 0) tt2
+                               ) ttt1
+                       ) basc
+                WHERE  basc.page = #{page, jdbcType=NUMERIC}
+               ) allc
+
+    </select>
+
+    <!--  통합검색(이미지/동영상) -->
+    <select id="selectTbbsDocInfTotResearchImg" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfTotResearchImg][통합검색(이미지/동영상))][TANINE]*/
+        SELECT basc.*
+        FROM   (
+                SELECT CEIL(ttt1.row_num / #{rows, jdbcType=NUMERIC}) AS page
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS total_page
+                     , @ROW_NUMBER AS total_count
+                     , ttt1.*
+                FROM   (
+                        SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS row_num
+                             , tt1.*
+                        FROM   (
+                                select
+                                a1.*
+                                    from(
+                                    select d.DOC_SEQ
+                                         , d.MODL_SEQ
+                                         , d.TITL
+                                         , d.LGN_ID
+                                         , d.CTS
+                                         , d.OTP_STAT
+                                         , d.CRTR_ID
+                                         , d.INQ_CNT
+                                         , d.CRT_DTTM
+                                         , m.MODL_TP
+                                         , m.MODL_NM
+                                         , m.TMP_SEQ
+                                         , a.FL_SEQ
+                                         , replace(a.UPL_FL_NM, './', '/') as UPL_FL_NM
+                                         , a.ORI_FL_NM
+                                    from TBBS_FL_INF a
+                                    left outer join TBBS_DOC_INF d on (d.DOC_SEQ = a.DOC_SEQ)
+                                    left outer join TBBS_MODL_INF m on (a.MODL_SEQ = m.MODL_SEQ)
+                                    where d.DEL_YN = 'N'
+                                    and   m.TMP_SEQ is not null
+                                    AND   LOWER(a.FL_EXT) IN ('jpg','jpeg','png','gif','bmp','mpg','mpeg','avi','wmv','mp4')
+                                    <if test='user_auth_type == "" or user_auth_type == "30"'>
+                                    AND   m.TMP_SEQ NOT IN (SELECT CD FROM TCMN_CD_DTL WHERE MST_CD = 'INTRA')
+                                    </if>
+                                    AND    d.OTP_STAT IN ( 'PUBLIC'
+                                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(user_auth_type)">
+                                                        ,'SECRET'
+                                                        </if>
+                                                       )
+                                )a1
+                                where 1=1
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(totSearchKey)">
+                                    AND    a1.ORI_FL_NM LIKE CONCAT('%', #{totSearchKey, jdbcType=VARCHAR}, '%')
+                                </if>
+                                <if test='@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id) and user_auth_type != "10"'>
+                                AND (('SECRET' = a1.OTP_STAT ) AND (a1.CRTR_ID = #{crtr_id, jdbcType=NUMERIC}) OR ('PUBLIC' = a1.OTP_STAT ))
+                                </if>
+                                order by a1.CRT_DTTM desc
+                               ) tt1
+                             , (SELECT @ROW_NUMBER := 0) tt2
+                       ) ttt1
+               ) basc
+                WHERE  basc.page = #{page, jdbcType=NUMERIC}
+    </select>
+
+    <!--  통합검색(파일) -->
+    <select id="selectTbbsDocInfTotResearchFile" parameterType="ParameterMap" resultType="TbbsDocInf">
+     /*[TbbsDocInf.xml][selectTbbsDocInfTotResearchFile][통합검색(파일)][TANINE]*/
+        SELECT basc.*
+        FROM   (
+                SELECT CEIL(ttt1.row_num / #{rows, jdbcType=NUMERIC}) AS page
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS total_page
+                     , @ROW_NUMBER AS total_count
+                     , ttt1.*
+                FROM   (
+                        SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS row_num
+                             , tt1.*
+                        FROM   (
+                                select
+                                a1.*
+                                    from(
+                                    select d.DOC_SEQ
+                                         , d.MODL_SEQ
+                                         , d.TITL
+                                         , d.LGN_ID
+                                         , d.CTS
+                                         , d.OTP_STAT
+                                         , d.CRTR_ID
+                                         , d.INQ_CNT
+                                         , d.CRT_DTTM
+                                         , m.MODL_TP
+                                         , m.MODL_NM
+                                         , m.TMP_SEQ
+                                         , a.ORI_FL_NM
+                                         , a.FL_SIZE
+                                         , a.FL_SEQ
+                                    from TBBS_FL_INF a
+                                    left outer join TBBS_DOC_INF d on (d.DOC_SEQ = a.DOC_SEQ)
+                                    left outer join TBBS_MODL_INF m on (a.MODL_SEQ = m.MODL_SEQ)
+                                    where d.DEL_YN = 'N'
+                                    and   m.TMP_SEQ is not null
+                                    AND   LOWER(a.FL_EXT) NOT IN ('jpg','jpeg','png','gif','bmp','mpg','mpeg','avi','wmv','mp4')
+                                    <if test='user_auth_type == "" or user_auth_type == "30"'>
+                                    AND   m.TMP_SEQ NOT IN (SELECT CD FROM TCMN_CD_DTL WHERE MST_CD = 'INTRA')
+                                    </if>
+                                    AND    d.OTP_STAT IN ( 'PUBLIC'
+                                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(user_auth_type)">
+                                                        ,'SECRET'
+                                                        </if>
+                                                       )
+                                )a1
+                                where 1=1
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(totSearchKey)">
+                                    AND    a1.ORI_FL_NM LIKE CONCAT('%', #{totSearchKey, jdbcType=VARCHAR}, '%')
+                                </if>
+                                <if test='@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id) and user_auth_type != "10"'>
+                                AND (('SECRET' = a1.OTP_STAT ) AND (a1.CRTR_ID = #{crtr_id, jdbcType=NUMERIC}) OR ('PUBLIC' = a1.OTP_STAT ))
+                                </if>
+                                order by a1.CRT_DTTM desc
+                               ) tt1
+                             , (SELECT @ROW_NUMBER := 0) tt2
+                       ) ttt1
+               ) basc
+                WHERE  basc.page = #{page, jdbcType=NUMERIC}
+    </select>
+
+    <!-- BoardType3 게시글 목록 조회(B/O) -->
+    <select id="selectTbbsDocInfType3BoList" parameterType="ParameterMap" resultType="TbbsDocInf">
+     /*[TbbsDocInf.xml][selectTbbsDocInfType3BoList][BoardType3 게시글 목록 조회(B/O)][TANINE]*/
+        SELECT allc.*
+            FROM    (
+                    SELECT basc.*
+                    FROM    (
+                            SELECT  CEIL(ttt1.row_num / #{rows, jdbcType=NUMERIC}) AS page
+                                  , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS total_page
+                                  , @ROW_NUMBER AS total_count
+                                  , ttt1.*
+                            FROM    (
+                                    SELECT  (@ROW_NUMBER := @ROW_NUMBER + 1) AS row_num
+                                            , tt1.*
+                                    FROM    (SELECT t1.*
+                                               FROM (SELECT A.DOC_SEQ
+                                                         , A.MODL_SEQ
+                                                         , A.NOTC_YN
+                                                         , A.TITL
+                                                         , IFNULL(A.LGN_ID, '-') AS LGN_ID
+                                                         , DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+                                                         , A.INQ_CNT
+                                                         , A.OTP_STAT
+                                                         , A.DEL_YN
+                                                         , (SELECT S1.CD
+                                                            FROM   TBBS_DOC_ADD_ITM_INF S1
+                                                            WHERE  S1.MODL_SEQ = A.MODL_SEQ
+                                                            AND    S1.DOC_SEQ = A.DOC_SEQ
+                                                            AND    S1.EID = 'treatment') AS TREATMENT_CD
+                                                         , IFNULL(U.USR_NM, '-') AS USR_NM
+                                                    FROM   TBBS_DOC_INF A
+                                                    LEFT OUTER JOIN TBBS_MODL_INF B ON (A.MODL_SEQ = B.MODL_SEQ)
+                                                    LEFT OUTER JOIN TMBR_USR_INF U ON (A.CRTR_ID = U.USR_ID)
+                                                    WHERE  1=1
+                                                    AND    B.MODL_TP = 'B_TYPE3'
+                                                    AND    B.MODL_SEQ IS NOT NULL
+                                                    <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt)">  AND DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') <![CDATA[>=]]> #{sch_st_dt, jdbcType=VARCHAR}</if>
+                                                    <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt)">  AND DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') <![CDATA[<=]]> #{sch_ed_dt, jdbcType=VARCHAR}</if>
+                                                    <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type)">
+                                                    <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+                                                    <choose>
+                                                    <when test='sch_type == "1"'>
+                                                    AND    A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                                    </when>
+                                                    <when test='sch_type == "2"'>
+                                                    AND    A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                                    </when>
+                                                    <when test='sch_type == "3"'>
+                                                    AND    (A.TITL   LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%') OR
+                                                            A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+                                                    </when>
+                                                    </choose>
+                                                    </if>
+                                                    </if>
+                                                    <choose>
+                                                    <when test='@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(otp_stat) and (OTP_STAT == "PUBLIC" || OTP_STAT == "SECRET")'>
+                                                    AND    A.OTP_STAT = #{otp_stat, jdbcType=VARCHAR}
+                                                    </when>
+                                                    <otherwise>
+                                                    AND    A.OTP_STAT IN ('PUBLIC', 'SECRET')
+                                                    </otherwise>
+                                                    </choose>
+                                                    <if test='@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(del_yn)'>
+                                                    AND    A.DEL_YN = #{del_yn, jdbcType=VARCHAR}
+                                                    </if>
+                                                    <if test='@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)'>
+                                                    AND    A.LGN_ID LIKE CONCAT('%', #{lgn_id, jdbcType=VARCHAR}, '%')
+                                                    </if>
+                                                    ORDER BY A.CRT_DTTM DESC
+                                                    )t1
+                                                WHERE t1.TREATMENT_CD != '0'
+                                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(treatment_cd)">
+                                                AND   t1.TREATMENT_CD = #{treatment_cd,, jdbcType=VARCHAR}
+                                                </if>
+                                                <if test='@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)'>
+                                                AND    t1.USR_NM LIKE CONCAT('%', #{usr_nm, jdbcType=VARCHAR}, '%')
+                                                    </if>
+                                                ) tt1
+                                                , (SELECT @ROW_NUMBER := 0) tt2
+                                        ) ttt1
+                                ) basc
+                    WHERE basc.page = #{page, jdbcType=NUMERIC}
+                    ) allc
+    </select>
+
+    <!-- 일반컨텐츠 리스트 조회 -->
+    <select id="selectTbbsDocInfNormalList" parameterType="ParameterMap" resultType="TbbsDocInf">
+     /*[TbbsDocInf.xml][selectTbbsDocInfType3BoList][일반컨텐츠 리스트 조회][TANINE]*/
+        SELECT ALLC.*
+        FROM    (
+                SELECT BASC.*
+                FROM    (
+                        SELECT CEIL(TTT1.ROW_NUM / #{rows, jdbcType=NUMERIC}) AS PAGE
+                             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE
+                             , @ROW_NUMBER AS TOTAL_COUNT
+                             , TTT1.*
+                        FROM    (
+                                SELECT  (@ROW_NUMBER := @ROW_NUMBER + 1) AS ROW_NUM
+                                        , TT1.*
+                                FROM    (
+                                        SELECT M.MODL_NM
+                                             , M.MODL_TP
+                                             , IFNULL(U.USR_NM,A.LGN_ID)            AS USER_NM
+                                             , A.LGN_ID
+                                             , A.TITL
+                                             , A.INQ_CNT
+                                             , DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d')  AS F_CRT_DTTM
+                                             , A.DEL_YN
+                                             , A.NOTC_YN
+                                             , A.DOC_SEQ
+                                             , A.MODL_SEQ
+                                             , M.TMP_SEQ
+                                        FROM   TBBS_DOC_INF A
+                                        LEFT OUTER JOIN TBBS_MODL_INF M ON (A.MODL_SEQ = M.MODL_SEQ AND M.TMP_SEQ IS NOT NULL)
+                                        LEFT OUTER JOIN TMBR_USR_INF U ON (A.CRTR_ID = U.USR_ID)
+                                        WHERE  1=1
+                                        <choose>
+                                        <when test='intraFlag == "Y"'>
+                                        AND    M.TMP_SEQ IN (SELECT CD FROM TCMN_CD_DTL WHERE MST_CD = 'INTRA')
+                                        </when>
+                                        <otherwise>
+                                        AND    M.MODL_TP IN  ('B_TYPE1','B_TYPE2')
+                                        AND    M.TMP_SEQ NOT IN (SELECT CD FROM TCMN_CD_DTL WHERE MST_CD = 'INTRA')
+                                        </otherwise>
+                                        </choose>
+                                        AND    A.OTP_STAT IN ('PUBLIC', 'SECRET')
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(modl_seq)">     AND A.MODL_SEQ = #{modl_seq ,jdbcType=NUMERIC} </if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">        AND USR_NM LIKE CONCAT('%',#{usr_nm ,jdbcType=VARCHAR},'%') </if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">       AND A.LGN_ID LIKE CONCAT('%',#{lgn_id ,jdbcType=VARCHAR},'%') </if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt)">  AND DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') <![CDATA[>=]]> #{sch_st_dt, jdbcType=VARCHAR}</if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt)">    AND DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') <![CDATA[<=]]> #{sch_ed_dt, jdbcType=VARCHAR}</if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(notc_yn)">      AND A.NOTC_YN = #{notc_yn, jdbcType=VARCHAR}</if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(del_yn)">         AND A.DEL_YN = #{del_yn ,jdbcType=VARCHAR}</if>
+                                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+                                        <choose>
+                                        <when test='sch_type == "1"'>
+                                        AND    A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "2"'>
+                                        AND    A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                        </when>
+                                        <when test='sch_type == "3"'>
+                                        AND    (A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                         OR    A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+                                        </when>
+                                        </choose>
+                                        </if>
+                                        ORDER BY A.CRT_DTTM DESC
+                                    ) TT1
+                                    , (SELECT @ROW_NUMBER := 0) TT2
+                                ) TTT1
+                        ) BASC
+                WHERE  BASC.PAGE = #{page ,jdbcType=NUMERIC}
+                ) ALLC
+    </select>
+
+    <!-- 홍보영상 목록 조회 -->
+    <select id="selectTbbsDocInfPromotionList" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfPromotionList][홍보영상 목록 조회][TANINE]*/
+        SELECT BASC.*
+        FROM    (
+                SELECT CEIL(TTT1.ROW_NUM / #{rows, jdbcType=NUMERIC}) AS PAGE
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE
+                     , @ROW_NUMBER AS TOTAL_COUNT
+                     , TTT1.*
+                FROM    (
+                        SELECT  (@ROW_NUMBER := @ROW_NUMBER + 1) AS ROW_NUM
+                                , TT1.*
+                        FROM    (
+                                SELECT M.MODL_NM
+                                     , M.MODL_TP
+                                     , A.LGN_ID
+                                     , A.TITL
+                                     , A.INQ_CNT
+                                     , DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d')  AS F_CRT_DTTM
+                                     , A.DEL_YN
+                                     , A.NOTC_YN
+                                     , A.DOC_SEQ
+                                     , A.MODL_SEQ
+                                     , M.TMP_SEQ
+                                FROM   TBBS_DOC_INF A
+                                LEFT OUTER JOIN TBBS_MODL_INF M ON (A.MODL_SEQ = M.MODL_SEQ)
+                                WHERE  1=1
+                                AND    A.MODL_SEQ = '5'
+                                AND    A.OTP_STAT = 'PUBLIC'
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+                                <choose>
+                                <when test='sch_type == "1"'>
+                                AND    A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                </when>
+                                <when test='sch_type == "2"'>
+                                AND    A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                </when>
+                                <when test='sch_type == "3"'>
+                                AND    (A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+                                 OR    A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+                                </when>
+                                </choose>
+                                </if>
+                                ORDER BY A.CRT_DTTM DESC
+                            ) TT1
+                            , (SELECT @ROW_NUMBER := 0) TT2
+                        ) TTT1
+                ) BASC
+        WHERE  BASC.PAGE = #{page ,jdbcType=NUMERIC}
+    </select>
+
+    <!-- 홍보영상 상세 조회 -->
+    <select id="selectTbbsDocInfPvContentInfo" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfPvContentInfo][홍보영상 목록 조회][TANINE]*/
+        SELECT A.TITL
+             , A.URL_INF
+             , A.CTS
+        FROM   TBBS_DOC_INF A
+        WHERE  1=1
+        AND    A.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    A.OTP_STAT = 'PUBLIC'
+        AND    A.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </select>
+
+    <!-- 대시보드 게시판 조회 -->
+    <select id="selectTbbsDocInfDashBoardList" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][selectTbbsDocInfDashBoardList][대시보드 게시판 조회][TANINE]*/
+        SELECT 1 as id
+             , A.*
+        FROM (
+                SELECT M.MODL_NM
+                     , M.MODL_TP
+                     , D.MODL_SEQ
+                     , D.DOC_SEQ
+                     , M.TMP_SEQ
+                     , D.TITL
+                     , DATE_FORMAT(D.CRT_DTTM, '%Y.%m.%d %h%i%s') AS F_CRT_DTTM
+                FROM   TBBS_DOC_INF D
+                LEFT JOIN TBBS_MODL_INF M
+                ON     D.MODL_SEQ=M.MODL_SEQ
+                WHERE  1 = 1
+                AND    M.MODL_TP='B_TYPE3'
+                AND    D.DEL_YN='N'
+                AND    D.OTP_STAT = 'PUBLIC'
+                ORDER BY D.CRT_DTTM DESC LIMIT 5
+             )A
+        UNION ALL
+        SELECT 2 as id
+             , B.*
+        FROM (
+                SELECT M.MODL_NM
+                     , M.MODL_TP
+                     , D.MODL_SEQ
+                     , D.DOC_SEQ
+                     , M.TMP_SEQ
+                     , D.TITL
+                     , DATE_FORMAT(D.CRT_DTTM, '%Y.%m.%d %h%i%s') AS F_CRT_DTTM
+                FROM   TBBS_DOC_INF D
+                LEFT OUTER JOIN TBBS_MODL_INF M
+                ON    (D.MODL_SEQ = M.MODL_SEQ AND M.TMP_SEQ IS NOT NULL)
+                WHERE 1 = 1
+                AND   M.US_YN = 'Y'
+                AND   D.DEL_YN = 'N'
+                AND   D.OTP_STAT = 'PUBLIC'
+                AND   M.MODL_TP IN  ('B_TYPE1','B_TYPE2','B_TYPE4')
+                ORDER BY D.CRT_DTTM DESC LIMIT 5
+        )B
+    </select>
+
+    <!-- 통합게시글 리스트 조회 -->
+    <select id="getTbbsDocInfList" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][getTbbsDocInfList][통합게시글 리스트 조회][TANINE]*/
+        SELECT P.*
+          FROM (
+            SELECT V.*
+                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                  ,CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                  ,@ROW_NUMBER TOTAL_COUNT
+                  ,CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+
+                  </if>
+              FROM (
+                SELECT Y.*
+                     ,(@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                     , CASE WHEN QA_CNT > 0  THEN '3'
+                            ELSE '2'
+                       END AS TREATMENT_CD
+                  FROM (
+
+             SELECT D.MODL_SEQ
+                  , D.DOC_SEQ
+                  , D.LGN_ID
+                  , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = D.LGN_ID) AS USR_NM
+                  , D.TITL
+                  , D.NOTC_YN
+                  , D.OTP_STAT
+                  , D.INQ_CNT
+                  , D.CTEGRY_MST_CD
+                  , D.CTEGRY_DTL_CD
+                  , IFNULL((SELECT CTEGRY_MST_NM FROM TBBS_CTEGRY_MST WHERE CTEGRY_MST_CD = D.CTEGRY_MST_CD), '없음') AS CTEGRY_MST_NM
+                  , IFNULL((SELECT CTEGRY_DTL_NM FROM TBBS_CTEGRY_DTL WHERE CTEGRY_MST_CD = D.CTEGRY_MST_CD AND CTEGRY_DTL_CD = D.CTEGRY_DTL_CD), '없음') AS CTEGRY_DTL_NM
+                  , (CASE WHEN D.DSPLY_YN IS NULL || D.DSPLY_YN = 'N' THEN '임시저장' WHEN D.DSPLY_ED_DTTM > NOW() THEN '게시중' ELSE '게시종료' END) AS DSPLY_STAT
+                  , M.MODL_TP
+                  , M.MODL_NM
+                  , M.TMP_SEQ
+                  , (SELECT COUNT(1) FROM TBBS_QA_CMT_INF QA_CMT WHERE QA_CMT.MODL_SEQ = D.MODL_SEQ AND QA_CMT.DOC_SEQ = D.DOC_SEQ) AS QA_CNT
+                  , C.CD_NM
+                  , C.REF_1
+                  , CTS
+                  , CONCAT(SUBSTR(D.CRT_DTTM,1,4), '-', SUBSTR(D.CRT_DTTM,6,2), '-', SUBSTR(D.CRT_DTTM,9,2)) AS F_CRT_DTTM
+                  , CONCAT(SUBSTR(D.UPD_DTTM,1,4), '-', SUBSTR(D.UPD_DTTM,6,2), '-', SUBSTR(D.UPD_DTTM,9,2)) AS F_UPD_DTTM
+                  , (SELECT COUNT(1) FROM TBBS_FL_INF A WHERE A.DOC_SEQ = D.DOC_SEQ AND IFNULL(A.THUMB_YN,'N') = 'N') AS FL_CNT
+                  , F.UPL_FL_NM
+                  , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = M.SYS_CD) AS SYS_NM
+             FROM TBBS_DOC_INF D
+             LEFT OUTER JOIN TBBS_MODL_INF M ON (D.MODL_SEQ = M.MODL_SEQ)
+             INNER JOIN TCMN_CD_DTL C ON (M.MODL_TP = C.CD AND C.MST_CD = 'BBS0001')
+             LEFT OUTER JOIN TBBS_FL_INF F ON (F.DOC_SEQ = D.DOC_SEQ AND THUMB_YN = 'Y')
+             WHERE 1=1
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(modl_seq)">  AND D.MODL_SEQ  = #{modl_seq,jdbcType=NUMERIC} </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt)">
+             AND D.CRT_DTTM BETWEEN REPLACE(#{sch_st_dt ,jdbcType=VARCHAR},'-','') AND REPLACE(#{sch_ed_dt, jdbcType=VARCHAR},'-','')
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(notc_yn)">  AND D.NOTC_YN    = #{notc_yn,jdbcType=VARCHAR}</if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(del_yn)">  AND D.DEL_YN      = #{del_yn,jdbcType=VARCHAR}</if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(otp_stat)">  AND D.OTP_STAT      = #{otp_stat,jdbcType=VARCHAR}</if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(modl_nm)">    AND M.MODL_NM  = #{modl_nm,jdbcType=VARCHAR}</if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(modl_tp)">    AND M.MODL_TP  = #{modl_tp,jdbcType=VARCHAR}</if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">    AND M.SYS_CD  = #{sys_cd, jdbcType=VARCHAR}</if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+             <choose>
+             <when test='sch_type == "1"'>
+             AND    D.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+             </when>
+             <when test='sch_type == "2"'>
+             AND    D.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+             </when>
+             <when test='sch_type == "3"'>
+             AND    (D.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+              OR    D.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+             </when>
+             </choose>
+             </if>
+           ORDER BY D.DOC_SEQ DESC
+            ) Y, (SELECT @ROW_NUMBER := 0) RN
+            WHERE 1=1
+
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(treatment_cd)">
+            AND Y.TREATMENT_CD LIKE CONCAT('%', #{treatment_cd, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_stat)">
+            AND Y.DSPLY_STAT = #{dsply_stat, jdbcType=VARCHAR}
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+            AND (Y.LGN_ID = #{lgn_id ,jdbcType=VARCHAR} OR Y.USR_NM LIKE CONCAT('%', #{lgn_id ,jdbcType=VARCHAR}, '%'))
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_dtl_cd)">
+            AND Y.CTEGRY_DTL_CD = #{ctegry_dtl_cd ,jdbcType=VARCHAR}
+            </if>
+             )V
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+             ORDER BY V.DOC_SEQ DESC
+             </if>
+        ) P
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+       </if>
+    </select>
+    <select id="selectTbbsDocInfMainList" parameterType="map" resultType="Main">
+    /*[TbbsDocInf.xml][selectTbbsDocInfMainList][메인화면 게시판 조회 ][TANINE]*/
+        SELECT  t1.TITL        /*제목*/
+              , t1.CTS      /*내용*/
+              , t1.TMPL_SEQ       /*템플릿 ID*/
+              , t1.DOC_SEQ /*문서번호*/
+              , t1.MODL_SEQ   /*게시판번호*/
+              , t1.MODL_NM    /*게시판명*/
+              , t1.MODL_TP  /*게시판타입*/
+              , '' AS AUTHOR    /*저자*/
+              , '' AS PBL_DATE  /*등록일자*/
+              ,TIMESTAMPDIFF(hour, date_format(t1.CRT_DTTM, '%Y%m%d%H%i%s') , now()) as DIFF_TIME
+        FROM (
+                SELECT  a.TITL
+                      , a.CTS
+                      , b.TMPL_SEQ
+                      , a.DOC_SEQ
+                      , a.MODL_SEQ
+                      , c.MODL_NM
+                      , c.MODL_TP
+                      , a.CRT_DTTM
+                FROM    TBBS_DOC_INF  a
+                      , TDSP_TMPL_INF b
+                      , TBBS_MODL_INF c
+                WHERE   1=1
+                AND     a.DEL_YN = 'N'
+                AND     a.OTP_STAT IN ('PUBLIC')
+                AND     b.TMPL_SEQ = #{p1,jdbcType=INTEGER}
+                AND     a.MODL_SEQ = b.MODL_SEQ
+                AND     a.MODL_SEQ = c.MODL_SEQ
+                AND     b.TMPL_SEQ    = c.TMP_SEQ
+                ORDER BY a.CRT_DTTM DESC
+                LIMIT 4
+             ) t1 /* 알림마당 */
+             UNION ALL
+        SELECT  t2.TITL
+              , t2.CTS
+              , t2.TMPL_SEQ
+              , t2.DOC_SEQ
+              , t2.MODL_SEQ
+              , t2.MODL_NM
+              , t2.MODL_TP
+              , '' AS AUTHOR
+              , '' AS PBL_DATE
+              ,TIMESTAMPDIFF(hour, date_format(t2.CRT_DTTM, '%Y%m%d%H%i%s') , now()) as DIFF_TIME
+        FROM (
+                SELECT  a.TITL
+                      , a.CTS
+                      , b.TMPL_SEQ
+                      , a.DOC_SEQ
+                      , a.MODL_SEQ
+                      , c.MODL_NM
+                      , c.MODL_TP
+                      , a.CRT_DTTM
+                FROM    TBBS_DOC_INF  a
+                      , TDSP_TMPL_INF b
+                      , TBBS_MODL_INF c
+                WHERE   1=1
+                AND     a.DEL_YN = 'N'
+                AND     a.OTP_STAT IN ('PUBLIC')
+                AND     b.TMPL_SEQ = #{p2,jdbcType=INTEGER}
+                AND     a.MODL_SEQ = b.MODL_SEQ
+                AND     a.MODL_SEQ = c.MODL_SEQ
+                AND     b.TMPL_SEQ    = c.TMP_SEQ
+                ORDER BY a.CRT_DTTM DESC
+                LIMIT 4
+              ) t2 /* 입낙찰 동향 */
+              UNION ALL
+        SELECT  t3.TITL
+              , t3.CTS
+              , t3.TMPL_SEQ
+              , t3.DOC_SEQ
+              , t3.MODL_SEQ
+              , t3.MODL_NM
+              , t3.MODL_TP
+              , t3.AUTHOR
+              , t3.PBL_DATE
+              ,TIMESTAMPDIFF(hour, date_format(t3.CRT_DTTM, '%Y%m%d%H%i%s') , now()) as DIFF_TIME
+        FROM (
+                SELECT  a.TITL
+                      , a.CTS
+                      , b.TMPL_SEQ
+                      , a.DOC_SEQ
+                      , a.MODL_SEQ
+                      , c.MODL_NM
+                      , c.MODL_TP
+                      , (SELECT s1.DOC_ITM_VAL
+                         FROM   TBBS_DOC_ADD_ITM_INF s1
+                         WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                           AND  s1.DOC_SEQ = a.DOC_SEQ
+                           AND  s1.EID = 'author') AS AUTHOR
+                     , (SELECT s1.DOC_ITM_VAL
+                        FROM   TBBS_DOC_ADD_ITM_INF s1
+                        WHERE  s1.MODL_SEQ = a.MODL_SEQ
+                          AND  s1.DOC_SEQ = a.DOC_SEQ
+                          AND  s1.EID = 'pbl_date') AS PBL_DATE
+                      , a.CRT_DTTM
+                FROM    TBBS_DOC_INF  a
+                      , TDSP_TMPL_INF b
+                      , TBBS_MODL_INF c
+                WHERE   1=1
+                AND     a.DEL_YN = 'N'
+                AND     a.OTP_STAT IN ('PUBLIC')
+                AND     b.TMPL_SEQ = #{p3,jdbcType=INTEGER}
+                AND     a.MODL_SEQ = b.MODL_SEQ
+                AND     a.MODL_SEQ = c.MODL_SEQ
+                AND     b.TMPL_SEQ     = c.TMP_SEQ
+                ORDER BY a.CRT_DTTM desc
+                LIMIT 3
+             ) t3  /* 연구보고서 */
+
+    </select>
+
+    <select id="getCtgInfo" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][getCtgInfo][게시판별카테고리 상세조회 조회][TANINE]*/
+        SELECT A.CTEGRY_DTL_CD
+             , A.CTEGRY_DTL_NM
+             , A.CTEGRY_MST_CD
+          FROM TBBS_CTEGRY_DTL A
+    INNER JOIN TBBS_MODL_INF B
+            ON A.CTEGRY_MST_CD = B.CTEGRY_MST_CD
+         WHERE B.MODL_SEQ = #{modl_seq, jdbcType=VARCHAR}
+        <!-- SELECT A.CTEGRY_DTL_CD
+             , A.CTEGRY_DTL_NM
+             , A.CTEGRY_MST_CD
+          FROM TBBS_CTEGRY_DTL A
+    INNER JOIN TBBS_CTEGRY_MST B
+            ON A.CTEGRY_MST_CD = B.CTEGRY_MST_CD
+         WHERE SYS_CD = (SELECT SYS_CD FROM TDSP_SYS_INF WHERE SYS_NM = #{sys_nm, jdbcType=VARCHAR}) -->
+    </select>
+
+    <select id="ckdoc" resultType="int">
+    /*[TbbsDocInf.xml][ckdoc][게시글 존재 확인][TANINE]*/
+        SELECT COUNT(MODL_SEQ)
+          FROM TBBS_DOC_INF
+         WHERE MODL_SEQ = #{modl_seq, jdbcType=VARCHAR}
+    </select>
+    
+    <!--빅데이터 포탈 공지사항 통합게시글 리스트 조회 -->
+    <select id="getTbbsDocInfNoticeLandingList" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][getTbbsDocInfNoticeLandingList][빅데이터 포탈 공지사항 통합게시글 리스트 조회 ][TANINE]*/
+        SELECT P.*
+          FROM (
+            SELECT V.*
+                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                  ,CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                  ,@ROW_NUMBER TOTAL_COUNT
+                  ,CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+
+                  </if>
+              FROM (
+                SELECT Y.*
+                     ,(@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                     , CASE WHEN QA_CNT > 0  THEN '3'
+                            ELSE '2'
+                       END AS TREATMENT_CD
+                  FROM (
+
+                       SELECT DD.MODL_SEQ
+                            , DD.DOC_SEQ
+                            , DD.LGN_ID
+                            , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = DD.LGN_ID) AS USR_NM
+                            , DD.TITL
+                            , DD.NOTC_YN
+                            , DD.OTP_STAT
+                            , DD.INQ_CNT
+                            , DD.CTEGRY_MST_CD
+                            , DD.CTEGRY_DTL_CD
+                            , DD.DSPLY_ST_DTTM
+                            , DD.DSPLY_ED_DTTM
+                            , IFNULL((SELECT CTEGRY_MST_NM FROM TBBS_CTEGRY_MST WHERE CTEGRY_MST_CD = DD.CTEGRY_MST_CD), '없음') AS CTEGRY_MST_NM
+                            , IFNULL((SELECT CTEGRY_DTL_NM FROM TBBS_CTEGRY_DTL WHERE CTEGRY_MST_CD = DD.CTEGRY_MST_CD AND CTEGRY_DTL_CD = DD.CTEGRY_DTL_CD), '없음') AS CTEGRY_DTL_NM
+                            , (CASE WHEN DD.DSPLY_YN IS NULL || DD.DSPLY_YN = 'N' THEN '임시저장' WHEN DD.DSPLY_ED_DTTM > NOW() THEN '게시중' ELSE '게시종료' END) AS DSPLY_STAT
+                            , M.MODL_TP
+                            , M.MODL_NM
+                            , M.TMP_SEQ
+                            , (SELECT COUNT(1) FROM TBBS_QA_CMT_INF QA_CMT WHERE QA_CMT.MODL_SEQ = DD.MODL_SEQ AND QA_CMT.DOC_SEQ = DD.DOC_SEQ) AS QA_CNT
+                            , C.CD_NM
+                            , C.REF_1
+                            , CTS
+                            , CONCAT(SUBSTR(DD.CRT_DTTM,1,4), '-', SUBSTR(DD.CRT_DTTM,6,2), '-', SUBSTR(DD.CRT_DTTM,9,2)) AS F_CRT_DTTM
+                            , CONCAT(SUBSTR(DD.UPD_DTTM,1,4), '-', SUBSTR(DD.UPD_DTTM,6,2), '-', SUBSTR(DD.UPD_DTTM,9,2)) AS F_UPD_DTTM
+                            , (SELECT COUNT(1) FROM TBBS_FL_INF A WHERE A.DOC_SEQ = DD.DOC_SEQ AND IFNULL(A.THUMB_YN,'N') = 'N') AS FL_CNT
+                            , F.UPL_FL_NM
+                            , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = M.SYS_CD) AS SYS_NM
+                            , DD.UPD_DTTM
+                        FROM 
+                            (SELECT D.DOC_SEQ
+	                              , D.MODL_SEQ
+	                              , D.CTEGRY_DTL_CD
+	                              , D.CTEGRY_MST_CD
+	                              , D.CTEGRY_DTL_CD
+	                              , D.NOTC_YN
+	                              , D.TITL
+	                              , D.CTS
+	                              , D.INQ_CNT
+	                              , D.CMT_CNT
+	                              , D.SCP_CNT
+	                              , D.DEL_YN
+	                              , D.LGN_ID
+	                              , D.IP_ADDR
+	                              , D.SCP_PMS_YN
+	                              , D.CMT_PMS_STAT
+	                              , D.NICKNAME
+	                              , D.OTP_STAT
+	                              , D.UPL_CNT
+	                              , D.URL_INF
+	                              , D.DSPLY_YN
+	                              , D.DSPLY_ST_DTTM
+	                              , D.DSPLY_ED_DTTM
+	                              , D.CSTR_CD
+	                              , D.USPR_NM
+	                              , D.CRTR_ID
+	                              , D.CRT_DTTM
+	                              , D.UPDR_ID
+	                              , D.UPD_DTTM
+                             FROM
+                         (TBBS_DOC_INF D INNER JOIN
+                         (SELECT CD.CTEGRY_MST_CD,CD.CTEGRY_DTL_CD 
+                         FROM 
+		                 (SELECT CTEGRY_MST_CD FROM TBBS_CTEGRY_MST WHERE US_YN = 'Y') CM INNER JOIN (SELECT CTEGRY_MST_CD,CTEGRY_DTL_CD FROM TBBS_CTEGRY_DTL WHERE US_YN = 'Y') CD 
+		                 ON CM.CTEGRY_MST_CD = CD.CTEGRY_MST_CD) CTE
+                         ON D.CTEGRY_DTL_CD = CTE.CTEGRY_DTL_CD AND D.CTEGRY_MST_CD = CTE.CTEGRY_MST_CD)) DD
+                         LEFT OUTER JOIN TBBS_MODL_INF M ON (DD.MODL_SEQ = M.MODL_SEQ)
+                         INNER JOIN TCMN_CD_DTL C ON (M.MODL_TP = C.CD AND C.MST_CD = 'BBS0001')
+                         LEFT OUTER JOIN TBBS_FL_INF F ON (F.DOC_SEQ = DD.DOC_SEQ AND THUMB_YN = 'Y')
+                         WHERE 1=1
+                           AND DD.MODL_SEQ = '15073'  
+                           AND M.MODL_TP  = 'B_TYPE2' 
+                           AND M.SYS_CD  = '0'
+                           AND DD.NOTC_YN IN ('Y', 'N')
+                           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt)">
+                           AND DD.CRT_DTTM BETWEEN REPLACE(#{sch_st_dt ,jdbcType=VARCHAR},'-','') AND REPLACE(#{sch_ed_dt, jdbcType=VARCHAR},'-','')
+                           </if>
+                       ORDER BY DD.NOTC_YN DESC, F_UPD_DTTM DESC, DD.DOC_SEQ DESC
+            ) Y, (SELECT @ROW_NUMBER := 0) RN
+            WHERE 1=1
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(front_notice_yn)">
+            AND SYSDATE() BETWEEN Y.DSPLY_ST_DTTM AND Y.DSPLY_ED_DTTM
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(notc_yn)">
+            AND Y.NOTC_YN = #{notc_yn,jdbcType=VARCHAR}
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+            AND Y.titl LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(treatment_cd)">
+            AND Y.TREATMENT_CD LIKE CONCAT('%', #{treatment_cd, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_stat)">
+            AND Y.DSPLY_STAT = #{dsply_stat, jdbcType=VARCHAR}
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+            AND (Y.LGN_ID = #{lgn_id ,jdbcType=VARCHAR} OR Y.USR_NM LIKE CONCAT('%', #{lgn_id ,jdbcType=VARCHAR}, '%'))
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_dtl_cd)">
+            AND Y.CTEGRY_DTL_CD = #{ctegry_dtl_cd ,jdbcType=VARCHAR}
+            </if>
+             )V
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+             ORDER BY V.NOTC_YN DESC, V.F_UPD_DTTM DESC, V.DOC_SEQ DESC
+             </if>
+        ) P
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+       </if>
+       ORDER BY P.NOTC_YN DESC, P.UPD_DTTM DESC, P.DOC_SEQ DESC
+    </select>
+    
+    <!--빅데이터 포탈 공지사항 팝업 리스트 조회 -->
+    <select id="getPopNotice" parameterType="ParameterMap" resultType="TbbsDocInf">
+    /*[TbbsDocInf.xml][getPopNotice][빅데이터 포탈 공지사항 통합게시글 리스트 조회 ][TANINE]*/
+        SELECT P.*
+          FROM (
+            SELECT V.*
+                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                  ,CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                  ,@ROW_NUMBER TOTAL_COUNT
+                  ,CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+
+                  </if>
+              FROM (
+                SELECT Y.*
+                     ,(@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                     , CASE WHEN QA_CNT > 0  THEN '3'
+                            ELSE '2'
+                       END AS TREATMENT_CD
+                  FROM (
+
+                       SELECT DD.MODL_SEQ
+                            , DD.DOC_SEQ
+                            , DD.LGN_ID
+                            , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = DD.LGN_ID) AS USR_NM
+                            , DD.TITL
+                            , DD.NOTC_YN
+                            , DD.OTP_STAT
+                            , DD.INQ_CNT
+                            , DD.CTEGRY_MST_CD
+                            , DD.CTEGRY_DTL_CD
+                            , DD.DSPLY_ST_DTTM
+                            , DD.DSPLY_ED_DTTM
+                            , IFNULL((SELECT CTEGRY_MST_NM FROM TBBS_CTEGRY_MST WHERE CTEGRY_MST_CD = DD.CTEGRY_MST_CD), '없음') AS CTEGRY_MST_NM
+                            , IFNULL((SELECT CTEGRY_DTL_NM FROM TBBS_CTEGRY_DTL WHERE CTEGRY_MST_CD = DD.CTEGRY_MST_CD AND CTEGRY_DTL_CD = DD.CTEGRY_DTL_CD), '없음') AS CTEGRY_DTL_NM
+                            , (CASE WHEN DD.DSPLY_YN IS NULL || DD.DSPLY_YN = 'N' THEN '임시저장' WHEN DD.DSPLY_ED_DTTM > NOW() THEN '게시중' ELSE '게시종료' END) AS DSPLY_STAT
+                            , M.MODL_TP
+                            , M.MODL_NM
+                            , M.TMP_SEQ
+                            , (SELECT COUNT(1) FROM TBBS_QA_CMT_INF QA_CMT WHERE QA_CMT.MODL_SEQ = DD.MODL_SEQ AND QA_CMT.DOC_SEQ = DD.DOC_SEQ) AS QA_CNT
+                            , C.CD_NM
+                            , C.REF_1
+                            , CTS
+                            , CONCAT(SUBSTR(DD.CRT_DTTM,1,4), '-', SUBSTR(DD.CRT_DTTM,6,2), '-', SUBSTR(DD.CRT_DTTM,9,2)) AS F_CRT_DTTM
+                            , CONCAT(SUBSTR(DD.UPD_DTTM,1,4), '-', SUBSTR(DD.UPD_DTTM,6,2), '-', SUBSTR(DD.UPD_DTTM,9,2)) AS F_UPD_DTTM
+                            , (SELECT COUNT(1) FROM TBBS_FL_INF A WHERE A.DOC_SEQ = DD.DOC_SEQ AND IFNULL(A.THUMB_YN,'N') = 'N') AS FL_CNT
+                            , F.UPL_FL_NM
+                            , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = M.SYS_CD) AS SYS_NM
+                            , DD.UPD_DTTM
+                        FROM 
+                            (SELECT D.DOC_SEQ
+	                              , D.MODL_SEQ
+	                              , D.CTEGRY_DTL_CD
+	                              , D.CTEGRY_MST_CD
+	                              , D.CTEGRY_DTL_CD
+	                              , D.NOTC_YN
+	                              , D.TITL
+	                              , D.CTS
+	                              , D.INQ_CNT
+	                              , D.CMT_CNT
+	                              , D.SCP_CNT
+	                              , D.DEL_YN
+	                              , D.LGN_ID
+	                              , D.IP_ADDR
+	                              , D.SCP_PMS_YN
+	                              , D.CMT_PMS_STAT
+	                              , D.NICKNAME
+	                              , D.OTP_STAT
+	                              , D.UPL_CNT
+	                              , D.URL_INF
+	                              , D.DSPLY_YN
+	                              , D.DSPLY_ST_DTTM
+	                              , D.DSPLY_ED_DTTM
+	                              , D.CSTR_CD
+	                              , D.USPR_NM
+	                              , D.CRTR_ID
+	                              , D.CRT_DTTM
+	                              , D.UPDR_ID
+	                              , D.UPD_DTTM
+                             FROM
+                         (TBBS_DOC_INF D INNER JOIN
+                         (SELECT CD.CTEGRY_MST_CD,CD.CTEGRY_DTL_CD 
+                         FROM 
+		                 (SELECT CTEGRY_MST_CD FROM TBBS_CTEGRY_MST WHERE US_YN = 'Y') CM INNER JOIN (SELECT CTEGRY_MST_CD,CTEGRY_DTL_CD FROM TBBS_CTEGRY_DTL WHERE US_YN = 'Y') CD 
+		                 ON CM.CTEGRY_MST_CD = CD.CTEGRY_MST_CD) CTE
+                         ON D.CTEGRY_DTL_CD = CTE.CTEGRY_DTL_CD AND D.CTEGRY_MST_CD = CTE.CTEGRY_MST_CD)) DD
+                         LEFT OUTER JOIN TBBS_MODL_INF M ON (DD.MODL_SEQ = M.MODL_SEQ)
+                         INNER JOIN TCMN_CD_DTL C ON (M.MODL_TP = C.CD AND C.MST_CD = 'BBS0001')
+                         LEFT OUTER JOIN TBBS_FL_INF F ON (F.DOC_SEQ = DD.DOC_SEQ AND THUMB_YN = 'Y')
+                         WHERE 1=1
+                           AND DD.MODL_SEQ = '15073'  
+                           AND M.MODL_TP  = 'B_TYPE2' 
+                           AND M.SYS_CD  = '0'
+                           AND DD.NOTC_YN IN ('P')
+                           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt)">
+                           AND DD.CRT_DTTM BETWEEN REPLACE(#{sch_st_dt ,jdbcType=VARCHAR},'-','') AND REPLACE(#{sch_ed_dt, jdbcType=VARCHAR},'-','')
+                           </if>
+                       ORDER BY DD.NOTC_YN DESC, F_UPD_DTTM DESC, DD.DOC_SEQ DESC
+            ) Y, (SELECT @ROW_NUMBER := 0) RN
+            WHERE 1=1
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(front_notice_yn)">
+            AND SYSDATE() BETWEEN Y.DSPLY_ST_DTTM AND Y.DSPLY_ED_DTTM
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(notc_yn)">
+            AND Y.NOTC_YN = #{notc_yn,jdbcType=VARCHAR}
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+            AND Y.titl LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(treatment_cd)">
+            AND Y.TREATMENT_CD LIKE CONCAT('%', #{treatment_cd, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_stat)">
+            AND Y.DSPLY_STAT = #{dsply_stat, jdbcType=VARCHAR}
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+            AND (Y.LGN_ID = #{lgn_id ,jdbcType=VARCHAR} OR Y.USR_NM LIKE CONCAT('%', #{lgn_id ,jdbcType=VARCHAR}, '%'))
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_dtl_cd)">
+            AND Y.CTEGRY_DTL_CD = #{ctegry_dtl_cd ,jdbcType=VARCHAR}
+            </if>
+             )V
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+             ORDER BY V.NOTC_YN DESC, V.F_UPD_DTTM DESC, V.DOC_SEQ DESC
+             </if>
+        ) P
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+       </if>
+       ORDER BY P.NOTC_YN DESC, P.UPD_DTTM DESC, P.DOC_SEQ DESC
+    </select>
+    
+    <!-- 게시판 상세 조회수 갱신 -->
+    <update id="updateTbbsDocInfInqCnt" parameterType="ParameterMap">
+     /*[TbbsDocInfTrx.xml][updateTbbsDocInfInqCnt][게시판 상세 조회수 갱신][TANINE]*/
+        UPDATE TBBS_DOC_INF
+		SET    UPD_DTTM = DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s')
+		     , UPDR_ID = 'test'
+		     , INQ_CNT = INQ_CNT + 1
+		WHERE  MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </update>
+
+    <!-- 게시판 임시 정보 저장 -->
+    <insert id="insertTbbsTmpDocInf" parameterType="TbbsDocInf" useGeneratedKeys="true" keyProperty="doc_seq">
+    /*[TbbsDocInfTrx.xml][insertTbbsTmpDocInf][게시판 임시 정보 저장][TANINE]*/
+        INSERT INTO TBBS_TMP_DOC_INF
+		(
+		   MODL_SEQ
+		 , IP_ADDR
+		 , CRTR_ID
+		 , CRT_DTTM
+		 , UPDR_ID
+		 , UPD_DTTM
+		)
+		VALUES
+		(
+		   #{modl_seq, jdbcType=NUMERIC}
+		 , #{ip_addr, jdbcType=NUMERIC}
+		 , #{crtr_id, jdbcType=NUMERIC}
+		 , SYSDATE()
+		 , #{updr_id, jdbcType=NUMERIC}
+		 , SYSDATE()
+		)
+    </insert>
+
+    <!-- 게시판 정보 저장 -->
+    <insert id="insertTbbsDocInfInfo" parameterType="TbbsDocInf">
+    /*[TbbsDocInfTrx.xml][insertTbbsDocInfInfo][게시판 정보 저장][TANINE]*/
+        INSERT INTO TBBS_DOC_INF
+		(
+		       DOC_SEQ
+		     , MODL_SEQ
+		     , NOTC_YN
+             , TITL
+             , CTS
+		     , CRTR_ID
+		     , LGN_ID
+		     , CRT_DTTM
+		     , UPD_DTTM
+		     , UPDR_ID
+		     , IP_ADDR
+		     , CMT_PMS_STAT
+		     , OTP_STAT
+		     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url_inf)">
+		     , URL_INF
+		     </if>
+		     , CTEGRY_MST_CD
+		     , CTEGRY_DTL_CD
+		     , DSPLY_YN
+		     , DSPLY_ST_DTTM
+		     , DSPLY_ED_DTTM
+		     
+		)
+		SELECT t1.DOC_SEQ
+		     , t1.MODL_SEQ
+		     , #{notc_yn, jdbcType=VARCHAR} AS NOTC_YN
+		     , #{titl, jdbcType=VARCHAR} AS TITL
+		     , #{cts, jdbcType=VARCHAR} AS CTS
+		     , t1.CRTR_ID
+		     ,(SELECT s1.LGN_ID FROM TMBR_ADM_LGN_INF s1 WHERE s1.USR_ID = t1.CRTR_ID) AS LGN_ID
+		     , DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s') AS F_CRT_DTTM
+		     , DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s') AS F_UPD_DTTM
+		     , t1.CRTR_ID AS UPDR_ID
+		     , t1.IP_ADDR AS IP_ADDR
+		     , #{cmt_pms_stat, jdbcType=VARCHAR} AS CMT_PMS_STAT
+		     , #{otp_stat, jdbcType=VARCHAR} AS OTP_STAT
+		     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url_inf)">
+		     , #{url_inf, jdbcType=VARCHAR}
+		     </if>
+		     , #{ctegry_mst_cd, jdbcType=VARCHAR}
+		     , #{ctegry_dtl_cd, jdbcType=VARCHAR}
+		     , #{dsply_yn, jdbcType=VARCHAR}
+		     , DATE_FORMAT(#{dsply_st_dttm, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i') AS DSPLY_ST_DTTM
+		     , DATE_FORMAT(#{dsply_ed_dttm, jdbcType=VARCHAR}, '%Y-%m-%d %H:%i') AS DSPLY_ED_DTTM
+		FROM   TBBS_TMP_DOC_INF t1
+		WHERE  t1.DOC_SEQ  = #{doc_seq, jdbcType=NUMERIC}
+		AND    t1.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+    </insert>
+
+    <!-- 게시판 정보 갱신 -->
+    <update id="updateTbbsDocInfInfo" parameterType="TbbsDocInf">
+    /*[TbbsDocInfTrx.xml][updateTbbsDocInfInfo][게시판 정보 갱신][TANINE]*/
+        UPDATE TBBS_DOC_INF
+        SET    UPD_DTTM = DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s')
+             , UPDR_ID = #{updr_id, jdbcType=NUMERIC}
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(titl)">
+             , TITL = #{titl, jdbcType=VARCHAR}
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cts)">
+             , CTS = #{cts, jdbcType=VARCHAR}
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(notc_yn)">
+             , NOTC_YN = #{notc_yn, jdbcType=VARCHAR}
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cmt_pms_stat)">
+             , CMT_PMS_STAT = #{cmt_pms_stat, jdbcType=VARCHAR}
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(otp_stat)">
+             , OTP_STAT = #{otp_stat, jdbcType=VARCHAR}
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_dtl_cd)">
+		     , CTEGRY_DTL_CD = #{ctegry_dtl_cd, jdbcType=NUMERIC}
+		     </if>
+		     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url_inf)">
+		     , URL_INF = #{url_inf, jdbcType=VARCHAR}
+		     </if>
+		     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_yn)">
+		     , dsply_yn = #{dsply_yn, jdbcType=VARCHAR}
+		     </if>
+		     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_st_dttm)">
+		     , dsply_st_dttm = #{dsply_st_dttm, jdbcType=VARCHAR}
+		     </if>
+		     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_ed_dttm)">
+		     , dsply_ed_dttm = #{dsply_ed_dttm, jdbcType=VARCHAR}
+		     </if>
+		     , ctegry_dtl_cd = IFNULL(#{ctegry_dtl_cd, jdbcType=VARCHAR},'')
+		     
+        WHERE  MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    DOC_SEQ  = #{doc_seq, jdbcType=NUMERIC}
+    </update>
+
+    <!-- 게시판 추가 컬럼 정보 저장 -->
+    <insert id="insertTbbsDocAddItmInfInfo" parameterType="TbbsDocInf">
+    /*[TbbsDocInfTrx.xml][insertTbbsDocAddItmInfInfo][게시판 추가 컬럼 정보 저장][TANINE]*/
+        INSERT INTO TBBS_DOC_ADD_ITM_INF
+		(
+		  DOC_SEQ
+		, MODL_SEQ
+		, DOC_ITM_VAL
+		, EID
+		, VAR_SEQ
+		, LANG_CD
+		, CD
+		, CRTR_ID
+		, CRT_DTTM
+		, UPDR_ID
+		, UPD_DTTM
+		)
+		VALUES
+		(
+		  #{doc_seq, jdbcType=NUMERIC}
+        , #{modl_seq, jdbcType=NUMERIC}
+		, #{doc_itm_val, jdbcType=VARCHAR}
+		, #{eid, jdbcType=VARCHAR}
+		, (SELECT IFNULL(MAX(s1.var_seq), 0) + 1
+		     FROM TBBS_DOC_ADD_ITM_INF s1
+		    WHERE s1.DOC_SEQ  = #{doc_seq, jdbcType=NUMERIC}
+		      AND s1.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+		   )
+		, #{lang_cd, jdbcType=VARCHAR}
+		, #{cd, jdbcType=VARCHAR}
+		, #{crtr_id, jdbcType=NUMERIC}
+		, SYSDATE()
+		, #{updr_id, jdbcType=NUMERIC}
+		, SYSDATE()
+		)
+    </insert>
+
+    <!-- 게시판 추가 컬럼 정보 갱신 -->
+    <update id="updateTbbsDocAddItmInfInfo" parameterType="TbbsDocInf">
+	/*[TbbsDocInfTrx.xml][updateTbbsDocAddItmInfInfo][게시판 추가 컬럼 정보 갱신][TANINE]*/
+        UPDATE TBBS_DOC_ADD_ITM_INF
+        SET    DOC_ITM_VAL = #{doc_itm_val, jdbcType=VARCHAR}
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cd)">
+             , cd = #{cd, jdbcType=VARCHAR}
+             </if>
+        WHERE  modl_seq = #{modl_seq, jdbcType=NUMERIC}
+        AND    doc_seq  = #{doc_seq, jdbcType=NUMERIC}
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(eid)">
+        AND    eid = #{eid, jdbcType=VARCHAR}
+        </if>
+    </update>
+
+    <!-- 게시판 파일 정보 저장 -->
+    <insert id="insertTbbsFlInfInfo" parameterType="TbbsDocInf" useGeneratedKeys="true" keyProperty="fl_seq">
+     /*[TbbsDocInfTrx.xml][insertTbbsFlInfInfo][게시판 파일 정보 저장][TANINE]*/
+        INSERT INTO TBBS_FL_INF
+		(
+		  DOC_SEQ
+		, MODL_SEQ
+		, UPL_TRG_TP
+		, USR_ID
+		, ORI_FL_NM
+		, UPL_FL_NM
+		, FL_EXT
+		, FL_SIZE
+		, VLD_YN
+		, IP_ADDR
+		, DWLD_CNT
+		, DRC_DWLD_YN
+		, THUMB_YN
+		, CRTR_ID
+		, CRT_DTTM
+		, UPDR_ID
+	    , UPD_DTTM
+		)
+		VALUES
+		(
+		  #{doc_seq, jdbcType=NUMERIC}
+		, #{modl_seq, jdbcType=NUMERIC}
+		, #{upl_trg_tp, jdbcType=VARCHAR}
+		, #{usr_id, jdbcType=VARCHAR}
+		, #{ori_fl_nm, jdbcType=VARCHAR}
+		, #{upl_fl_nm, jdbcType=VARCHAR}
+		, #{fl_ext, jdbcType=VARCHAR}
+		, #{fl_size, jdbcType=NUMERIC}
+		, 'Y'
+		, #{ip_addr, jdbcType=VARCHAR}
+		, 0
+		, 'Y'
+		, #{thumb_yn, jdbcType=VARCHAR}
+		, #{crtr_id, jdbcType=VARCHAR}
+		, SYSDATE()
+		, #{updr_id, jdbcType=VARCHAR}
+		, SYSDATE()
+		)
+    </insert>
+
+    <!-- 게시판 파일 정보 삭제 -->
+    <delete id="deleteTbbsFlInfInfo" parameterType="TbbsDocInf">
+    /*[TbbsDocInfTrx.xml][deleteTbbsFlInfInfo][게시판 파일 정보 삭제][TANINE]*/
+        DELETE
+        FROM  TBBS_FL_INF
+        WHERE FL_SEQ = #{fl_seq, jdbcType=NUMERIC}
+    </delete>
+
+    <!-- 게시판 파일 정보 삭제 -->
+    <delete id="deleteTbbsFlInf" parameterType="TbbsDocInf">
+    /*[TbbsDocInfTrx.xml][deleteTbbsFlInf][게시판 파일 정보 삭제][TANINE]*/
+        DELETE
+        FROM   TBBS_FL_INF
+        WHERE  DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </delete>
+
+    <!-- 썸네일 파일 정보 삭제 -->
+    <delete id="deleteTbbsFlInfThumbnailFile" parameterType="TbbsDocInf">
+    /*[TbbsDocInfTrx.xml][deleteTbbsFlInfThumbnailFile][게시판 파일 정보 삭제][TANINE]*/
+        DELETE
+        FROM   TBBS_FL_INF
+        WHERE  DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+        AND    THUMB_YN    = 'Y'
+    </delete>
+
+    <!-- 게시판 정보 갱신 : DEL_YN(Y) -->
+    <update id="updateTbbsDocInfDelYnInfo" parameterType="ParameterMap">
+    /*[TbbsDocInfTrx.xml][updateTbbsDocInfDelYnInfo][게시판 정보 갱신 : DEL_YN(Y)][TANINE]*/
+        UPDATE TBBS_DOC_INF
+        SET    UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+             , DEL_YN   = #{del_yn, jdbcType=VARCHAR}
+        WHERE  MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND    DOC_SEQ  = #{doc_seq, jdbcType=NUMERIC}
+    </update>
+
+	<!-- 게시글 관련 컬럼 물리삭제 (단건)-->
+	<delete id="deleteTbbsDocAddItmInfExVal" parameterType="TbbsDocInf">
+    /*[TbbsDocInfTrx.xml][deleteTbbsDocAddItmInfExVal][게시글 관련 컬럼 물리삭제 (단건)][TANINE]*/
+		DELETE
+		FROM TBBS_DOC_ADD_ITM_INF
+		WHERE DOC_SEQ = #{doc_seq ,jdbcType=NUMERIC}
+	</delete>
+
+	<!-- 게시글 조회수 카운트-->
+	<update id="updatepluscnt" parameterType="TbbsDocInf">
+    /*[TbbsDocInfTrx.xml][updatepluscnt][게시글 조회수 카운트][TANINE]*/
+        UPDATE TBBS_DOC_INF
+        SET    INQ_CNT = INQ_CNT + 1 
+        where DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </update>
+    
+    
+    <!-- 공지사항 게시판 목록 조회 -->
+	<select id="selectTbbsDocNotiList" parameterType="ParameterMap" resultType="TbbsDocInf">
+        /*[TbbsDocInf.xml][selectTbbsDocNotiList][공지사항 게시판 목록 조회][TANINE]*/
+        SELECT (SELECT S1.REF_1
+			      FROM TCMN_CD_DTL S1
+			     WHERE S1.MST_CD = 'MODL_INF_CD'
+			       AND S1.US_YN = 'Y'
+			       AND S1.CD = ALLC.MODL_SEQ) AS MODL_TP_CD
+             , (SELECT S1.CD_NM
+			      FROM TCMN_CD_DTL S1
+			     WHERE S1.MST_CD = 'MODL_INF_CD'
+			       AND S1.US_YN = 'Y'
+			       AND S1.CD = ALLC.MODL_SEQ) AS MODL_NM
+		     , ALLC.*
+		  FROM (
+		        SELECT NOTI.*
+		          FROM (
+		                SELECT 0 AS PAGE
+		                     , 0 AS TOTAL_PAGE
+		                     , 0 AS TOTAL_COUNT
+		                     , 0 AS ROW_NUM
+		                     , A.DOC_SEQ
+		                     , A.MODL_SEQ
+		                     , A.NOTC_YN
+		                     , A.TITL
+		                     , A.INQ_CNT
+		                     , A.CTS
+		                     , DATE_FORMAT(A.CRT_DTTM, '%Y.%m.%d') AS F_CRT_DTTM
+		                  FROM TBBS_DOC_INF A
+		                 WHERE A.NOTC_YN = 'Y'
+		                   AND A.DEL_YN = 'N'
+		                   AND A.OTP_STAT IN ('PUBLIC', 'SECRET')
+		                   AND A.MODL_SEQ IN <foreach collection="modl_seq_list" item="list" separator="," open="(" close=")">#{list.modl_seq, jdbcType=NUMERIC}</foreach>
+		                ORDER BY A.CRT_DTTM DESC
+		               ) NOTI
+		        UNION ALL
+		        SELECT BASC.*
+		          FROM (
+		                SELECT CEIL(XX.ROW_NUM / #{rows, jdbcType=NUMERIC}) AS PAGE
+		                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE
+		                     , @ROW_NUMBER AS TOTAL_COUNT
+		                     , XX.*
+		                  FROM (
+		                        SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS ROW_NUM
+		                             , X.*
+		                          FROM (
+		                                SELECT B.DOC_SEQ
+		                                     , B.MODL_SEQ
+		                                     , B.NOTC_YN
+		                                     , B.TITL
+		                                     , B.INQ_CNT
+		                                     , B.CTS
+		                                     , B.F_CRT_DTTM
+		                                  FROM (
+		                                        SELECT A.DOC_SEQ
+		                                             , A.MODL_SEQ
+		                                             , A.CTEGRY_DTL_CD
+		                                             , A.NOTC_YN
+		                                             , A.TITL
+		                                             , A.INQ_CNT
+		                                             , A.CTS
+		                                             , DATE_FORMAT(A.CRT_DTTM, '%Y.%m.%d') AS F_CRT_DTTM
+		                                          FROM TBBS_DOC_INF A
+		                                         WHERE A.NOTC_YN = 'N'
+		                                           AND A.DEL_YN = 'N'
+		                                           AND A.OTP_STAT IN ('PUBLIC', 'SECRET')
+		                                           AND A.MODL_SEQ IN <foreach collection="modl_seq_list" item="list" separator="," open="(" close=")">#{list.modl_seq, jdbcType=NUMERIC}</foreach>
+		                                           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(modl_seq)">
+		                                           AND A.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+		                                           </if>
+		                                        ORDER BY A.CRT_DTTM DESC
+		                                       ) B
+		                                 WHERE 1 = 1
+		                                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+		                                   <choose>
+		                                   <when test='sch_type == "1"'>
+		                                   AND B.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+		                                   </when>
+		                                   <when test='sch_type == "2"'>
+		                                   AND B.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+		                                   </when>
+		                                   <when test='sch_type == "3"'>
+		                                   AND (B.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+		                                    OR  B.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+		                                   </when>
+		                                   </choose>
+		                                   </if>
+		                               ) X
+		                             , (SELECT @ROW_NUMBER := 0) RN
+		                       ) XX
+		               ) BASC
+		         WHERE BASC.PAGE = #{page, jdbcType=NUMERIC}
+		       ) ALLC
+    </select>
+     <!-- 게시판 상세 정보 조회 -->
+    <select id="selectTbbsDocInf" parameterType="ParameterMap" resultType="TbbsDocInf">
+    	/*[TbbsDocInf.xml][selectTbbsDocInf][게시판 상세 정보 조회][TANINE]*/
+        SELECT T1.MODL_SEQ
+             , T1.DOC_SEQ
+             , (SELECT S1.REF_1
+			      FROM TCMN_CD_DTL S1
+			     WHERE S1.MST_CD = 'MODL_INF_CD'
+			       AND S1.US_YN = 'Y'
+			       AND S1.CD = T1.MODL_SEQ) AS MODL_TP_CD
+             , (SELECT S1.CD_NM
+			      FROM TCMN_CD_DTL S1
+			     WHERE S1.MST_CD = 'MODL_INF_CD'
+			       AND S1.US_YN = 'Y'
+			       AND S1.CD = T1.MODL_SEQ) AS MODL_NM
+             , T1.TITL
+             , T1.CTS
+             , T1.INQ_CNT
+             , T1.OTP_STAT
+             , T1.CMT_PMS_STAT
+             , T1.NOTC_YN
+             , IFNULL((SELECT S1.USR_NM FROM TMBR_ADM_LGN_INF S1 WHERE S1.USR_ID = T1.CRTR_ID)
+                     ,(SELECT S1.USR_NM FROM TMBR_ADM_LGN_INF S1 WHERE S1.USR_ID = T1.CRTR_ID)) AS USR_NM
+             , DATE_FORMAT(T1.CRT_DTTM, '%Y.%m.%d') AS F_CRT_DTTM
+             , DATE_FORMAT(T1.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS F_CRT_DTTM_2
+          FROM TBBS_DOC_INF T1
+         WHERE T1.DEL_YN = 'N'
+           AND T1.OTP_STAT IN ('PUBLIC', 'SECRET')
+           AND T1.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+           AND T1.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </select>
+    
+     <!-- 게시판 상세 이전/다음글 정보 조회 -->
+    <select id="selectTbbsDocBnAList" parameterType="ParameterMap" resultType="TbbsDocInf">
+    	/*[TbbsDocInf.xml][selectTbbsDocBnAList][게시판 상세 이전/다음글 정보 조회][TANINE]*/
+    	<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lst_modl_seq)">
+    	(SELECT 'BEFORE' AS TP
+              , A.MODL_SEQ
+              , A.DOC_SEQ
+              , A.TITL
+           FROM TBBS_DOC_INF A
+          WHERE A.NOTC_YN = 'N'
+            AND A.DEL_YN = 'N'
+            AND A.OTP_STAT IN ('PUBLIC', 'SECRET')
+            AND A.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+            AND A.CRT_DTTM <![CDATA[>]]> #{crt_dttm, jdbcType=VARCHAR}
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+            <choose>
+            <when test='sch_type == "1"'>
+            AND A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </when>
+            <when test='sch_type == "2"'>
+            AND A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </when>
+            <when test='sch_type == "3"'>
+            AND (A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+             OR  A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+            </when>
+            </choose>
+            </if>
+          ORDER BY A.CRT_DTTM ASC
+          LIMIT 1)
+        UNION ALL
+        (SELECT 'AFTER' AS TP
+              , A.MODL_SEQ
+              , A.DOC_SEQ
+              , A.TITL
+           FROM TBBS_DOC_INF A
+          WHERE A.NOTC_YN = 'N'
+            AND A.DEL_YN = 'N'
+            AND A.OTP_STAT IN ('PUBLIC', 'SECRET')
+            AND A.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+            AND A.CRT_DTTM <![CDATA[<]]> #{crt_dttm, jdbcType=VARCHAR}
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+            <choose>
+            <when test='sch_type == "1"'>
+            AND A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </when>
+            <when test='sch_type == "2"'>
+            AND A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </when>
+            <when test='sch_type == "3"'>
+            AND (A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+             OR  A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+            </when>
+            </choose>
+            </if>
+          ORDER BY A.CRT_DTTM DESC
+          LIMIT 1)
+    	</if>
+    	<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(lst_modl_seq)">
+    	(SELECT 'BEFORE' AS TP
+              , A.MODL_SEQ
+              , A.DOC_SEQ
+              , A.TITL
+           FROM TBBS_DOC_INF A
+          WHERE A.NOTC_YN = 'N'
+            AND A.DEL_YN = 'N'
+            AND A.OTP_STAT IN ('PUBLIC', 'SECRET')
+            AND MODL_SEQ IN <foreach collection="modl_seq_list" item="list" separator="," open="(" close=")">#{list.modl_seq, jdbcType=NUMERIC}</foreach>
+            AND A.CRT_DTTM <![CDATA[>]]> #{crt_dttm, jdbcType=VARCHAR}
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+            <choose>
+            <when test='sch_type == "1"'>
+            AND A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </when>
+            <when test='sch_type == "2"'>
+            AND A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </when>
+            <when test='sch_type == "3"'>
+            AND (A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+             OR  A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+            </when>
+            </choose>
+            </if>
+          ORDER BY A.CRT_DTTM ASC
+          LIMIT 1)
+        UNION ALL
+        (SELECT 'AFTER' AS TP
+              , A.MODL_SEQ
+              , A.DOC_SEQ
+              , A.TITL
+           FROM TBBS_DOC_INF A
+          WHERE A.NOTC_YN = 'N'
+            AND A.DEL_YN = 'N'
+            AND A.OTP_STAT IN ('PUBLIC', 'SECRET')
+            AND MODL_SEQ IN <foreach collection="modl_seq_list" item="list" separator="," open="(" close=")">#{list.modl_seq, jdbcType=NUMERIC}</foreach>
+            AND A.CRT_DTTM <![CDATA[<]]> #{crt_dttm, jdbcType=VARCHAR}
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_type_txt)">
+            <choose>
+            <when test='sch_type == "1"'>
+            AND A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </when>
+            <when test='sch_type == "2"'>
+            AND A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+            </when>
+            <when test='sch_type == "3"'>
+            AND (A.TITL LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%')
+             OR  A.CTS LIKE CONCAT('%', #{sch_type_txt, jdbcType=VARCHAR}, '%'))
+            </when>
+            </choose>
+            </if>
+          ORDER BY A.CRT_DTTM DESC
+          LIMIT 1)
+    	</if>
+    </select>
+
+</mapper>

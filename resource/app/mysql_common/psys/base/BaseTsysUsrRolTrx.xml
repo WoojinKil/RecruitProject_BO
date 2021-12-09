@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysUsrRolTrx">
+	
+	<insert id="insert" parameterType="TsysUsrRol">
+        /*[BaseTsysUsrRolTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_USR_ROL
+		(
+			 ROL_ID
+		   , ROL_NM
+		   , US_YN
+		   , APL_ST_DT
+		   , APL_ED_DT
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{rol_id, jdbcType=VARCHAR}
+		   , #{rol_nm, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , replace(#{f_apl_st_dt, jdbcType=VARCHAR}, '-', '')
+		   , replace(#{f_apl_ed_dt, jdbcType=VARCHAR}, '-', '')
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TsysUsrRol">
+        /*[BaseTsysUsrRolTrx.xml][update][TANINE]*/
+		UPDATE TSYS_USR_ROL
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+	         , UPD_DTTM = SYSDATE()
+	           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_nm)">
+		     , ROL_NM = #{rol_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(f_apl_st_dt)">
+		     , APL_ST_DT = replace(#{f_apl_st_dt, jdbcType=VARCHAR}, '-', '')
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(f_apl_ed_dt)">
+		     , APL_ED_DT = replace(#{f_apl_ed_dt, jdbcType=VARCHAR}, '-', '')
+		       </if>
+		WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysUsrRol">
+        /*[BaseTsysUsrRolTrx.xml][delete][TANINE]*/
+		DELETE FROM TSYS_USR_ROL
+		 WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</delete>
+
+</mapper>

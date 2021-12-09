@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TdspSysInf">
+	
+	<sql id="select-one-sql">
+		/*[TdspSysInf.xml][select][TANINE]*/
+		SELECT SYS_CD                           /* 시스템코드 */
+             , SYS_NM                           /* 사이트명 */
+             , SYS_PTH                          /* 사이트경로 */
+             , US_YN                            /* 사용여부 */
+             , SRT_SEQ                          /* 정렬 순서 */
+             , DSPLY_YN                          /* 권한사용여부 */
+             , SYS_ABRV                         /* 약어 */
+             , CRTR_ID                          /* 생성자ID */
+             , CRT_DTTM                         /* 생성일시 */
+             , UPDR_ID                          /* 수정자ID */
+             , UPD_DTTM                         /* 수정일시 */
+          FROM TDSP_SYS_INF
+		 WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+		 ORDER BY SRT_SEQ
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TdspSysInf">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+
+
+	<insert id="insert" parameterType="TdspSysInf">
+        /*[TdspSysInf.xml][insert][사이트 등록][TANINE]*/
+        INSERT INTO TDSP_SYS_INF
+		(
+		     SYS_NM                     /* 사이트명 */
+		   , SYS_PTH                    /* 사이트경로 */
+		   , SYS_URL					/* 사이트URL */
+		   , US_YN                      /* 사용여부 */
+		   , SRT_SEQ					/* 정렬순서 */
+           , DSPLY_YN                    /*권한사용여부*/
+           , SYS_ABRV                   /*약어명*/
+           , SYS_DESC              /* 사이트 설명 내용 */ 
+		   , CRTR_ID                    /* 생성자ID */
+		   , CRT_DTTM                   /* 생성일시 */
+		   , UPDR_ID                    /* 수정자ID */
+		   , UPD_DTTM                   /* 수정일시 */
+		)
+		VALUES
+		(
+		     #{sys_nm, jdbcType=VARCHAR}
+		   , #{sys_pth, jdbcType=VARCHAR}
+		   , #{sys_url, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{srt_seq, jdbcType=NUMERIC}
+		   , #{dsply_yn, jdbcType=VARCHAR}
+		   , #{sys_abrv, jdbcType=VARCHAR}
+		   , #{sys_desc, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TdspSysInf">
+         /* [BaseTdspSysInfTrx.xml][updateSite][사이트 수정][TANINE] */
+		UPDATE TDSP_SYS_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_nm)">
+		     , SYS_NM = #{sys_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_pth)">
+		     , SYS_PTH = #{sys_pth, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_url)">
+		     , SYS_URL = #{sys_url, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(srt_seq)">
+		     , SRT_SEQ = #{srt_seq, jdbcType=VARCHAR}
+		       </if>
+		      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_yn)">
+		     , DSPLY_YN = #{dsply_yn, jdbcType=VARCHAR}
+		      </if>
+		      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_abrv)">
+		     , SYS_ABRV = #{sys_abrv, jdbcType=VARCHAR}
+		       </if>
+		      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_desc)">
+		     , SYS_DESC = #{sys_desc, jdbcType=VARCHAR}
+		       </if>
+		 WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="delete" parameterType="TdspSysInf">
+        /* [BaseTdspSysInfTrx.xml][deleteSite][사이트 삭제][TANINE] */
+		DELETE FROM TDSP_SYS_INF
+		 WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+	</delete>
+    <!-- 사이트 조회 -->
+    <select id="selectTdspSysInfList" parameterType="ParameterMap" resultType="TdspSysInf">
+        /* [TdspSysInf.xml][selectTdspSysInfList][사이트 조회][TANINE] */
+        SELECT  P.*
+          FROM (
+                SELECT CEIL(V2.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                       , CEIL(@row_number / #{rows, jdbcType=NUMERIC})   AS TOTAL_PAGE
+                       , @row_number                                     AS TOTAL_COUNT
+                       , V2.*
+                  FROM (
+                        SELECT V1.*
+                               , ( @row_number := @row_number + 1 ) AS ID /* mysql ROWNUM */
+                          FROM (
+                                 SELECT SYS_CD                                          AS SYS_CD          /* 사이트순번 */
+                                        , SYS_NM                                         AS SYS_NM           /* 사이트명 */
+                                        , SYS_PTH                                        AS SYS_PTH          /* 사이트경로 */
+                                        , SYS_URL                                        AS SYS_URL          /* 사이트URL */
+                                        , US_YN                                          AS US_YN            /* 사용여부 */
+                                        , SRT_SEQ                                        AS SRT_SEQ          /* 정렬순서 */
+                                        , DSPLY_YN                                        AS DSPLY_YN          /*권한사용여부*/
+                                        , SYS_ABRV                                       AS SYS_ABRV         /*약어명*/
+                                        , SYS_DESC                                  AS SYS_DESC    /* 사이트 설명 내용 */
+                                        , CRTR_ID                                        AS CRTR_ID          /* 생성자ID */
+                                        , CRT_DTTM                                       AS CRT_DTTM         /* 생성일시 */
+                                        , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d %H:%i:%s')     AS F_CRT_DTTM       /* 작성일시 */
+                                        , UPDR_ID                                        AS UPDR_ID          /* 수정자ID */
+                                        , UPD_DTTM                                       AS UPD_DTTM         /* 수정일시 */
+                                   FROM TDSP_SYS_INF
+                                  ORDER BY SRT_SEQ
+                               ) V1
+                                 , (SELECT @row_number := 0) RN /* mysql ROWNUM */
+                          WHERE  1 = 1
+                            AND SYS_CD !=5 -- 파트너포탈 검색 제외
+                      ) V2
+               ) P
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.page = #{page ,jdbcType=NUMERIC}
+         </if>
+      ORDER BY P.SRT_SEQ, P.SYS_CD
+    </select>
+
+    <!-- 사이트 조회 -->
+     <select id="selectTdspSysInf" parameterType="ParameterMap" resultType="TdspSysInf">
+        /* [TdspSysInf.xml][selectTdspSysInf][시스템 정보 조회][TANINE] */
+           SELECT SYS_CD                   AS SYS_CD                    /* 사이트순번 */
+                  , SYS_NM                  AS SYS_NM                     /* 사이트명 */
+                  , SYS_PTH                 AS SYS_PTH                    /* 사이트경로 */
+                  , SYS_URL                 AS SYS_URL                    /* 사이트URL */
+                  , US_YN                   AS US_YN                      /* 사용여부 */
+                  , SRT_SEQ                 AS SRT_SEQ                    /* 정렬순서 */
+                  , DSPLY_YN                 AS DSPLY_YN                    /* 권한사용여부*/
+                  , SYS_ABRV                AS SYS_ABRV                   /* 약어명*/
+                  , SYS_DESC           AS SYS_DESC              /* 사이트 설명 내용 */
+                  , CRTR_ID                 AS CRTR_ID                    /* 생성자ID */
+                  , CRT_DTTM                AS CRT_DTTM                   /* 생성일시 */
+                  , UPDR_ID                 AS UPDR_ID                    /* 수정자ID */
+                  , UPD_DTTM                AS UPD_DTTM                   /* 수정일시 */
+             FROM TDSP_SYS_INF
+            WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+            ORDER BY SRT_SEQ
+    </select>
+
+    <!-- 사이트 콤보 조회 -->
+    <select id="selectTdspSysInfComboList" parameterType="ParameterMap" resultType="TdspSysInf">
+        /* [TdspSysInf.xml][selectTdspSysInfComboList][사이트 콤보 조회][TANINE] */
+           SELECT SYS_CD                    AS SYS_CD            /* 사이트순번 */
+                  , SYS_NM                   AS SYS_NM             /* 사이트명 */
+                  , SYS_PTH                  AS SYS_PTH            /* 사이트경로 */
+                  , SYS_URL                  AS SYS_URL            /* 사이트URL */
+                  , US_YN                    AS US_YN              /* 사용여부 */
+                  , SRT_SEQ                  AS SRT_SEQ            /* 정렬순서 */
+                  , DSPLY_YN                  AS DSPLY_YN            /*권한사용여부*/
+                  , SYS_ABRV                 AS SYS_ABRV           /*약어명*/
+                  , SYS_DESC                 AS SYS_DESC      /* 사이트 설명 내용 */
+                  , CRTR_ID                  AS CRTR_ID            /* 생성자ID */
+                  , CRT_DTTM                 AS CRT_DTTM           /* 생성일시 */
+                  , UPDR_ID                  AS UPDR_ID            /* 수정자ID */
+                  , UPD_DTTM                 AS UPD_DTTM           /* 수정일시 */
+            FROM TDSP_SYS_INF
+           WHERE US_YN = 'Y'
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd) and sys_cd != 0 ">
+             AND SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+           </if>
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_yn) ">
+             AND DSPLY_YN = #{dsply_yn, jdbcType=VARCHAR}
+           </if>
+           ORDER BY SRT_SEQ
+    </select>
+    
+    <!-- 로그인 이력 적재 가능 사이트  조회 -->
+    <select id="selectTdspSysInfLogComboList" parameterType="ParameterMap" resultType="TdspSysInf">
+        /* [TdspSysInf.xml][selectTdspSysInfLogComboList][로그인 이력 적재 가능 사이트  조회][TANINE] */
+           SELECT A.SYS_CD                  AS SYS_CD            /* 사이트순번 */
+                , A.SYS_NM                   AS SYS_NM             /* 사이트명 */
+                , A.SYS_PTH                  AS SYS_PTH            /* 사이트경로 */
+                , A.SYS_URL                  AS SYS_URL            /* 사이트URL */
+                , A.US_YN                    AS US_YN              /* 사용여부 */
+                , A.SRT_SEQ                  AS SRT_SEQ            /* 정렬순서 */
+                , A.DSPLY_YN                  AS DSPLY_YN            /*권한사용여부*/
+                , A.SYS_ABRV                 AS SYS_ABRV           /*약어명*/
+                , A.SYS_DESC            AS SYS_DESC      /* 사이트 설명 내용 */
+                , A.CRTR_ID                  AS CRTR_ID            /* 생성자ID */
+                , A.CRT_DTTM                 AS CRT_DTTM           /* 생성일시 */
+                , A.UPDR_ID                  AS UPDR_ID            /* 수정자ID */
+                , A.UPD_DTTM                 AS UPD_DTTM           /* 수정일시 */
+             FROM TDSP_SYS_INF A
+                , TCMN_CD_MST B 
+                , TCMN_CD_DTL C
+            WHERE A.US_YN = 'Y'
+              AND B.US_YN = 'Y'
+              AND B.MST_CD = 'SIT_LGN_LOG'
+              AND B.MST_CD = C.MST_CD
+              AND C.US_YN = 'Y'
+              AND A.SYS_CD = C.REF_1
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd) and sys_cd != 0 ">
+              AND A.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_yn) ">
+              AND A.DSPLY_YN = #{dsply_yn, jdbcType=VARCHAR}
+            </if>
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ref_2) ">
+              AND C.REF_2 = #{ref_2, jdbcType=VARCHAR}
+            </if>
+           ORDER BY A.SRT_SEQ
+    </select>
+
+    <!-- 접근 가능한 사이트 정보 조회 -->
+    <select id="getAccessSitList" parameterType="ParameterMap" resultType="TdspSysInf">
+        /* [TdspSysInf.xml][getAccessSitList][접근 가능한 사이트 정보 조회][TANINE] */
+        SELECT  AA.SYS_CD
+                , AA.SYS_NM
+                , AA.SYS_PTH
+                , CASE WHEN BB.SYS_CD IS NULL
+                       THEN "#"
+                  ELSE AA.SYS_URL
+                   END  AS SYS_URL
+                , AA.SRT_SEQ
+                , AA.US_YN
+                , AA.SRT_SEQ
+                , AA.SYS_DESC
+                , AA.CRTR_ID
+                , AA.CRT_DTTM
+                , AA.UPDR_ID
+                , AA.UPD_DTTM
+          FROM
+            TDSP_SYS_INF AA LEFT JOIN
+                (
+                  SELECT AR.SYS_CD
+                    FROM (
+                          SELECT USR_ID
+                               , MAX(SYS_CL_CD) AS SYS_CL_CD
+                               , MAX(ORG_CD) AS ORG_CD
+                               , MAX(GRP_ROL_ID) AS GRP_ROL_ID
+                               , MAX(BLSTR_CD) AS BLSTR_CD
+                               , MAX(UM.BSLE_HDOFIC_CD) AS BSLE_HDOFIC_CD
+                               , GROUP_CONCAT(MSM.CSTR_CD) AS MSTR_CD
+                               , GROUP_CONCAT(MSM.CSTR_NM) AS MSTR_NM
+                               , GROUP_CONCAT(CSM.CSTR_CD) AS CSTR_CD
+                               , GROUP_CONCAT(CSM.CSTR_NM) AS CSTR_NM
+                               , MAX(SHOP_GRDE_CD) AS SHOP_GRDE_CD
+                               , MAX(BUY_GRDE_CD) AS BUY_GRDE_CD
+                               , MAX(MSTRS_USPR_ID) AS MSTR_USPR_ID
+                               , MAX(EXCV_YN) AS EXCV_YN
+                               , MAX(RGN_LDR_YN) AS RGN_LDR_YN
+                            FROM TB_BCPC_USPRATHR_M  UM
+                               , TB_BCPC_STR_M MSM
+                               , TB_BCPC_STR_M CSM
+                           WHERE 1=1
+                             AND USR_ID = #{user_id, jdbcType=VARCHAR}
+                             AND UM.MSTR_CD = MSM.CSTR_CD
+                             AND UM.CSTR_CD = CSM.CSTR_CD
+                        GROUP BY USR_ID )
+                        T
+                      , TSYS_ADM_GRP_ROL_RTNN GRR
+                      , TSYS_ADM_ROL AR
+                  WHERE T.GRP_ROL_ID = GRR.GRP_ROL_ID
+                    AND GRR.ROL_ID = AR.ROL_ID
+                UNION
+                   SELECT AR.SYS_CD                                      /*개인 권한에 대한 사이트*/
+                     FROM TMBR_ADM_LGN_INF ALI
+                        , TSYS_ADM_ROL_RTNN ARR
+                        , TSYS_ADM_ROL AR
+                    WHERE AR.ROL_ID = ARR.ROL_ID
+                      AND ALI.USR_ID = ARR.USR_ID
+                      AND AR.US_YN = 'Y'
+                      AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                      AND ALI.APVL_YN = 'Y'
+                      AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+                  UNION
+                   SELECT AM.SYS_CD                                      /*개인 메뉴에 대한 사이트*/
+                     FROM TMBR_ADM_LGN_INF ALI
+                        , TSYS_ADM_MNU_RTNN AMR
+                        , TSYS_ADM_MNU AM
+                    WHERE ALI.USR_ID = AMR.USR_ID
+                      AND AMR.MNU_SEQ = AM.MNU_SEQ
+                      AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                      AND ALI.APVL_YN = 'Y'
+                ) BB
+           ON AA.SYS_CD = BB.SYS_CD
+        WHERE AA.US_YN = 'Y'
+          AND AA.DSPLY_YN = 'Y'
+     ORDER BY AA.SRT_SEQ
+    </select>
+    <select id="selectSitList" parameterType="ParameterMap"  resultType="TdspSysInf" >
+          SELECT SYS_CD                    AS SYS_CD          /* 사이트순번 */
+               , SYS_NM                   AS SYS_NM             /* 사이트명 */
+               , SYS_PTH                  AS SYS_PTH            /* 사이트경로 */
+               , SYS_URL                  AS SYS_URL            /* 사이트URL */
+               , US_YN                    AS US_YN              /* 사용여부 */
+               , SRT_SEQ                  AS SRT_SEQ            /* 정렬순서 */
+               , SYS_ABRV                AS SYS_ABRV            /* 사이트 약어명 */
+               , SYS_DESC           AS SYS_DESC       /* 사이트 설명 내용 */
+               , CRTR_ID                  AS CRTR_ID            /* 생성자ID */
+               , CRT_DTTM                 AS CRT_DTTM           /* 생성일시 */
+               , UPDR_ID                  AS UPDR_ID            /* 수정자ID */
+               , UPD_DTTM                 AS UPD_DTTM           /* 수정일시 */
+            FROM TDSP_SYS_INF
+           WHERE US_YN = 'Y'
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_yn) ">
+             AND DSPLY_YN = #{dsply_yn, jdbcType=NUMERIC}
+           </if>
+           ORDER BY SRT_SEQ
+    </select>
+
+     <select id="getAccessSitCnt" parameterType="ParameterMap" resultType="int">
+        /* [TdspSysInf.xml][getAccessSitList][디봇사이트 가능여부][TANINE] */
+        SELECT  count(1) AS CNT
+          FROM
+            TDSP_SYS_INF AA LEFT JOIN
+                (
+                  SELECT AR.SYS_CD                                        /*조직별 권한에 대한 사이트*/
+                    FROM TMBR_ADM_LGN_INF ALI
+                       , TSYS_ADM_ORG_GRP_ROL_RTNN OGRR
+                       , TSYS_ADM_GRP_ROL_RTNN GRR
+                       , TSYS_ADM_ROL AR
+                   WHERE ALI.ORG_CD = OGRR.ORG_CD
+                     AND OGRR.GRP_ROL_ID = GRR.GRP_ROL_ID
+                     AND GRR.ROL_ID = AR.ROL_ID
+                     AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                     AND ALI.APVL_YN = 'Y'
+                     AND AR.US_YN = 'Y'
+                     AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+                UNION
+                  SELECT DISTINCT AR.SYS_CD  -- 직별책 통합 그룹의 권한 사이트 유무
+                    FROM TMBR_ADM_LGN_INF ALI
+                       , TSYS_ADM_JBFN_RTNN AJR -- 직무코드
+                       , TSYS_ADM_JBFN_GRP_ROL_RTNN AJGRR -- 통합 그룹
+                       , TSYS_ADM_GRP_ROL_RTNN  AGRR -- 권한 코드
+                       , TSYS_ADM_GRP_ROL AGR
+                       , TSYS_ADM_ROL AR
+                   WHERE 1=1
+	                 AND ALI.USR_ID = AJR.USR_ID
+	                 AND AJR.JOB_CD = AJGRR.JOB_CD
+	                 AND AJGRR.GRP_ROL_ID = AGRR.GRP_ROL_ID
+	                 AND AGRR.GRP_ROL_ID = AGR.GRP_ROL_ID
+	                 AND AGRR.ROL_ID = AR.ROL_ID
+	                 AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+	                 AND SYSDATE() BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+	                 AND AGR.US_YN = 'Y'
+	                 AND AR.US_YN = 'Y'
+	                 AND SYSDATE() BETWEEN AGR.APL_ST_DT AND AGR.APL_ED_DT
+                UNION
+                   SELECT AR.SYS_CD                                      /*개인 권한에 대한 사이트*/
+                     FROM TMBR_ADM_LGN_INF ALI
+                        , TSYS_ADM_ROL_RTNN ARR
+                        , TSYS_ADM_ROL AR
+                    WHERE AR.ROL_ID = ARR.ROL_ID
+                      AND ALI.USR_ID = ARR.USR_ID
+                      AND AR.US_YN = 'Y'
+                      AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                      AND ALI.APVL_YN = 'Y'
+                      AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+                  UNION
+                   SELECT AM.SYS_CD                                      /*개인 메뉴에 대한 사이트*/
+                     FROM TMBR_ADM_LGN_INF ALI
+                        , TSYS_ADM_MNU_RTNN AMR
+                        , TSYS_ADM_MNU AM
+                    WHERE ALI.USR_ID = AMR.USR_ID
+                      AND AMR.MNU_SEQ = AM.MNU_SEQ
+                      AND AMR.APVL_YN = 'Y'
+                      AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                      AND ALI.APVL_YN = 'Y'
+                ) BB
+           ON AA.SYS_CD = BB.SYS_CD
+        WHERE AA.US_YN = 'Y'
+          AND AA.DSPLY_YN = 'Y'
+          AND AA.SYS_PTH ='/DBOT'
+    </select>
+
+
+</mapper>

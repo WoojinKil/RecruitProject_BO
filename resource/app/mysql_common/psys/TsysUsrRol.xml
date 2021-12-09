@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysUsrRol">
+	
+	<!-- 사용자 권한 그리드 리스트 조회  -->
+    <select id="selectTsysUsrRolGridList" parameterType="ParameterMap" resultType="TsysUsrRol">
+    	/*[TsysUsrRol.xml][selectTsysUsrRolGridList][사용자 권한 그리드 리스트 조회][TANINE]*/
+    	SELECT P.*
+          FROM (
+		        SELECT V.*
+				     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+		             , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+		             , @ROW_NUMBER TOTAL_COUNT
+		             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+		             </if>
+		          FROM (
+						SELECT Y.*
+						     , (@ROW_NUMBER := @ROW_NUMBER + 1) ID 
+				          FROM (
+								SELECT ROL_ID
+							         , ROL_NM
+							         , US_YN
+							         , APL_ST_DT
+							         , APL_ED_DT
+							         , CRTR_ID
+							         , CRT_DTTM
+							         , UPDR_ID
+							         , UPD_DTTM
+							         , DATE_FORMAT(APL_ST_DT, '%Y-%m-%d') AS F_APL_ST_DT
+							         , DATE_FORMAT(APL_ED_DT, '%Y-%m-%d') AS F_APL_ED_DT
+							         , DATE_FORMAT(UPD_DTTM, '%Y-%m-%d')  AS F_UPD_DTTM     
+							      FROM TSYS_USR_ROL
+							     WHERE 1 = 1
+							     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_id)">AND ROL_ID = #{rol_id, jdbcType=VARCHAR}</if>
+							     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_nm)">AND ROL_NM LIKE CONCAT('%', #{rol_nm, jdbcType=VARCHAR}, '%')</if>
+							     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">AND US_YN = #{us_yn, jdbcType=VARCHAR}</if>								
+				               ) Y
+				             , (SELECT @row_number := 0) RN
+		               ) V
+		         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+		         ORDER BY V.ROL_NM
+		         </if>
+		       ) P
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+         </if>
+    </select>
+    
+    <!-- 사용자 권한수 -->
+    <select id="selectTsysUsrRolCnt" parameterType="ParameterMap" resultType="Integer">
+    	/*[TsysUsrRol.xml][selectTsysUsrRolCnt][사용자 권한수][TANINE]*/
+        SELECT COUNT(1) 
+          FROM TSYS_USR_ROL
+         WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR}
+    </select>
+    
+	<!-- 사용자 권한 목록 (전체) -->
+	<select id="selectTsysUsrRolList" parameterType="ParameterMap" resultType="TsysUsrRol">
+		/*[TsysUsrRol.xml][selectTsysUsrRolList][사용자 권한 목록 (전체)][TANINE]*/
+		SELECT UR.APL_ED_DT
+			 , UR.APL_ST_DT
+			 , UR.UPD_DTTM
+			 , UR.UPDR_ID
+			 , UR.CRT_DTTM
+			 , UR.CRTR_ID
+			 , UR.ROL_ID
+			 , UR.ROL_NM
+			 , UR.US_YN
+			 , CASE WHEN URA.USR_ID IS NULL THEN 'N'
+			 	    ELSE 'Y'
+		   	    END AS ROL_YN
+		   	 , #{usr_id ,jdbcType=VARCHAR} AS USR_ID
+		  FROM TSYS_USR_ROL UR
+		  LEFT JOIN TSYS_USR_ROL_RTNN URA 
+			ON UR.ROL_ID = URA.ROL_ID
+		   AND URA.USR_ID = #{usr_id, jdbcType=VARCHAR}
+		   AND SYSDATE() BETWEEN URA.APL_ST_DT AND URA.APL_ED_DT
+		 WHERE SYSDATE() BETWEEN UR.APL_ST_DT AND UR.APL_ED_DT
+		   AND UR.US_YN = 'Y'
+	</select>
+	
+</mapper>

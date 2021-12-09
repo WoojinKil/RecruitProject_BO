@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMetaPjtUsrMTrx">
+	
+	<insert id="insert" parameterType="TbMetaPjtUsrM">
+        /*[TbMetaPjtUsrM.xml][insert][TANINE]*/
+        INSERT INTO TB_META_PJT_USR_M
+		(
+			 CMPNY_CD
+		   , PJT_CD
+		   , STAF_EMPNO
+		   , ORZN_GBCD
+		   , ORZN_CMPNY_NM
+		   , STAF_GBCD
+		   , PJT_ROLE_GBCD
+		   , SYS_ROLE_GBCD
+		   , USE_STA_DY
+		   , USE_END_DY
+		   , CRT_DTM
+		   , CRT_ID
+		   , MDF_DTM
+		   , MDF_ID
+		)
+		VALUES
+		(
+			 #{cmpny_cd, jdbcType=VARCHAR}
+		   , #{pjt_cd, jdbcType=VARCHAR}
+		   , #{staf_empno, jdbcType=VARCHAR}
+		   , #{orzn_gbcd, jdbcType=VARCHAR}
+		   , #{orzn_cmpny_nm, jdbcType=VARCHAR}
+		   , #{staf_gbcd, jdbcType=VARCHAR}
+		   , #{pjt_role_gbcd, jdbcType=VARCHAR}
+		   , #{sys_role_gbcd, jdbcType=VARCHAR}
+		   , #{use_sta_dy, jdbcType=VARCHAR}
+		   , #{use_end_dy, jdbcType=VARCHAR}
+		   , #{crt_dtm, jdbcType=DATE}
+		   , #{crt_id, jdbcType=VARCHAR}
+		   , #{mdf_dtm, jdbcType=DATE}
+		   , #{mdf_id, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="tbMetaPjtUsrM">
+        /*[TbMetaPjtUsrM.xml][update][TANINE]*/
+		UPDATE TB_META_PJT_USR_M
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(orzn_gbcd)">
+		       ORZN_GBCD = #{orzn_gbcd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(orzn_cmpny_nm)">
+		     , ORZN_CMPNY_NM = #{orzn_cmpny_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(staf_gbcd)">
+		     , STAF_GBCD = #{staf_gbcd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pjt_role_gbcd)">
+		     , PJT_ROLE_GBCD = #{pjt_role_gbcd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_role_gbcd)">
+		     , SYS_ROLE_GBCD = #{sys_role_gbcd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(use_sta_dy)">
+		     , USE_STA_DY = #{use_sta_dy, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(use_end_dy)">
+		     , USE_END_DY = #{use_end_dy, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dtm)">
+		     , CRT_DTM = #{crt_dtm, jdbcType=DATE}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_id)">
+		     , CRT_ID = #{crt_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_dtm)">
+		     , MDF_DTM = #{mdf_dtm, jdbcType=DATE}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_id)">
+		     , MDF_ID = #{mdf_id, jdbcType=VARCHAR}
+		       </if>
+		WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND PJT_CD = #{pjt_cd, jdbcType=VARCHAR} 
+           AND STAF_EMPNO = #{staf_empno, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TbMetaPjtUsrM">
+        /*[TbMetaPjtUsrM.xml][delete][TANINE]*/
+		DELETE FROM TB_META_PJT_USR_M
+		 WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND PJT_CD = #{pjt_cd, jdbcType=VARCHAR} 
+           AND STAF_EMPNO = #{staf_empno, jdbcType=VARCHAR} 
+	</delete>
+
+</mapper>

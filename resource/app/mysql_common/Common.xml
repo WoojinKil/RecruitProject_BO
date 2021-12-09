@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Common 조회 xml -->
+<mapper namespace="Common">
+	
+    <!-- DB기준 현재 날짜/시간정보 조회 -->
+    <select id="getSysdate" resultType="java.lang.Object">
+        /*{ DB기준 현재 날짜/시간정보 조회}*/
+        SELECT SYSDATE()
+    </select>
+    
+    <!-- DB기준 현재 날짜/시간정보 조회 -->
+    <select id="getSimpleSysdate" parameterType="ParameterMap" resultType="java.lang.String">
+        /*{ DB기준 현재 날짜/시간정보 조회}*/
+        SELECT DATE_FORMAT(SYSDATE(), #{format ,jdbcType=VARCHAR})
+    </select>
+    
+    <!-- 페이징 공통 -->
+  	<sql id="getPaging-Prefix">
+  		/*[Common.xml][getPaging-Prefix][페이징헤더][TANINE]*/
+  		SELECT TTT.*
+          FROM (
+		        SELECT TT.*
+				     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+		             , CEIL(TT.ID / #{rows, jdbcType=NUMERIC}) PAGE
+		             , @ROW_NUMBER TOTAL_COUNT
+		             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+		             </if>
+		          FROM (
+						SELECT T.*
+						     , (@ROW_NUMBER := @ROW_NUMBER + 1) ID 
+				          FROM (
+    </sql>
+    
+    <sql id="getPaging-Suffix">
+    	/*[Common.xml][getPaging-Prefix][페이징FOOTER][TANINE]*/
+				               ) T
+				             , (SELECT @ROW_NUMBER := 0) RN
+		               ) TT
+		       ) TTT
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE TTT.PAGE = #{page ,jdbcType=NUMERIC}
+         </if>
+	</sql>
+</mapper>

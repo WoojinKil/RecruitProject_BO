@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Main">
+
+	<!-- 메인전시 목록 조회 -->
+	<select id="selectMnDispDocList" parameterType="ParameterMap" resultType="Main">
+		/*[Main.xml][selectMnDispDocList][메인전시 목록 조회][TANINE]*/
+		<![CDATA[
+		SELECT /* 메인전시목록 조회 */
+		       XX.MODL_TP_CD
+		     , XX.MODL_SEQ
+		     , XX.DOC_SEQ
+		     , XX.TITL
+		     , XX.F_CRT_DTTM
+			 , XX.CTS
+		     , XX.URL_INFO
+		     , XX.UPL_FL_NM
+		  FROM (
+		        SELECT CASE WHEN T3.MODL_TP_CD IN ('NOTI', 'EVT') THEN 'NOTI'
+		                    ELSE T3.MODL_TP_CD
+		                END MODL_TP_CD
+		             , T1.MODL_SEQ
+		             , T1.DOC_SEQ
+		             , T1.TITL
+		             , DATE_FORMAT(T1.CRT_DTTM, '%Y.%m.%d') AS F_CRT_DTTM
+		        	 , T1.CTS		        	 
+		             , CASE WHEN T3.MODL_TP_CD = 'INTRO' THEN CONCAT('/module/board/boardTypeDtlInfo.do%bbs_tp_cd=', T3.MODL_TP_CD
+		                                                           , '&tmpl_seq=', T2.TMPL_SEQ
+		                                                           , '&modl_seq=', T1.MODL_SEQ
+		                                                           , '&doc_seq=', T1.DOC_SEQ)
+		                    WHEN T3.MODL_TP_CD = 'MBNNR' THEN IFNULL(T1.URL_INFO, '/')
+		                    WHEN T3.MODL_TP_CD IN ('NOTI', 'EVT') THEN CONCAT('/module/board/boardTypeDtlInfo.do%bbs_tp_cd=NOTI'
+		                                                                    , '&tmpl_seq=', (SELECT S1.REF_2 AS TMPL_SEQ
+                                                                                               FROM TCMN_CD_DTL S1
+                                                                                              WHERE S1.MST_CD = 'MODL_INF_CD'
+                                                                                                AND S1.REF_1 IN ('NOTI', 'EVT')
+                                                                                                AND S1.US_YN = 'Y'
+                                                                                                AND S1.CD = T1.MODL_SEQ)
+		                                                                    , '&modl_seqs=', (SELECT GROUP_CONCAT(A.MODL_SEQ ORDER BY A.MODL_SEQ SEPARATOR '.')
+		                                                                                        FROM TBBS_MODL_INF A
+		                                                                                           , (SELECT S1.CD AS MODL_SEQ
+		                                                                                                   , S1.REF_1 AS MODL_TP_CD
+		                                                                                                FROM TCMN_CD_DTL S1
+		                                                                                               WHERE S1.MST_CD = 'MODL_INF_CD'
+		                                                                                                 AND S1.REF_1 IN ('NOTI', 'EVT')
+		                                                                                                 AND S1.US_YN = 'Y') B
+		                                                                                       WHERE A.MODL_SEQ = B.MODL_SEQ
+		                                                                                         AND A.US_YN = 'Y')
+		                                                                    , '&modl_seq=', T1.MODL_SEQ
+		                                                                    , '&doc_seq=', T1.DOC_SEQ
+		                                                                    , '&page=1')
+		                    ELSE '/'
+		                END AS URL_INFO
+		             , (SELECT S1.UPL_FL_NM
+		                  FROM TBBS_FL_INF S1
+		        		 WHERE S1.MODL_SEQ = T1.MODL_SEQ
+		        		   AND S1.DOC_SEQ = T1.DOC_SEQ) AS UPL_FL_NM
+		             , T1.CRT_DTTM
+		          FROM TBBS_DOC_INF T1
+		             , (SELECT S1.MODL_SEQ
+		                     , S1.TMP_SEQ AS TMPL_SEQ
+		                  FROM TBBS_MODL_INF S1
+		                 WHERE S1.US_YN = 'Y'
+		                   AND S1.TMP_SEQ IS NOT NULL) T2
+		             , (SELECT S1.CD AS MODL_SEQ
+		                     , S1.REF_1 AS MODL_TP_CD
+		                  FROM TCMN_CD_DTL S1
+		                 WHERE S1.MST_CD = 'MODL_INF_CD'
+		                   AND S1.US_YN = 'Y') T3
+		         WHERE T1.MODL_SEQ = T2.MODL_SEQ
+		           AND T1.MODL_SEQ = T3.MODL_SEQ
+		           AND T1.DEL_YN = 'N'
+		           AND T1.OTP_STAT IN ('PUBLIC', 'SECRET')
+		 ]]>
+		           AND T3.MODL_TP_CD IN <foreach collection="modl_tp_cd_list" item="list" separator="," open="(" close=")">#{list.modl_tp_cd, jdbcType=VARCHAR}</foreach>
+		       ) XX
+		 ORDER BY XX.MODL_TP_CD, XX.CRT_DTTM DESC
+		 <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(noti_max_cnt)">
+		 LIMIT #{noti_max_cnt, jdbcType=NUMERIC}
+		 </if>
+	</select>
+	
+	<!-- 공지사항 기타 정보 조회 -->
+	<select id="selectNotiEtcInf" resultType="Main">
+		/*[Main.xml][selectNotiEtcInf][공지사항 기타 정보 조회][TANINE]*/
+		<![CDATA[
+		SELECT CONCAT('/module/board/boardTypeList.do%bbs_tp_cd=NOTI&tmpl_seq=', T1.TMPL_SEQ
+             , '&modl_seqs=', (SELECT GROUP_CONCAT(A.MODL_SEQ ORDER BY A.MODL_SEQ SEPARATOR '.')
+                                 FROM TBBS_MODL_INF A
+                                    , (SELECT S1.CD AS MODL_SEQ
+                                            , S1.REF_1 AS MODL_TP_CD
+                                         FROM TCMN_CD_DTL S1
+                                        WHERE S1.MST_CD = 'MODL_INF_CD'
+                                          AND S1.REF_1 IN ('NOTI', 'EVT')
+                                          AND S1.US_YN = 'Y') B
+                                WHERE A.MODL_SEQ = B.MODL_SEQ
+                                  AND A.US_YN = 'Y')) AS URL_INFO
+             , IFNULL((SELECT CASE WHEN CAST(S1.REF_1 AS UNSIGNED) > 3 THEN 3
+                                   ELSE CAST(S1.REF_1 AS UNSIGNED)
+                               END
+			             FROM TCMN_CD_DTL S1
+			            WHERE S1.MST_CD = 'NOTI_MAX_CNT'
+			              AND S1.US_YN = 'Y'
+			            LIMIT 1), 2) AS NOTI_MAX_CNT
+		  FROM TDSP_TMPL_INF T1
+		  LEFT JOIN (SELECT MNU_SEQ
+		                  , SYS_CD
+		               FROM TSYS_ADM_MNU
+		              WHERE FRNT_YN = 'Y'
+		                AND US_YN = 'Y') T2
+		    ON T1.MNU_SEQ = T2.MNU_SEQ
+		  LEFT JOIN (SELECT CD AS TMPL_TP_CD
+		                  , CAST(REF_1 AS UNSIGNED) AS MNU_DPH
+		               FROM TCMN_CD_DTL
+		              WHERE MST_CD = 'TMPL_TP_CD'
+		                AND US_YN = 'Y') T3
+		    ON T1.TMPL_TP_CD = T3.TMPL_TP_CD
+		 INNER JOIN (SELECT T1.TMP_SEQ AS TMPL_SEQ
+		                  , T1.MODL_SEQ
+		               FROM TBBS_MODL_INF T1
+		                  , (SELECT S1.CD AS MODL_SEQ
+		                       FROM TCMN_CD_DTL S1
+		                      WHERE S1.MST_CD = 'MODL_INF_CD'
+		                        AND S1.US_YN = 'Y'
+		                        AND S1.REF_1 IN ('NOTI', 'EVT')) T2
+		              WHERE T1.MODL_SEQ = T2.MODL_SEQ
+		                AND T1.US_YN = 'Y') T4
+		    ON T1.TMPL_SEQ = T4.TMPL_SEQ
+		 WHERE 1 = 1
+		   AND T1.US_YN = 'Y'
+		   AND T1.DSPLY_YN = 'Y'
+		   AND T1.MNU_SEQ != ''
+		   AND T1.MNU_SEQ IS NOT NULL
+		   AND IFNULL(T1.MNU_SEQ, '') != ''
+		   AND (CASE WHEN T1.TMPL_TP_CD = 1 THEN 'Y'
+		             ELSE (SELECT IFNULL(S1.DSPLY_YN, 'N')
+		                     FROM TDSP_TMPL_INF S1
+		   	                WHERE S1.TMPL_SEQ = T1.UP_TMPL_SEQ)
+			     END) = 'Y'
+	     LIMIT 1
+	     ]]>
+	</select>
+    
+</mapper>

@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+/* 환불 정책 & 개인 정보 보호 */
+.mArticle.typeText{padding:25px 0 0; border-top:1px solid #333; font-size:14px; line-height:22px; font-weight:300; color:#333;}
+.mArticle.typeText li{list-style:none;}
+.mArticle.typeText .articleTitle{margin-top:40px; font-size:20px; line-height:22px; font-weight:400; color:#333;}
+.mArticle.typeText .articleTitle .titleBullet{color:#1ec7d8;}
+.mArticle.typeText .articleSubTitle{font-weight:400;}
+.mArticle.typeText .articleBlock{margin-top:20px;}
+
+.mArticle.typeText .articleTable{margin-top:20px; font-size:14px; line-height:22px; table-layout: fixed; width: 100%; border: 0; border-spacing: 0; border-collapse: collapse;}
+.mArticle.typeText .articleTable th,
+.mArticle.typeText .articleTable td{padding:8px 20px; border:1px solid #dddddd; color:#666;}
+.mArticle.typeText .articleTable thead th{font-weight:400; background:#f8f8f8;}
+.mArticle.typeText .articleTable .center{text-align:center;}
+.mArticle.typeText .articleTable tbody tr:first-child td:first-child{background:#f8f8f8;}
+
+.mArticle.typeText .refundList{margin-top:30px;}
+.mArticle.typeText .refundList > li{margin-top:10px;}
+.mArticle.typeText .refundList > li strong{font-weight:500;}
+
+/* 수강신청 */
+.mIntroduction{}
+.mIntroduction .introHeader{text-align:center;}
+.mIntroduction .introHeader img{max-width:100%;}
+.mIntroduction .introContent{padding:36px 0 0; text-align:center; font-size:16px; font-weight:300px; letter-spacing:-0.5px;}
+.mIntroduction .introContent .title{padding:40px 0 0; font-size:40px; line-height:46px; color:#333; font-weight:400;}
+.mIntroduction .introContent .description{padding:20px 0; line-height:28px; color:#666;}
+.mIntroduction .introContent .descriptionImg{max-width:100%;}
+
+/* 에러 페이지 */
+.mError{position:absolute; left:0; top:0; display:table; width:100%; height:100%;}	
+.mError .errorContent{display:table-cell; vertical-align:middle; padding:0 20px; text-align: center; font-size:16px; line-height:24px; font-weight:300; color:#999;}
+.mError .errorContent .errorMsg{display:inline-block; padding:205px 0 22px; font-size:22px; line-height:26px; font-weight:400; color:#34c1d3; background:url("../images/bg_error_page.png") no-repeat 50% 0;}
+.mError .errorContent .mainBtn{display:inline-block; margin:65px 0 0; padding:0 60px; font-size:22px; line-height:60px; font-weight:400; color:#fff; text-decoration:none; background:#1ec7d8;}
+
+/* 강의실 대여 */
+.mIntroduction.typeRental{}
+.mIntroduction.typeRental .rentalInfo{position: relative; padding:46px 0 50px 380px;}
+.mIntroduction.typeRental .rentalInfo .title{position:absolute; left:63px; top:-70px; width:235px; padding:50px 0 75px 40px; font-size:40px; line-height:49px; letter-spacing:-1px; font-weight:300; color:#fff; background:#1ec7d8;}
+.mIntroduction.typeRental .rentalInfo .description{font-size:16px; line-height:23px; color:#666; font-weight:300; letter-spacing:-0.5px;}
+.mIntroduction.typeRental .rentalInfo .description > li{margin:20px 0 0;}
+.mIntroduction.typeRental .rentalInfo .description > li:first-child{margin:0;}
+.mIntroduction.typeRental .rentalInfo .description >  li strong{margin-right:15px;}
+.mIntroduction.typeRental .rentalInfo .description .innerDesc{padding:8px 0 0 75px;}
+
+/* 오시는 길 */
+.mContact.typeMap{border:1px solid #ddd;}
+.mContact.typeMap .contactMap{line-height:0; font-size:0;}
+.mContact.typeMap .contactInfo{overflow:hidden; padding:55px 0 0; font-size:15px; line-height:22px; letter-spacing: -0.5px; color:#787878; border-top:1px solid #ddd; background:#f8f8f8;}
+.mContact.typeMap .contactInfo .infoValue em{color: #46d2d4;font-weight: 700;}
+.mContact.typeMap .contactInfo li{float:left; width:25%; padding:0 0 54px 125px; box-sizing:border-box; background-position:54px 0; background-repeat:no-repeat;}
+.mContact.typeMap .contactInfo li.address{width:31%; background-image:url("../images/icon_contact_1.png"); }
+.mContact.typeMap .contactInfo li.tel{width:25%; background-image:url("../images/icon_contact_2.png"); }
+.mContact.typeMap .contactInfo li.bus{float: right; width:44%; background-image:url("../images/icon_contact_3.png"); padding: 0 20px 54px 125px;}
+.mContact.typeMap .contactInfo li.email{width:31%; background-image:url("../images/icon_contact_4.png"); }
+.mContact.typeMap .contactInfo li.fax{width:25%; background-image:url("../images/icon_contact_5.png"); }
+.mContact.typeMap .contactInfo li .infoTitle{display:block; padding:0 0 7px; font-size:18px; font-weight:bold; color:#333333;}
+.mContact.typeMap .contactInfo li.bus .busDetail{margin-top: 8px;}
+.mContact.typeMap .contactInfo li.bus .busDetail p{position: relative; margin-top: 2px; padding-left: 10px;}
+.mContact.typeMap .contactInfo li.bus .busDetail p:first-child{margin-top: 0;}
+.mContact.typeMap .contactInfo li.bus .busDetail p:before{content: ""; position: absolute; left: 0; top: 8px; width: 7px; height: 7px; border-radius: 50%;}
+.mContact.typeMap .contactInfo li.bus .busDetail .typeCyan:before{background: #46d2d4;}
+.mContact.typeMap .contactInfo li.bus .busDetail .typeBlue:before{background: #4f7bfb;}
+.mContact.typeMap .contactInfo li.bus .busDetail .typeGreen:before{background: #4dcd59;}
+.mContact.typeMap .contactInfo li.bus .busDetail .typeRed:before{background: #eb3d49;}
+
+/* 교육시설 */
+.mGallery.typePicture .imgView .swiper-wrapper{height: 636px;}
+.mGallery.typePicture .imgList img,
+.mGallery.typePicture .imgView img{width:100%;}
+.mGallery.typePicture .imgList{overflow:hidden;}
+.mGallery.typePicture .imgList .swiper-slide {float:left; width: 20%; cursor: pointer;}
+.mGallery.typePicture .imgList .swiper-slide:after{content:''; display:block; position:absolute; left:0; top:0; width:100%; height:100%; box-sizing:border-box; background:rgba(0, 0, 0, 0.4);}
+.mGallery.typePicture .imgList .swiper-slide-thumb-active:after {background:none; border:2px solid #1ec7d8;}

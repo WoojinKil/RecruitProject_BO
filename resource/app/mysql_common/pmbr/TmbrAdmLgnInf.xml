@@ -1,0 +1,895 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrAdmLgnInf">
+
+	<sql id="select-one-sql">
+		/*[BaseTmbrAdmLgnInf.xml][select][BO 사용자 조회 ][TANINE]*/
+		SELECT USR_ID
+             , USR_NM
+             , LGN_ID
+             , LGN_PWD
+             , MNGR_TP_CD
+             , ACTV_YN
+             , PWD_FAIL_CNT
+             , PWD_FAIL_DTTM
+             , PWD_UPD_DTTM
+             , JN_CTF_KEY
+             , JN_CTF_DTTM
+             , FND_CTF_KEY
+             , FND_CTF_KEY_DTTM
+             , USR_EML_ADDR
+             , USR_STAT_CD
+             , USR_ZIP_CD
+             , ROD_ADDR
+             , LNO_ADDR
+             , DTL_ADDR
+             , TMP_EML_ADDR
+             , EML_CTF_KEY
+             , EML_CTF_DTTM
+             , HP_TEL_NO
+             , ETSN_TEL_NO
+             , FXL_TEL_NO
+             , ORG_CD
+             , POS_CD
+             , JOB_CD
+             , APVL_YN
+             , APVL_RFS_RSN
+             , CTF_YN
+             , CTF_FAIL_CNT
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TMBR_ADM_LGN_INF
+		 WHERE USR_ID = #{usr_id, jdbcType=VARCHAR}
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+
+
+	<insert id="insert" parameterType="TmbrAdmLgnInf">
+        /*[BaseTmbrAdmLgnInfTrx.xml][insert][BO사용자 등록][TANINE]*/
+        INSERT INTO TMBR_ADM_LGN_INF
+        (
+           USR_ID
+         , USR_NM
+         , LGN_ID
+         , LGN_PWD
+         , MNGR_TP_CD
+         , ACTV_YN
+         , PWD_FAIL_CNT
+         , PWD_FAIL_DTTM
+         , PWD_UPD_DTTM
+         , JN_CTF_KEY
+         , JN_CTF_DTTM
+         , FND_CTF_KEY
+         , FND_CTF_KEY_DTTM
+         , USR_EML_ADDR
+         , USR_STAT_CD
+         , USR_ZIP_CD
+         , ROD_ADDR
+         , LNO_ADDR
+         , DTL_ADDR
+         , TMP_EML_ADDR
+         , EML_CTF_KEY
+         , EML_CTF_DTTM
+         , HP_TEL_NO
+         , ETSN_TEL_NO
+         , FXL_TEL_NO
+         , ORG_CD
+         , POS_CD
+         , JOB_CD
+         , APVL_YN
+         , APVL_RFS_RSN
+         , CTF_YN
+         , CTF_FAIL_CNT
+         , CRTR_ID
+         , CRT_DTTM
+         , UPDR_ID
+         , UPD_DTTM
+        )
+        VALUES
+        (
+           #{usr_id}
+         , #{usr_nm}
+         , #{lgn_id}
+         , #{lgn_pwd}
+         , #{mngr_tp_cd}
+         , #{actv_yn}
+         , #{pwd_fail_cnt}
+         , #{pwd_fail_dttm}
+         , #{pwd_upd_dttm}
+         , #{jn_ctf_key}
+         , #{jn_ctf_dttm}
+         , #{fnd_ctf_key}
+         , #{fnd_ctf_key_dttm}
+         , #{usr_eml_addr}
+         , #{usr_stat_cd}
+         , #{usr_zip_cd}
+         , #{rod_addr}
+         , #{lno_addr}
+         , #{dtl_addr}
+         , #{tem_eml_addr}
+         , #{eml_ctf_key}
+         , #{eml_ctf_dttm}
+         , #{hp_tel_no}
+         , #{etsn_tel_no}
+         , #{fxl_tel_no}
+         , #{org_cd}
+         , #{pos_cd}
+         , #{job_cd}
+         , #{apvl_yn}
+         , #{apvl_rfs_rsn, jdbcType=VARCHAR}
+         , #{ctf_yn}
+         , #{ctf_fail_cnt}
+         , #{crtr_id, jdbcType=VARCHAR}
+         , SYSDATE()
+         , #{updr_id, jdbcType=VARCHAR}
+         , SYSDATE()
+		   
+		)
+	</insert>
+
+	<update id="update" parameterType="TmbrAdmLgnInf">
+        /*[BaseTmbrAdmLgnInfTrx.xml][update][BO사용자 수정][TANINE]*/
+		UPDATE TMBR_ADM_LGN_INF
+		   SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+		     , USR_NM = #{usr_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+		     , LGN_ID = #{lgn_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_pwd)">
+		     , LGN_PWD = #{lgn_pwd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mngr_tp_cd)">
+		     , MNGR_TP_CD = #{mngr_tp_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(actv_yn)">
+		     , ACTV_YN = #{actv_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pwd_fail_cnt)">
+		     , PWD_FAIL_CNT = #{pwd_fail_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(f_pwd_fail_dttm)">
+		     , PWD_FAIL_DTTM = STR_TO_DATE(#{f_pwd_fail_dttm, jdbcType=VARCHAR}, '%Y%m%d%H%i%s');
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(f_pwd_upd_dttm)">
+		     , PWD_UPD_DTTM = STR_TO_DATE(#{f_pwd_upd_dttm, jdbcType=DATETIME}, '%Y%m%d%H%i%s');
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jn_ctf_key)">
+		     , JN_CTF_KEY = #{jn_ctf_key, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jn_ctf_dttm)">
+		     , JN_CTF_DTTM = #{jn_ctf_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(fnd_ctf_key)">
+		     , FND_CTF_KEY = #{fnd_ctf_key, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(fnd_ctf_key_dttm)">
+		     , FND_CTF_KEY_DTTM = #{fnd_ctf_key_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_eml_addr)">
+		     , USR_EML_ADDR = #{usr_eml_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_stat_cd)">
+		     , USR_STAT_CD = #{usr_stat_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_zip_cd)">
+		     , USR_ZIP_CD = #{usr_zip_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rod_addr)">
+		     , ROD_ADDR = #{rod_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lno_addr)">
+		     , LNO_ADDR = #{lno_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dtl_addr)">
+		     , DTL_ADDR = #{dtl_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(tem_eml_addr)">
+		     , TMP_EML_ADDR = #{tem_eml_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(eml_ctf_key)">
+		     , EML_CTF_KEY = #{eml_ctf_key, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(eml_ctf_dttm)">
+		     , EML_CTF_DTTM = #{eml_ctf_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(hp_tel_no)"> 
+		     , HP_TEL_NO =  #{hp_tel_no, jdbcType=VARCHAR} 
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(etsn_tel_no)"> 
+		     , ETSN_TEL_NO =  #{etsn_tel_no, jdbcType=VARCHAR} 
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(fxl_tel_no)"> 
+		     , FXL_TEL_NO =  #{fxl_tel_no, jdbcType=VARCHAR} 
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(org_cd)"> 
+		     , ORG_CD =  #{org_cd, jdbcType=VARCHAR} 
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pos_cd)"> 
+		     , POS_CD =  #{pos_cd, jdbcType=VARCHAR} 
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(job_cd)"> 
+		     , JOB_CD =  #{job_cd, jdbcType=VARCHAR} 
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(apvl_yn)"> 
+		     , APVL_YN =  #{apvl_yn, jdbcType=VARCHAR} 
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(apvl_rfs_rsn)"> 
+		     , APVL_RFS_RSN =  #{apvl_rfs_rsn, jdbcType=VARCHAR} 
+		       </if>
+		WHERE USR_ID = #{usr_id, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="delete" parameterType="TmbrAdmLgnInf">
+        /*[BaseTmbrAdmLgnInfTrx.xml][delete][BO사용자 삭제][TANINE]*/
+       UPDATE TMBR_ADM_LGN_INF
+       SET    USR_STAT_CD = 2 /* 회원상태 1: 가입 2:탈퇴 3:미인증  */
+       WHERE  USR_ID    = #{usr_id, jdbcType=VARCHAR}
+	</delete>
+
+    <!-- BO 사용자 리스트 조회 -->
+    <select id="selectTmbrAdmLgnInf" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        /*[TmbrAdmLgnInf.xml][selectTmbrAdmLgnInf][BO 사용자 상세 조회][TANINE]*/
+        SELECT USR_ID
+             , LGN_ID
+             , USR_NM
+             , USR_EML_ADDR
+             , JN_CTF_KEY
+             , JN_CTF_DTTM
+             , FND_CTF_KEY
+             , FND_CTF_KEY_DTTM
+             , DTL_ADDR
+             , ROD_ADDR
+             , LNO_ADDR
+             , USR_ZIP_CD
+             , HP_TEL_NO
+             , ETSN_TEL_NO
+             , FXL_TEL_NO
+             , ORG_CD
+             , POS_CD
+             , JOB_CD
+             , APVL_YN
+             , APVL_RFS_RSN
+          FROM TMBR_ADM_LGN_INF
+         WHERE 1=1
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+           AND LGN_ID = #{lgn_id ,jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_id)">
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_pwd)">
+           AND LGN_PWD = #{lgn_pwd, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm )">
+           AND USR_NM LIKE CONCAT('%',#{usr_nm  ,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(actv_yn)">
+           AND ACTV_YN = #{actv_yn ,jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(eml_ctf_key)">
+           AND EML_CTF_KEY = #{eml_ctf_key ,jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jn_ctf_key)">
+           AND JN_CTF_KEY = #{jn_ctf_key ,jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_eml_addr)">
+           AND USR_EML_ADDR = #{usr_eml_addr ,jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_stat_cd)">
+           AND USR_STAT_CD = #{usr_stat_cd ,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 회원아이디 조회 -->
+    <select id="getTmbrAdmLgnInfLgnId" parameterType="String" resultType="String">
+        /* [SysAdmin.xml][getTmbrAdmLgnInfLgnId][아이디 찾기][TANINE] */
+        SELECT LGN_ID
+          FROM TMBR_ADM_LGN_INF
+         WHERE USR_EML_ADDR = #{usr_eml_addr ,jdbcType=VARCHAR}
+           AND USR_NM = #{usr_nm,jdbcType=VARCHAR}
+    </select>
+
+    <!-- BO 사용자 이메일 중복 체크 -->
+    <select id="getTmbrAdmLgnInfUsrId" parameterType="String" resultType="String">
+        /* [SysAdmin.xml][getTmbrAdmLgnInfUsrId][BO 사용자 이메일 중복 체크][TANINE] */
+        SELECT USR_ID
+          FROM TMBR_ADM_LGN_INF
+         WHERE USR_EML_ADDR = #{usr_eml_addr ,jdbcType=VARCHAR}
+           AND LGN_ID = #{lgn_id,jdbcType=VARCHAR}
+           AND LGN_PWD = #{lgn_pwd ,jdbcType=VARCHAR}
+    </select>
+
+    <!-- BO 사용자 아이디 중복 체크 -->
+    <select id="getTmbrAdmLgnInfDupLgnId" resultType="String">
+        /*[SysAdmin.xml][getTmbrAdmLgnInfDupLgnId][BO 사용자 아이디 중복 체크][TANINE]*/
+        SELECT CASE WHEN COUNT(1) > 0 THEN 'N'
+                    ELSE 'Y'
+                END AS FLAG
+          FROM (SELECT DISTINCT LGN_ID
+                  FROM (SELECT LGN_ID
+                          FROM TMBR_ADM_LGN_INF T
+                         WHERE T.LGN_ID = #{lgn_id ,jdbcType=VARCHAR}
+                        UNION ALL
+                        SELECT CD_NM AS LGN_ID
+                          FROM TCMN_CD_DTL
+                         WHERE MST_CD = 'BUID'
+                       )T
+               )TT
+         WHERE TT.LGN_ID = #{lgn_id ,jdbcType=VARCHAR}
+    </select>
+
+    <!-- BO 사용자 이메일 중복 체크 -->
+    <select id="getTmbrAdmLgnInfDupUsrEmlAdr" resultType="String">
+        /* [SysAdmin.xml][getTmbrAdmLgnInfDupUsrEmlAdr][이메일 중복조회][TANINE] */
+        SELECT IF(COUNT(1) = 0, "Y", "N")
+          FROM TMBR_ADM_LGN_INF
+         WHERE USR_EML_ADDR = #{usr_eml_addr ,jdbcType=VARCHAR}
+    </select>
+
+
+    <!-- BO 사용자 리스트 조회 -->
+    <select id="selectTmbrAdmLgnInfList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        SELECT /* [TmbrAdmLgnInf.xml][selectTmbrAdmLgnInfList][BO 사용자 리스트 조회][TANINE] */
+               ALI.USR_ID
+             , ALI.LGN_ID
+             , ALI.LGN_PWD
+             , ALI.USR_NM
+             , ALI.USR_EML_ADDR
+             , ALI.MNGR_TP_CD
+             , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD = 'MBR0003' AND CD = ALI.MNGR_TP_CD) AS MNGR_TP_NM
+             , ALI.ACTV_YN
+             , ALI.PWD_FAIL_CNT
+             , ALI.PWD_FAIL_DTTM
+             , ALI.PWD_UPD_DTTM
+             , DATE_FORMAT(ALI.PWD_FAIL_DTTM, '%Y%m%d%H%i%s') AS F_PWD_FAIL_DTTM
+             , DATE_FORMAT(ALI.PWD_UPD_DTTM, '%Y%m%d%H%i%s') AS F_PWD_UPD_DTTM
+             , ALI.JN_CTF_KEY
+             , ALI.JN_CTF_DTTM
+             , ALI.FND_CTF_KEY
+             , ALI.FND_CTF_KEY_DTTM
+             , ALI.USR_STAT_CD
+             , DATE_FORMAT(ALI.CRT_DTTM, '%Y-%M-%D') AS F_CRT_DTTM
+             , DATE_FORMAT(ALI.UPD_DTTM, '%Y-%M-%D') AS F_UPD_DTTM
+             , DATEDIFF(SYSDATE(), (CASE WHEN IFNULL(ALI.PWD_UPD_DTTM, '') = '' THEN SYSDATE() ELSE ALI.PWD_UPD_DTTM END)) AS PW_UPD_TR
+             , O.ORG_CD
+             , IFNULL(O.ORG_NM,'-') AS ORG_NM
+             , ALI.HP_TEL_NO
+             , ALI.ETSN_TEL_NO
+             , ALI.FXL_TEL_NO
+             , ALI.POS_CD
+             , IFNULL(OI.POS_NM,'-') AS POS_NM
+             , ALI.APVL_YN
+             , ALI.APVL_RFS_RSN
+             , DATE_FORMAT(SYSDATE(),'%y-%m-%d %H:%i') AS LGN_ACCESS_DY
+             , ALI.CRT_DTTM
+             , ALI.CRTR_ID
+             , ALI.UPDR_ID
+             , ALI.UPD_DTTM
+          FROM TMBR_ADM_LGN_INF ALI
+     LEFT JOIN TSYS_ORG O
+            ON ALI.ORG_CD = O.ORG_CD
+     LEFT JOIN TSYS_POS_INF OI
+            ON ALI.POS_CD = OI.POS_CD 
+         WHERE 1=1
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+           AND ALI.LGN_ID = BINARY(#{lgn_id, jdbcType=VARCHAR})
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_id)">
+           AND ALI.USR_ID = BINARY(#{usr_id, jdbcType=VARCHAR})
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+           AND ALI.USR_NM LIKE CONCAT('%', #{usr_nm ,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(actv_yn)">
+           AND ALI.ACTV_YN = #{actv_yn, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(eml_ctf_key)">
+           AND ALI.EML_CTF_KEY = #{eml_ctf_key, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jn_ctf_key)">
+           AND ALI.JN_CTF_KEY = #{jn_ctf_key, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_eml_addr)">
+           AND ALI.USR_EML_ADDR = #{usr_eml_addr, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_stat_cd)">
+           AND A.USR_STAT_CD = #{usr_stat_cd, jdbcType=VARCHAR}
+        </if>
+        ORDER BY ALI.LGN_ID
+    </select>
+
+    <!-- 유저 아이디를 통한 사용자 리스트 조회 -->
+    <select id="selectTmbrUsrIdAdmLgnInfList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        SELECT /* [TmbrAdmLgnInf.xml][selectTmbrUsrIdAdmLgnInfList][유저 아이디 사용자 단건 조회][TANINE] */
+               ALI.USR_ID
+             , ALI.LGN_ID
+             , ALI.LGN_PWD
+             , ALI.USR_NM
+             , ALI.USR_EML_ADDR
+             , ALI.MNGR_TP_CD
+             , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD = 'MBR0003' AND CD = ALI.MNGR_TP_CD) AS MNGR_TP_NM
+             , ALI.ACTV_YN
+             , ALI.PWD_FAIL_CNT
+             , ALI.PWD_FAIL_DTTM
+             , ALI.PWD_UPD_DTTM
+             , DATE_FORMAT(ALI.PWD_FAIL_DTTM, '%Y%m%d%H%i%s') AS F_PWD_FAIL_DTTM
+             , DATE_FORMAT(ALI.PWD_UPD_DTTM, %Y%m%d%H%i%s') AS F_PWD_UPD_DTTM
+             , ALI.JN_CTF_KEY
+             , ALI.JN_CTF_DTTM
+             , ALI.FND_CTF_KEY
+             , ALI.FND_CTF_KEY_DTTM
+             , ALI.USR_STAT_CD
+             , DATE_FORMAT(ALI.CRT_DTTM, '%Y-%M-%D') AS F_CRT_DTTM
+             , DATE_FORMAT(ALI.UPD_DTTM, '%Y-%M-%D') AS F_UPD_DTTM
+             , DATEDIFF(SYSDATE(), (CASE WHEN IFNULL(ALI.PWD_UPD_DTTM, '') = '' THEN SYSDATE() ELSE ALI.PWD_UPD_DTTM END)) AS PW_UPD_TR
+             , O.ORG_CD
+             , IFNULL(O.ORG_NM,'-') AS ORG_NM
+             , ALI.HP_TEL_NO
+             , ALI.ETSN_TEL_NO
+             , ALI.FXL_TEL_NO
+             , ALI.POS_CD
+             , IFNULL(OI.POS_NM,'-') AS POS_NM
+             , ALI.APVL_YN
+             , ALI.APVL_RFS_RSN
+             , DATE_FORMAT(SYSDATE(),'%y-%m-%d %H:%i') AS LGN_ACCESS_DY
+             , ALI.CRT_DTTM
+             , ALI.CRTR_ID
+             , ALI.UPDR_ID
+             , ALI.UPD_DTTM
+          FROM TMBR_ADM_LGN_INF ALI
+     LEFT JOIN TSYS_ORG O
+            ON ALI.ORG_CD = O.ORG_CD
+     LEFT JOIN TSYS_POS_INF OI
+            ON ALI.POS_CD = OI.POS_CD 
+         WHERE 1=1
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+           AND ALI.LGN_ID = BINARY(#{lgn_id, jdbcType=VARCHAR})
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+           AND ALI.USR_NM LIKE CONCAT('%', #{usr_nm ,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(actv_yn)">
+           AND ALI.ACTV_YN = #{actv_yn, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(eml_ctf_key)">
+           AND ALI.EML_CTF_KEY = #{eml_ctf_key, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jn_ctf_key)">
+           AND ALI.JN_CTF_KEY = #{jn_ctf_key, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_eml_addr)">
+           AND ALI.USR_EML_ADDR = #{usr_eml_addr, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_stat_cd)">
+           AND ALI.USR_STAT_CD = #{usr_stat_cd, jdbcType=VARCHAR}
+        </if>
+           AND ALI.USR_ID = BINARY(#{usr_id, jdbcType=VARCHAR})
+        ORDER BY ALI.LGN_ID
+    </select>
+
+    <!-- BO 사용자 그리드 리스트 조회 -->
+    <select id="selectTmbrAdmLgnInfGridList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        /*[TmbrAdmLgnInf.xml][selectTmbrAdmLgnInfGridList][BO사용자 그리드 리스트 조회][TANINE]*/
+        SELECT P.*
+          FROM (SELECT CEIL(V.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})    AS TOTAL_PAGE
+                     , @ROW_NUMBER                                      AS TOTAL_COUNT
+                     , V.*
+                  FROM (SELECT get_masking(SA.USR_NM,'name') AS USR_NM
+                             , get_masking(SA.LGN_ID, 'lgn_id') AS LGN_ID
+                             , SA.LGN_PWD
+                             , get_masking(SA.USR_EML_ADDR, 'email') AS USR_EML_ADDR
+                             , SA.MNGR_TP_CD
+                             , CASE WHEN SA.MNGR_TP_CD = '99' -- 외부 사원은 점명/ 내부직원은 조직명
+                                    THEN ''
+                                    ELSE (SELECT ORG_NM FROM TSYS_ORG WHERE ORG_CD = SA.ORG_CD) END AS ORG_NM
+                             , SA.ACTV_YN
+                             , SA.CRT_DTTM
+                             , SA.UPD_DTTM
+                             , SA.USR_ID
+                             , SA.USR_STAT_CD
+                             , (SELECT CD_NM
+                                  FROM TCMN_CD_DTL
+                                 WHERE MST_CD = 'MSTS'
+                                   AND CD = SA.USR_STAT_CD )          AS USR_STAT_CD_NM
+                             , DATE_FORMAT(SA.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+                             , DATE_FORMAT(SA.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1)     AS ID -- mysql ROWNUM
+                             , PWD_FAIL_CNT
+                             , SA.HP_TEL_NO
+                             , SA.ETSN_TEL_NO
+                             , SA.FXL_TEL_NO
+                             , SA.ORG_CD
+                             , SA.POS_CD
+                             , SA.JOB_CD
+                             , SA.APVL_YN
+                             , SA.APVL_RFS_RSN
+                          FROM TMBR_ADM_LGN_INF             SA
+                             , (SELECT @ROW_NUMBER := 0)    RN
+                         WHERE 1 = 1
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+                           AND SA.USR_NM LIKE CONCAT('%',#{usr_nm, jdbcType=VARCHAR},'%')
+                        </if>
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_eml_addr)">
+                           AND SA.USR_EML_ADDR  LIKE CONCAT('%',#{usr_eml_addr, jdbcType=VARCHAR},'%')
+                        </if>
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+                           AND SA.LGN_ID  LIKE CONCAT('%',#{lgn_id, jdbcType=VARCHAR},'%')
+                        </if>
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(actv_yn)">
+                           AND SA.ACTV_YN = #{actv_yn, jdbcType=VARCHAR}
+                        </if>
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_stat_cd)">
+                           AND SA.USR_STAT_CD = #{usr_stat_cd, jdbcType=VARCHAR}
+                        </if>
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt) ">
+                           AND DATE_FORMAT(SA.CRT_DTTM, '%Y-%m-%d') BETWEEN #{sch_st_dt ,jdbcType=VARCHAR} AND #{sch_ed_dt ,jdbcType=VARCHAR}
+                        </if>
+                       ) V
+                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY V.USR_ID DESC
+                </if>
+               )P
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.page = #{page ,jdbcType=NUMERIC}
+        </if>
+    </select>
+
+    <!-- 마스터 코드 수 -->
+    <select id="selectTmbrAdmLgnInfCnt" parameterType="ParameterMap" resultType="Integer">
+        /*TmbrAdmLgnInf.selectTmbrAdmLgnInfCnt*/
+        SELECT COUNT(1)
+          FROM TMBR_ADM_LGN_INF
+    </select>
+
+    <!-- 조직별 시스템 회원 리스트 조회 -->
+    <select id="selectTsysOrgAdmList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        /*[TmbrAdmLgnInf.xml][selectTsysOrgAdmList][조직별 시스템 회원 리스트 조회][TANINE]*/
+        SELECT P.*
+          FROM (SELECT CEIL(V.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})    AS TOTAL_PAGE
+                     , @ROW_NUMBER                                      AS TOTAL_COUNT
+                     , V.*
+                  FROM (
+                        SELECT USR_ID
+                             , ORG_CD
+                             , LGN_ID
+                             , get_masking(USR_NM, 'name') AS USR_NM
+                             , USR_EML_ADDR
+                             , USR_STAT_CD
+                             , ACTV_YN
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1)     AS ID -- mysql ROWNUM
+                             , IFNULL((SELECT HR_CD_NM FROM TSYS_POS_INF WHERE HR_CD = POS_CD), '-') AS POS_NM -- 직책
+                             , IFNULL((SELECT JOB_NM FROM TSYS_JOB_INF WHERE JOB_CD = JOB_CD ), '-') AS JOB_NM -- 직무
+                          FROM TMBR_ADM_LGN_INF
+                             , (SELECT @ROW_NUMBER := 0)    RN -- mysql ROWNUM
+                         WHERE 1=1
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(org_cd)">
+                           AND ORG_CD = #{org_cd, jdbcType=VARCHAR}
+                         </if>
+                        ) V
+                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY V.USR_ID DESC
+                </if>
+               )P
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.page = #{page ,jdbcType=NUMERIC}
+        </if>
+    </select>
+
+    <!--외부 사원  리스트 조회 -->
+    <select id="selectExtnTmbrAdmLgnInfGridList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        /*[TmbrAdmLgnInf.xml][selectExtnTmbrAdmLgnInfGridList][외부 사원  리스트 조회][TANINE]*/
+        SELECT P.*
+          FROM (SELECT CEIL(V.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})    AS TOTAL_PAGE
+                     , @ROW_NUMBER                                      AS TOTAL_COUNT
+                     , V.*
+                  FROM (
+                        SELECT DATE_FORMAT(ALI.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+                             , get_masking(ALI.LGN_ID,'lgn_id') AS LGN_ID
+                             , ALI.USR_ID
+                             , get_masking(ALI.USR_NM,'name') AS USR_NM
+                             , ALI.MNGR_TP_CD
+                             , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD = 'MBR0003' AND CD = ALI.MNGR_TP_CD) AS MNGR_TP_NM
+                             , ALI.ACTV_YN
+                             , ALI.HP_TEL_NO
+                             , ALI.ETSN_TEL_NO
+                             , ALI.FXL_TEL_NO
+                             , ALI.ORG_CD
+                             , ALI.POS_CD
+                             , ALI.JOB_CD
+                             , ALI.USR_STAT_CD
+                             , ALI.APVL_YN
+                             , ALI.CTF_YN
+                             , AP.ROL_ID
+                             , AR.ROL_NM
+                             , AP.APPL_NO
+                             , AP.APPL_RSN_CONT
+                             , AP.APPL_STAT_CD
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1)     AS ID -- mysql ROWNUM
+                          FROM TMBR_ADM_LGN_INF ALI
+                             , TB_BCPC_ATHR_APP AP
+                             , TSYS_ADM_ROL AR
+                             , (SELECT @ROW_NUMBER := 0)    RN -- mysql ROWNUM
+                         WHERE 1=1
+                           AND ALI.USR_ID = AP.USR_ID
+                           AND AP.ROL_ID = AR.ROL_ID
+                           AND AP.APVL_YN = 'N'
+                           AND AP.APPL_STAT_CD = '20'
+                           AND MNGR_TP_CD = '99'
+                           AND USR_STAT_CD = '3'
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+                           AND ALI.USR_NM LIKE CONCAT('%',#{usr_nm ,jdbcType=VARCHAR},'%')
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_appl_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_appl_ed_dt) ">
+                           AND DATE_FORMAT(ALI.CRT_DTTM, '%Y-%m-%d') BETWEEN #{sch_appl_st_dt ,jdbcType=VARCHAR} AND #{sch_appl_ed_dt ,jdbcType=VARCHAR}
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+                           AND ALI.LGN_ID LIKE CONCAT('%',#{lgn_id ,jdbcType=VARCHAR},'%')
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cstr_cd)">
+                           AND ALI.CSTR_CD = #{cstr_cd ,jdbcType=VARCHAR}
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mstr_cd)">
+                            <choose>
+                                <when test='mstr_cd == "0000"'>
+
+                                </when>
+                                <when test='mstr_cd == "0001"'>
+                                 AND ALI.CSTR_CD IN ('0001', '0370', '0394') /* 본점, 본점(영플라자), 에비뉴엘(본점) */
+                                </when>
+                                <when test='mstr_cd == "0002"'>
+                                 AND ALI.CSTR_CD IN ('0002', '0348', '0375') /* 잠실점 에비뉴엘  */
+                                </when>
+                                <when test='mstr_cd == "0005"'>
+                                 AND ALI.CSTR_CD IN ('0005', '0377', '0396') /* 부산본점 센트럴스퀘어 롯데마트 해운대  */
+                                </when>
+                                <when test='mstr_cd == "0006"'>
+                                 AND ALI.CSTR_CD IN ('0006', '0356') /* 관악점 팩토리아울렛가산점  */
+                                </when>
+                                <when test='mstr_cd == "0012"'>
+                                 AND ALI.CSTR_CD IN ('0012', '0397') /* 대전점 엘큐브리빙 세종점 */
+                                </when>
+                                <when test='mstr_cd == "0342"'>
+                                 AND ALI.CSTR_CD IN ('0342', '0378') /* 아울렛청주점 청주점(영플라자)  */
+                                </when>
+                                <otherwise>
+                                AND ALI.CSTR_CD = #{mstr_cd}
+                                </otherwise>
+                            </choose>
+                         </if>
+
+
+                        ) V
+                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY V.F_CRT_DTTM DESC
+                </if>
+               )P
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.page = #{page ,jdbcType=NUMERIC}
+        </if>
+    </select>
+
+    <select id="selectExtnTmbrAdmLgnInfPocGridList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        /*[TmbrAdmLgnInf.xml][selectExtnTmbrAdmLgnInfGridList][외부 사원  리스트 조회][TANINE]*/
+        SELECT P.*
+          FROM (SELECT CEIL(V.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})    AS TOTAL_PAGE
+                     , @ROW_NUMBER                                      AS TOTAL_COUNT
+                     , V.*
+                  FROM (
+                     SELECT DATE_FORMAT(ALI.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+                             , get_masking(ALI.LGN_ID,'lgn_id') AS LGN_ID
+                             , ALI.USR_ID
+                             , get_masking(ALI.USR_NM,'name') AS USR_NM
+                             , ALI.MNGR_TP_CD
+                             , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD = 'MBR0003' AND CD = ALI.MNGR_TP_CD) AS MNGR_TP_NM
+                             , ALI.ACTV_YN
+                             , ALI.HP_TEL_NO
+                             , ALI.ETSN_TEL_NO
+                             , ALI.FXL_TEL_NO
+                             , ALI.ORG_CD
+                             , ALI.POS_CD
+                             , ALI.JOB_CD
+                             , ALI.USR_STAT_CD
+                             , ALI.APVL_YN
+                             , ALI.CTF_YN
+                             , ALI.CSTR_CD
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1)     AS ID
+                          FROM TMBR_ADM_LGN_INF ALI
+                             , (SELECT @ROW_NUMBER := 0)    RN
+                         WHERE 1=1
+                           AND ALI.APVL_YN = 'Y'
+                           AND ALI.MNGR_TP_CD = '99'
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+                           AND ALI.USR_NM LIKE CONCAT('%',#{usr_nm ,jdbcType=VARCHAR},'%')
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_appl_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_appl_ed_dt) ">
+                           AND DATE_FORMAT(ALI.CRT_DTTM, '%Y-%m-%d') BETWEEN #{sch_appl_st_dt ,jdbcType=VARCHAR} AND #{sch_appl_ed_dt ,jdbcType=VARCHAR}
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+                           AND ALI.LGN_ID LIKE CONCAT('%',#{lgn_id ,jdbcType=VARCHAR},'%')
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cstr_cd)">
+                           AND ALI.CSTR_CD = #{cstr_cd ,jdbcType=VARCHAR}
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mstr_cd)">
+                            <choose>
+                                <when test='mstr_cd == "0000"'>
+
+                                </when>
+                                <when test='mstr_cd == "0001"'>
+                                 AND ALI.CSTR_CD IN ('0001', '0370', '0394') /* 본점, 본점(영플라자), 에비뉴엘(본점) */
+                                </when>
+                                <when test='mstr_cd == "0002"'>
+                                 AND ALI.CSTR_CD IN ('0002', '0348', '0375') /* 잠실점 에비뉴엘  */
+                                </when>
+                                <when test='mstr_cd == "0005"'>
+                                 AND ALI.CSTR_CD IN ('0005', '0377', '0396') /* 부산본점 센트럴스퀘어 롯데마트 해운대  */
+                                </when>
+                                <when test='mstr_cd == "0006"'>
+                                 AND ALI.CSTR_CD IN ('0006', '0356') /* 관악점 팩토리아울렛가산점  */
+                                </when>
+                                <when test='mstr_cd == "0012"'>
+                                 AND ALI.CSTR_CD IN ('0012', '0397') /* 대전점 엘큐브리빙 세종점 */
+                                </when>
+                                <when test='mstr_cd == "0342"'>
+                                 AND ALI.CSTR_CD IN ('0342', '0378') /* 아울렛청주점 청주점(영플라자)  */
+                                </when>
+                                <otherwise>
+                                AND ALI.CSTR_CD = #{mstr_cd}
+                                </otherwise>
+                            </choose>
+                         </if>
+                        ) V
+                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY V.F_CRT_DTTM DESC
+                </if>
+               )P
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.page = #{page ,jdbcType=NUMERIC}
+        </if>
+      ORDER BY P.F_CRT_DTTM DESC, P.LGN_ID
+    </select>
+
+    <select id="selectTmbrAdmLgnInfRolList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+        SELECT P.*  /*[TmbrAdmLgnInf.xml][selectTmbrAdmLgnInfRolList][사원별 권한 사원 조회][TANINE]*/
+          FROM (
+            SELECT V.*
+                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                 , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                 , @ROW_NUMBER TOTAL_COUNT
+                 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                  </if>
+              FROM (
+                SELECT Y.*
+                     , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                  FROM (
+                        SELECT U.USR_ID           -- 사용자아이디
+                             , get_masking(U.USR_NM,'name') AS USR_NM           -- 사용자명
+                             , U.LGN_ID           -- 로그인아이디
+                             , U.LGN_PWD          -- 비밀번호
+                             , U.MNGR_TP_CD       -- 관리자유형코드
+                             , CASE WHEN U.MNGR_TP_CD = '99' -- 외부 사원은 점명/ 내부직원은 조직명
+                                    THEN (SELECT ORG_NM FROM TSYS_ORG WHERE ORG_CD = U.ORG_CD)
+                                    ELSE (SELECT ORG_NM FROM TSYS_ORG WHERE ORG_CD = U.ORG_CD) END AS CSTR_NM
+                             , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD = 'MBR0003' AND CD = U.MNGR_TP_CD) AS USR_CL_NM -- 사원 유형 명
+                             , IFNULL((SELECT POS_NM FROM TSYS_POS_INF WHERE POS_CD = U.POS_CD ), '없음') AS POS_NM   -- 직책
+                             , IFNULL(U.JOB_CD, '') AS JOB_CD
+                             , U.USR_EML_ADDR      -- 이메일
+                             , U.ACTV_YN          -- 활성화여부
+                             , U.PWD_FAIL_CNT     -- 비밀번호실패카운트
+                             , U.PWD_FAIL_DTTM    -- 비밀번호실패일시
+                             , U.PWD_UPD_DTTM     -- 비밀번호수정일시
+                             , DATE_FORMAT(U.PWD_FAIL_DTTM, '%Y%m%d%H%i%s') AS F_PWD_FAIL_DTTM
+                             , DATE_FORMAT(U.PWD_UPD_DTTM, '%Y%m%d%H%i%s') AS F_PWD_UPD_DTTM
+                             , U.CRTR_ID          -- 등록자
+                             , U.CRT_DTTM         -- 등록일시
+                             , U.UPDR_ID          -- 수정자
+                             , U.UPD_DTTM         -- 수정일시
+                             , U.APVL_YN
+                          FROM TMBR_ADM_LGN_INF U
+                         WHERE 1 = 1
+                           AND U.MNGR_TP_CD IN ('40', '99')
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_id)">
+                           AND U.USR_ID = #{usr_id  ,jdbcType=VARCHAR}
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+                           AND U.USR_NM LIKE CONCAT('%',#{usr_nm    ,jdbcType=VARCHAR},'%')
+                         </if>
+               ) Y, (SELECT @row_number := 0) RN
+             WHERE 1=1
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cstr_nm)">
+               AND Y.CSTR_NM LIKE CONCAT('%',#{cstr_nm    ,jdbcType=VARCHAR},'%')
+             </if>
+             )V
+        ) P
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+       </if>
+      ORDER BY P.USR_ID
+    </select>
+    
+    
+     <!-- 사용자 비밀번호 변경 (TmbrAdmLgnInf)-->
+    <update id="updateTmbrAdmLgnInfPwChg" parameterType="TmbrAdmLgnInf">
+    /* [TmbrAdmLgnInfTrx.xml][updateTmbrAdmLgnInfPwChg][비밀번호 변경][TANINE] */
+        UPDATE TMBR_ADM_LGN_INF
+           SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+             , LGN_PWD  = #{pw_chg ,jdbcType=VARCHAR}
+         WHERE USR_ID   = #{usr_id}
+    </update>
+
+    <!-- 패스워드 실패횟수 초기화 -->
+    <update id="updateTmbrAdmLgnInfInitAdminPwInfo" parameterType="TmbrAdmLgnInf">
+    /* [TmbrAdmLgnInfTrx.xml][updateTmbrAdmLgnInfInitAdminPwInfo][패스워드 실패횟수 초기화][TANINE] */
+        UPDATE TMBR_ADM_LGN_INF
+        SET    UPDR_ID       = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM      = SYSDATE()
+             , PWD_FAIL_CNT  = 0
+             , PWD_FAIL_DTTM = NULL
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(actv_yn)">
+             , ACTV_YN = #{actv_yn, jdbcType=VARCHAR}
+             </if>
+        WHERE  USR_ID  = #{usr_id, jdbcType=NUMERIC}
+    </update>
+    
+    <!-- 시스템 회원 조직 시퀀스 변경 -->
+    <update id="updateTmbrAdmLgnInfOrgSeq" parameterType="TmbrAdmLgnInf">
+    /* [TmbrAdmLgnInfTrx.xml][updateTmbrAdmLgnInfOrgSeq][시스템 회원 조직 시퀀스 변경][TANINE] */
+        UPDATE TMBR_ADM_LGN_INF
+        SET    UPDR_ID       = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM      = SYSDATE()
+             , ORG_CD = #{org_cd, jdbcType=VARCHAR}
+             , APVL_YN = 'N'
+        WHERE  USR_ID  = #{usr_id, jdbcType=NUMERIC}
+    </update>
+    
+    <!-- 시스템 회원 apvl Y 처리 -->
+    <update id="updateUsrApvl" parameterType="ParameterMap">
+    /* [TmbrAdmLgnInfTrx.xml][updateUsrApvl][시스템 회원 승인 변경][TANINE] */
+        UPDATE TMBR_ADM_LGN_INF
+           SET APVL_YN = 'Y'
+        WHERE  USR_ID  = #{user_id, jdbcType=VARCHAR}
+    </update>
+    
+    
+    <update id="updateExtnTmbrAdmLgnInfApvl" parameterType="TmbrAdmLgnInf">
+    /* [TmbrAdmLgnInfTrx.xml][updateExtnTmbrAdmLgnInfApvl][외부 사용자 승인][TANINE] */
+        UPDATE TMBR_ADM_LGN_INF
+           SET UPDR_ID       = #{updr_id, jdbcType=VARCHAR}
+             , UPD_DTTM      = SYSDATE()
+             , USR_STAT_CD = #{usr_stat_cd, jdbcType=VARCHAR}
+             , APVL_YN = 'Y'
+         WHERE USR_ID  = #{usr_id, jdbcType=NUMERIC}
+    </update>
+    
+    <delete id="deleteExtnTmbrAdmLgnInfApvl" parameterType="TmbrAdmLgnInf">
+    /* [TmbrAdmLgnInfTrx.xml][deleteExtnTmbrAdmLgnInfApvl][외부 사용자 반려][TANINE] */
+        DELETE FROM TMBR_ADM_LGN_INF
+         WHERE LGN_ID  = #{lgn_id, jdbcType=NUMERIC}
+    </delete>
+    
+    <update id="updateExtnTmbrAdmLgnInfPocCds" parameterType="TmbrAdmLgnInf">
+        UPDATE TMBR_ADM_LGN_INF
+           SET UPDR_ID       = #{updr_id, jdbcType=VARCHAR}
+             , UPD_DTTM      = SYSDATE()
+         WHERE USR_ID  = #{usr_id, jdbcType=VARCHAR}
+    </update>
+
+</mapper>

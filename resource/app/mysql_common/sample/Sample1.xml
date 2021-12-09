@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Sample1">
+	<select id="selectTsysAdmMnuGridTreeList" parameterType="ParameterMap" resultType="TsysAdmMnuTree">
+      /*[Sample1.xml][selectTsysAdmMnuGridTreeList][샘플 테스트 트리 구조 ][TANINE]*/
+	SELECT A.* FROM
+	    (SELECT NULL           AS ID
+	            , ''              AS PID
+	            , 'VIP'  	      AS NAME
+	            , 0               AS MNU_DPTH
+	            , 'Y'             AS US_YN
+	            , 'Y'             AS MNU_YN
+	            , 'TRUE'          AS OPEN
+	            , 'TRUE'          AS ISPARENT
+	            , 'Y'             AS ISSAVED
+	            , 0               AS SRT_SEQ
+	            , '10'            AS MNU_TP_CD
+	            , ''              AS PGM_ID
+	            , ''              AS PGM_NM
+	            , 'KO'				AS LANG
+	       UNION ALL
+	       SELECT 1 				AS ID
+	       		 , '0'	 			AS PID
+	       		 , 'Customer_Analytics'			      AS NAME
+	       		 , 1               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'TRUE'          AS OPEN
+	             , 'TRUE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 1               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				AS LANG
+	       UNION ALL
+		  	 SELECT 2 				AS ID
+	       		 , '1'	 			AS PID
+	       		 , '회원프로파일 분석'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				AS LANG
+	       UNION ALL
+	       SELECT 3 				AS ID
+	       		 , '1'	 			AS PID
+	       		 , '구매 전환 분석'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				AS LANG
+	       UNION ALL
+	       SELECT 4 				AS ID
+	       		 , '1'	 			AS PID
+	       		 , '매출 추이 분석'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+	       UNION ALL
+	       SELECT 5 				AS ID
+	       		 , '1'	 			AS PID
+	       		 , '기간 대비 매출 분석'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+	       UNION ALL
+	       SELECT 6 				AS ID
+	       		 , '0'	 			AS PID
+	       		 , '결과분석'			      AS NAME
+	       		 , 1               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'TRUE'          AS OPEN
+	             , 'TRUE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 2               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				AS LANG
+	       UNION ALL
+	       SELECT 7 				AS ID
+	       		 , '6'	 			AS PID
+	       		 , '고객군결과분석'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+	       UNION ALL
+	       SELECT 8 				AS ID
+	       		 , '6'	 			AS PID
+	       		 , '타겟팅결과분석'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+	       UNION ALL
+	       SELECT 9 				AS ID
+	       		 , '6'	 			AS PID
+	       		 , '접촉 정책 결과 분석 (설계)'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+	        UNION ALL
+	        SELECT 10 				AS ID
+	       		 , '0'	 			AS PID
+	       		 , '고객타겟팅'			      AS NAME
+	       		 , 1               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'TRUE'          AS OPEN
+	             , 'TRUE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 3               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				AS LANG
+	       UNION ALL
+	       SELECT 11 				AS ID
+	       		 , '10'	 			AS PID
+	       		 , '회원 기본 정보'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+	       UNION ALL
+	       SELECT 12 				AS ID
+	       		 , '10'	 			AS PID
+	       		 , '로그인 이력 정보'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+	       UNION ALL
+	       SELECT 14 				AS ID
+	       		 , '10'	 			AS PID
+	       		 , '회원 등급 정보'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+	       UNION ALL
+	       SELECT 15 				AS ID
+	       		 , '10'	 			AS PID
+	       		 , '배송정보'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'KO'				 AS LANG
+
+	             -- EN
+
+	       UNION ALL
+	       SELECT NULL           AS ID
+	            , ''              AS PID
+	            , 'VIP'  	      AS NAME
+	            , 0               AS MNU_DPTH
+	            , 'Y'             AS US_YN
+	            , 'Y'             AS MNU_YN
+	            , 'TRUE'          AS OPEN
+	            , 'TRUE'          AS ISPARENT
+	            , 'Y'             AS ISSAVED
+	            , 0               AS SRT_SEQ
+	            , '10'            AS MNU_TP_CD
+	            , ''              AS PGM_ID
+	            , ''              AS PGM_NM
+	            , 'EN'				AS LANG
+
+	       UNION ALL
+	       SELECT 1 				AS ID
+	       		 , '0'	 			AS PID
+	       		 , 'Customer_Analytics'			      AS NAME
+	       		 , 1               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'TRUE'          AS OPEN
+	             , 'TRUE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 1               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				AS LANG
+	       UNION ALL
+		  	 SELECT 2 				AS ID
+	       		 , '1'	 			AS PID
+	       		 , 'Member Profile Analysis'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				AS LANG
+	       UNION ALL
+	       SELECT 3 				AS ID
+	       		 , '1'	 			AS PID
+	       		 , 'Purchase Conversion Analysis'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				AS LANG
+	       UNION ALL
+	       SELECT 4 				AS ID
+	       		 , '1'	 			AS PID
+	       		 , 'Sales Trend Analysis'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+	       UNION ALL
+	       SELECT 5 				AS ID
+	       		 , '1'	 			AS PID
+	       		 , 'Time-to-Time Sales Analysis'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+	       UNION ALL
+	       SELECT 6 				AS ID
+	       		 , '0'	 			AS PID
+	       		 , 'Result Analysis'			      AS NAME
+	       		 , 1               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'TRUE'          AS OPEN
+	             , 'TRUE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 2               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				AS LANG
+	       UNION ALL
+	       SELECT 7 				AS ID
+	       		 , '6'	 			AS PID
+	       		 , 'Analysis of customer group results'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+	       UNION ALL
+	       SELECT 8 				AS ID
+	       		 , '6'	 			AS PID
+	       		 , 'Target Result Analysis'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+	       UNION ALL
+	       SELECT 9 				AS ID
+	       		 , '6'	 			AS PID
+	       		 , 'Analysis of Contact Policy Results (Design)'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+	        UNION ALL
+	        SELECT 10 				AS ID
+	       		 , '0'	 			AS PID
+	       		 , 'Target Customer'			      AS NAME
+	       		 , 1               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'TRUE'          AS OPEN
+	             , 'TRUE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 3               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				AS LANG
+	       UNION ALL
+	       SELECT 11 				AS ID
+	       		 , '10'	 			AS PID
+	       		 , 'Member Basic Information'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+	       UNION ALL
+	       SELECT 12 				AS ID
+	       		 , '10'	 			AS PID
+	       		 , 'Login History Information'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+	       UNION ALL
+	       SELECT 14 				AS ID
+	       		 , '10'	 			AS PID
+	       		 , 'Member Rating information'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+	       UNION ALL
+	       SELECT 15 				AS ID
+	       		 , '10'	 			AS PID
+	       		 , 'Shipping information'  AS NAME
+	       		 , 2               AS MNU_DPTH
+	  	          , 'Y'             AS US_YN
+	             , 'Y'             AS MNU_YN
+	             , 'FALSE'          AS OPEN
+	             , 'FALSE'          AS ISPARENT
+	             , 'Y'             AS ISSAVED
+	             , 0               AS SRT_SEQ
+	             , '10'            AS MNU_TP_CD
+	             , ''              AS PGM_ID
+	             , ''              AS PGM_NM
+	             , 'EN'				 AS LANG
+
+
+		 ) A
+		 WHERE 1=1
+		 <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lang   )">AND A.LANG    = #{lang     ,jdbcType=VARCHAR}</if>
+		 ORDER BY A.SRT_SEQ ASC
+    </select>
+
+    <!--샘플 고객별 정보 조회-->
+	<select id="selectTmbrAdmLgnInfGridList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+		/*[Sample1.xml][selectTmbrAdmLgnInfGridList][샘플 고객별 정보 조회][TANINE]*/
+		SELECT P.*
+		  FROM (SELECT CEIL(V.ID / #{rows, jdbcType=NUMERIC})			AS PAGE
+					 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})	AS TOTAL_PAGE
+					 , @ROW_NUMBER										AS TOTAL_COUNT
+					 , V.*
+				  FROM (SELECT SA.USR_NM
+							 , SA.LGN_ID
+							 , SA.LGN_PWD
+							 , SA.USR_EML_ADDR
+							 , SA.MNGR_TP_CD
+							 , SA.ACTV_YN
+							 , SA.CRT_DTTM
+							 , SA.UPD_DTTM
+							 , SA.USR_ID
+							 , SA.USR_STAT_CD
+							 , (SELECT CD_NM
+								  FROM TCMN_CD_DTL
+								 WHERE MST_CD = 'MSTS'
+								   AND CD = SA.USR_STAT_CD )			AS USR_STAT_CD_NM
+							 , DATE_FORMAT(SA.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+							 , DATE_FORMAT(SA.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM
+							 , (@ROW_NUMBER := @ROW_NUMBER + 1)		AS ID -- mysql ROWNUM
+							 , PWD_FAIL_CNT
+							 , HP_TEL_NO
+             				 , ETSN_TEL_NO
+                             , FXL_TEL_NO
+                             , ORG_CD
+                             , POS_CD
+                             , JOB_CD
+                             , APVL_YN
+                             , APVL_RFS_RSN
+						  FROM TMBR_ADM_LGN_INF				SA
+							 , (SELECT @ROW_NUMBER := 0)	RN -- mysql ROWNUM
+						 WHERE 1 = 1
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+						   AND SA.USR_NM LIKE CONCAT('%',#{usr_nm, jdbcType=VARCHAR},'%')
+						</if>
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_eml_addr)">
+						   AND SA.USR_EML_ADDR  LIKE CONCAT('%',#{usr_eml_addr, jdbcType=VARCHAR},'%')
+						</if>
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+						   AND SA.LGN_ID  LIKE CONCAT('%',#{lgn_id, jdbcType=VARCHAR},'%')
+						</if>
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(actv_yn)">
+						   AND SA.ACTV_YN = #{actv_yn, jdbcType=VARCHAR}
+						</if>
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_stat_cd)">
+						   AND SA.USR_STAT_CD = #{usr_stat_cd, jdbcType=VARCHAR}
+						</if>
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt) ">
+						   AND DATE_FORMAT(SA.CRT_DTTM, '%Y-%m-%d') BETWEEN #{sch_st_dt ,jdbcType=VARCHAR} AND #{sch_ed_dt ,jdbcType=VARCHAR}
+						</if>
+					   ) V
+				<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+				 ORDER BY V.USR_ID DESC
+				</if>
+			   )P
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+		 WHERE P.page = #{page ,jdbcType=NUMERIC}
+		</if>
+	</select>
+
+	<select id="selectTeamResultDataGridList" parameterType="ParameterMap" resultType="kr.co.ta9.pandora3.sample.Sample1012">
+	/*[Sample1.xml][selectTeamResultDataGridList][대시보드 팀별 실적 그리드][TANINE]*/
+	SELECT A.* FROM
+		(
+			SELECT '여성패션팀'	AS team
+			 , 1000			AS col1
+			 , 6432			AS col2
+			 , 21.3			AS col3
+			 , 6432			AS col4
+			 , 5431			AS col5
+			 , 52.7			AS col6
+			UNION ALL
+			SELECT '영패션팀'	AS team
+				 , 1000			AS col1
+				 , 5421			AS col2
+				 , 42			AS col3
+				 , 4632			AS col4
+				 , 1241			AS col5
+				 , 85			AS col6
+			UNION ALL
+			SELECT '남성패션팀'	AS team
+				 , 6542			AS col1
+				 , 5632			AS col2
+				 , 76			AS col3
+				 , 7342			AS col4
+				 , 6542			AS col5
+				 , 54			AS col6
+			UNION ALL
+			SELECT '아동스포츠팀'	AS team
+				 , 7942			AS col1
+				 , 6422			AS col2
+				 , 76			AS col3
+				 , 7316 		AS col4
+				 , 5644			AS col5
+				 , 21			AS col6
+			UNION ALL
+			SELECT '식품팀'	AS team
+				 , 5931			AS col1
+				 , 8655			AS col2
+				 , 65			AS col3
+				 , 6463			AS col4
+				 , 7563			AS col5
+				 , 38			AS col6
+			UNION ALL
+			SELECT 'F&amp;B팀'	AS team
+				 , 7653			AS col1
+				 , 6542			AS col2
+				 , 74			AS col3
+				 , 7242			AS col4
+				 , 5464			AS col5
+				 , 43			AS col6
+			UNION ALL
+			SELECT '가전/가구팀'	AS team
+				 , 8753			AS col1
+				 , 4353			AS col2
+				 , 33			AS col3
+				 , 5432			AS col4
+				 , 6542			AS col5
+				 , 64			AS col6
+			UNION ALL
+			SELECT '주방/홈패션팀'	AS team
+				 , 5634			AS col1
+				 , 7323			AS col2
+				 , 40			AS col3
+				 , 8532			AS col4
+				 , 7573			AS col5
+				 , 34			AS col6
+			UNION ALL
+			SELECT '잡화팀'	AS team
+				 , 9542			AS col1
+				 , 3223			AS col2
+				 , 78			AS col3
+				 , 6432			AS col4
+				 , 8634			AS col5
+				 , 34			AS col6
+		 ) AS A
+	</select>
+
+	<select id="selectGroupingList" parameterType="ParameterMap" resultType="kr.co.ta9.pandora3.sample.Sample1007">
+		/*[Sample1.xml][selectGroupingList][샘플 그리드 그룹핑][TANINE]*/
+		SELECT
+			   1  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   2  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   3  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 SELECT
+			   4  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   5  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   6  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 SELECT
+			   7  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   8  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   9  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 SELECT
+			   10  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   11  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   12  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 SELECT
+			   13  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   14  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   15  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 SELECT
+			   16  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   17  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   18  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 SELECT
+			   19  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   20  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   21  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 SELECT
+			   22  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   23  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   24  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 SELECT
+			   25  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   26  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   27  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		 UNION ALL
+		 		 SELECT
+			   28  			AS id
+			 , '2010-05-24'	AS invdate
+			 , 'test'		AS name
+			 , 'note'		AS note
+			 , 0		    AS amonut
+			 , 10.00		AS tax
+			 , 2111.00		AS total
+		 UNION ALL
+		 SELECT
+			   29  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test2'		AS name
+			 , 'note2'		AS note
+			 , 0		    AS amonut
+			 , 20.00		AS tax
+			 , 320.00		AS total
+		 UNION ALL
+		 SELECT
+			   30  			AS id
+			 , '2007-09-01'	AS invdate
+			 , 'test3'		AS name
+			 , 'note3'		AS note
+			 , 0		    AS amonut
+			 , 30.00		AS tax
+			 , 430.00		AS total
+		ORDER BY NAME
+	</select>
+
+	<select id="selectTmbrAdmLgnInfGridSampleList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+		/*[Sample1.xml][selectTmbrAdmLgnInfGridSampleList][BO사용자 그리드 리스트 조회][TANINE]*/
+		SELECT SA.USR_NM
+			 , SA.LGN_ID
+			 , SA.LGN_PWD
+			 , SA.USR_EML_ADDR
+			 , SA.MNGR_TP_CD
+			 , SA.ACTV_YN
+			 , SA.CRT_DTTM
+			 , SA.UPD_DTTM
+			 , SA.USR_ID
+			 , SA.USR_STAT_CD
+			 , (SELECT CD_NM
+				  FROM TCMN_CD_DTL
+				 WHERE MST_CD = 'MSTS'
+				   AND CD = SA.USR_STAT_CD )			AS USR_STAT_CD_NM
+			 , DATE_FORMAT(SA.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+			 , DATE_FORMAT(SA.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM
+			 , (@ROW_NUMBER := @ROW_NUMBER + 1)		AS ID -- mysql ROWNUM
+			 , PWD_FAIL_CNT
+		  FROM TMBR_ADM_LGN_INF				SA
+			 , (SELECT @ROW_NUMBER := 0)	RN -- mysql ROWNUM
+		 WHERE 1 = 1
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_nm)">
+		   AND SA.USR_NM LIKE CONCAT('%',#{usr_nm, jdbcType=VARCHAR},'%')
+		</if>
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_eml_addr)">
+		   AND SA.USR_EML_ADDR  LIKE CONCAT('%',#{usr_eml_addr, jdbcType=VARCHAR},'%')
+		</if>
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_id)">
+		   AND SA.LGN_ID  LIKE CONCAT('%',#{lgn_id, jdbcType=VARCHAR},'%')
+		</if>
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(actv_yn)">
+		   AND SA.ACTV_YN = #{actv_yn, jdbcType=VARCHAR}
+		</if>
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_stat_cd)">
+		   AND SA.USR_STAT_CD = #{usr_stat_cd, jdbcType=VARCHAR}
+		</if>
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt) ">
+		   AND DATE_FORMAT(SA.CRT_DTTM, '%Y-%m-%d') BETWEEN #{sch_st_dt ,jdbcType=VARCHAR} AND #{sch_ed_dt ,jdbcType=VARCHAR}
+		</if>
+
+	</select>
+
+     <!-- 사용자 권한 그리드 리스트 조회  -->
+    <select id="selectTsysAdmRolGridList" parameterType="ParameterMap" resultType="TsysAdmRol">
+        /* [Sample1.xml][selectTsysAdmRolGridList][사용자 권한 그리드 리스트 조회][TANINE] */
+      SELECT P.*
+          FROM (
+            SELECT V.*
+                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                 , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                 , @ROW_NUMBER TOTAL_COUNT
+                 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                  </if>
+              FROM (
+                SELECT Y.*
+                     , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                  FROM (
+                        SELECT R.ROL_ID
+                             , R.ROL_NM
+                             , R.US_YN
+                             , R.APL_ST_DT
+                             , R.APL_ED_DT
+					         , DATE_FORMAT(R.APL_ST_DT, '%Y-%m-%d') AS F_APL_ST_DT
+					         , DATE_FORMAT(R.APL_ED_DT, '%Y-%m-%d') AS F_APL_ED_DT
+                             , R.CRTR_ID
+                             , R.CRT_DTTM
+                             , R.UPDR_ID
+                             , R.UPD_DTTM
+                             , DATE_FORMAT(R.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM
+                             , R.SYS_CD
+                             , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = R.SYS_CD) AS SYS_NM
+                          FROM TSYS_ADM_ROL R
+                         WHERE 1 = 1
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_id)">
+						   AND ROL_NM LIKE CONCAT('%', #{rol_id ,jdbcType=VARCHAR}, '%') or ROL_ID LIKE CONCAT('%', #{rol_id ,jdbcType=VARCHAR}, '%')
+						</if>
+						<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+						   AND US_YN = #{us_yn, jdbcType=VARCHAR}
+						</if>
+                        ) Y, (SELECT @row_number := 0) RN
+             )V
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+             ORDER BY V.ROL_NM
+             </if>
+        ) P
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+       </if>
+    </select>
+    <select id="selectTsysAdmGrpRolList" parameterType="ParameterMap" resultType="ParameterMap">
+          SELECT IFNULL(A.GRP_ROL_ID, GR.GRP_ROL_ID) AS GRP_ROL_ID
+               , GR.GRP_ROL_NM
+               , GROUP_CONCAT(A.ROL_ID ORDER BY A.SYS_CD) AS ROL_ID
+               , GROUP_CONCAT(A.SYS_CD ORDER BY A.SYS_CD) AS SYS_CD
+               , GROUP_CONCAT(REPLACE(A.SYS_PTH,'/','') ORDER BY A.SYS_CD) AS SYS_PTH
+            FROM
+                 (
+                  SELECT GRR.GRP_ROL_ID
+                       , AR.ROL_ID
+                       , AR.ROL_NM
+                       , AR.SYS_CD
+                       , SI.SYS_PTH
+                    FROM TSYS_ADM_GRP_ROL_RTNN GRR
+              INNER JOIN TSYS_ADM_ROL AR
+                      ON GRR.GRP_ROL_ID = AR.ROL_ID
+              INNER JOIN TDSP_SYS_INF SI
+                      ON SI.SYS_CD = AR.SYS_CD
+                   WHERE 1=1
+                     AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+                     AND AR.US_YN = 'Y'
+                 ) A
+RIGHT OUTER JOIN TSYS_ADM_GRP_ROL GR
+              ON A.GRP_ROL_ID = GR.GRP_ROL_ID
+        GROUP BY IFNULL(A.GRP_ROL_ID, GR.GRP_ROL_ID) , GRP_ROL_NM
+    </select>
+
+    <select id="selectTsysRolList"  parameterType="ParameterMap" resultType="TsysAdmRol">
+       /* [TsysAdmRol.xml][selectRolList][사이트별   권한 조회 ][TANINE] */
+        SELECT AR.ROL_ID
+             , AR.ROL_NM
+             , AR.US_YN
+             , AR.SYS_CD
+             , REPLACE(SYS_PTH,"/","") AS SYS_NM
+          FROM TSYS_ADM_ROL AR
+          INNER JOIN TDSP_SYS_INF SI
+		  ON AR.SYS_CD = SI.SYS_CD
+		   WHERE CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+		     AND AR.US_YN = 'Y'
+	 	 ORDER BY AR.SYS_CD, AR.ROL_ID
+    </select>
+
+
+</mapper>

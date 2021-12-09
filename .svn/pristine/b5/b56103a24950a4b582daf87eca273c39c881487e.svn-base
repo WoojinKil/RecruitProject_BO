@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsDocUsrRtnn">
+    <!-- 문서 스크랩 조회 -->    
+    <select id="selectTbbsDocUsrRtnnScrapDocInfo" parameterType="ParameterMap" resultType="TbbsDocUsrRtnn">
+        /*[TbbsDocUsrRtnn.xml][selectUserScrapDocInfo][TANINE]*/
+        SELECT USR_ID
+             , MODL_SEQ
+             , DOC_SEQ
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+        FROM    TBBS_DOC_USR_RTNN
+        WHERE   USR_ID   = #{usr_id,   jdbcType=VARCHAR}
+        AND     MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND     DOC_SEQ  = #{doc_seq,  jdbcType=NUMERIC}
+    </select>
+</mapper>

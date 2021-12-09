@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmGrpRolRtnn">
+
+	<sql id="select-one-sql">
+		/*[TsysAdmGrpRolRtnn.xml][select][TANINE]*/
+		SELECT ROL_ID
+             , GRP_ROL_ID
+             , APL_ST_DT
+             , APL_ED_DT
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_GRP_ROL_RTNN
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmGrpRolRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TsysAdmGrpRolRtnn">
+        /*[TsysAdmGrpRolRtnn.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_GRP_ROL_RTNN
+		(
+			 ROL_ID
+		   , GRP_ROL_ID
+		   , APL_ST_DT
+		   , APL_ED_DT
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{rol_id, jdbcType=VARCHAR}
+		   , #{grp_rol_id, jdbcType=VARCHAR}
+		   , #{apl_st_dt, jdbcType=VARCHAR}
+		   , #{apl_ed_dt, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysAdmGrpRolRtnn">
+        /*[TsysAdmGrpRolRtnn.xml][update][TANINE]*/
+		UPDATE TSYS_ADM_GRP_ROL_RTNN
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(apl_st_dt)">
+		       APL_ST_DT = #{apl_st_dt, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(apl_ed_dt)">
+		     , APL_ED_DT = #{apl_ed_dt, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dttm)">
+		     , CRT_DTTM = #{crt_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(updr_id)">
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(upd_dttm)">
+		     , UPD_DTTM = #{upd_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysAdmGrpRolRtnn">
+        /*[TsysAdmGrpRolRtnn.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_GRP_ROL_RTNN
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</delete>
+
+    <!-- 사용자 권한 그리드 리스트 조회  -->
+    <select id="selectTsysAdmGrpRolRtnnGridList" parameterType="ParameterMap" resultType="TsysAdmGrpRolRtnn">
+        /* [TsysAdmGrpRolRtnn.xml][selectTsysAdmGrpRolGridList][권한 그룹 권한 매핑 그리드 리스트 조회][TANINE] */
+      SELECT P.*
+          FROM (
+            SELECT V.*
+                   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                 , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                 , @ROW_NUMBER TOTAL_COUNT
+                 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                  </if>
+              FROM (
+                SELECT Y.*
+                     , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                  FROM (
+                        SELECT AA.GRP_ROL_NM            AS GRP_ROL_NM
+                             , AA.GRP_ROL_ID            AS GRP_ROL_ID
+                             , IFNULL(BB.BDP_ROL, 0)    AS BDP_ROL
+                             , IFNULL(BB.AMS_ROL, 0)    AS AMS_ROL
+                             , IFNULL(BB.VIP_ROL, 0)    AS VIP_ROL
+                             , IFNULL(BB.TRD_ROL, 0)    AS TRD_ROL
+                             , IFNULL(BB.MLO_ROL, 0)    AS MLO_ROL
+                             , IFNULL(BB.BPN_ROL, 0)    AS BPN_ROL
+                             , IFNULL(BB.CMS_ROL, 0)    AS CMS_ROL
+                             , IFNULL(BB.BI_ROL, 0)    AS BI_ROL
+                          FROM TSYS_ADM_GRP_ROL AA
+                     LEFT JOIN (
+                                SELECT GRR.GRP_ROL_ID
+                                     , MAX(IF(AR.SYS_CD = 0, GRR.ROL_ID, 0)) AS BDP_ROL
+                                     , MAX(IF(AR.SYS_CD = 1, GRR.ROL_ID, 0)) AS AMS_ROL
+                                     , MAX(IF(AR.SYS_CD = 2, GRR.ROL_ID, 0)) AS VIP_ROL
+                                     , MAX(IF(AR.SYS_CD = 3, GRR.ROL_ID, 0)) AS TRD_ROL
+                                     , MAX(IF(AR.SYS_CD = 4, GRR.ROL_ID, 0)) AS MLO_ROL
+                                     , MAX(IF(AR.SYS_CD = 5, GRR.ROL_ID, 0)) AS BPN_ROL
+                                     , MAX(IF(AR.SYS_CD = 7, GRR.ROL_ID, 0)) AS CMS_ROL
+                                     , MAX(IF(AR.SYS_CD = 8, GRR.ROL_ID, 0)) AS BI_ROL
+                                  FROM TSYS_ADM_GRP_ROL_RTNN GRR, TSYS_ADM_ROL AR
+                                 WHERE GRR.ROL_ID = AR.ROL_ID
+                                   AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+                                   AND AR.US_YN = 'Y'
+                              GROUP BY GRR.GRP_ROL_ID
+                               ) BB
+                           ON AA.GRP_ROL_ID = BB.GRP_ROL_ID
+                        WHERE 1 = 1
+                          AND AA.US_YN = 'Y'
+                          AND CURRENT_TIMESTAMP BETWEEN AA.APL_ST_DT AND AA.APL_ED_DT
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_nm)">
+                          AND AA.GRP_ROL_NM LIKE CONCAT('%', #{grp_rol_nm ,jdbcType=VARCHAR}, '%')
+                        </if>
+                        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+                          AND AA.US_YN = #{us_yn, jdbcType=VARCHAR}
+                        </if>
+                        ) Y, (SELECT @row_number := 0) RN
+             )V
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+             ORDER BY V.GRP_ROL_NM
+             </if>
+        ) P
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+       </if>
+    </select>
+
+    <select id="selectTsysAdmGrpRolRtnnList" parameterType="TsysAdmGrpRolRtnn" resultType="TsysAdmGrpRolRtnn">
+    /*[TsysAdmGrpRolRtnn.xml][selectTsysAdmGrpRolRtnnList][권한그룹 조회][TANINE]*/
+        SELECT AR.ROL_ID
+             , AR.ROL_NM
+             , SI.SYS_CD
+             , SI.SYS_NM
+             , AGR.GRP_ROL_ID
+             , AGR.GRP_ROL_NM
+             , AGRR.APL_ST_DT
+             , AGRR.APL_ED_DT
+             , AGRR.CRTR_ID
+             , AGRR.CRT_DTTM
+             , AGRR.UPDR_ID
+             , AGRR.UPD_DTTM
+          FROM TSYS_ADM_GRP_ROL_RTNN AGRR
+             , TSYS_ADM_ROL AR
+             , TSYS_ADM_GRP_ROL AGR
+             , TDSP_SYS_INF SI
+         WHERE AGRR.ROL_ID = AR.ROL_ID
+           AND AGRR.GRP_ROL_ID = AGR.GRP_ROL_ID
+           AND AR.SYS_CD = SI.SYS_CD
+           AND AGR.GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectTsysAdmGrpRolRtnn" parameterType="TsysAdmGrpRolRtnn" resultType="TsysAdmGrpRolRtnn">
+    /*[TsysAdmGrpRolRtnn.xml][selectTsysAdmGrpRolRtnn][권한그룹 단건 조회][TANINE]*/
+        SELECT AR.ROL_ID
+             , AR.ROL_NM
+             , SI.SYS_CD
+             , SI.SYS_NM
+             , AGR.GRP_ROL_ID
+             , AGR.GRP_ROL_NM
+             , AGRR.APL_ST_DT
+             , AGRR.APL_ED_DT
+             , AGRR.CRTR_ID
+             , AGRR.CRT_DTTM
+             , AGRR.UPDR_ID
+             , AGRR.UPD_DTTM
+          FROM TSYS_ADM_GRP_ROL_RTNN AGRR
+             , TSYS_ADM_ROL AR
+             , TSYS_ADM_GRP_ROL AGR
+             , TDSP_SYS_INF SI
+         WHERE AGRR.ROL_ID = AR.ROL_ID
+           AND AGRR.GRP_ROL_ID = AGR.GRP_ROL_ID
+           AND AR.SYS_CD = SI.SYS_CD
+           AND AGR.GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR}
+           AND AR.ROL_ID = #{rol_id, jdbcType=VARCHAR}
+    </select>
+
+      <select id="selectTsysAdmGrpRolList" parameterType="ParameterMap" resultType="ParameterMap">
+        SELECT A.*
+             , IFNULL(B.SRT_SEQ , 0) AS SRT_SEQ 
+          FROM
+              (
+               SELECT IFNULL(A.GRP_ROL_ID, GR.GRP_ROL_ID) AS GRP_ROL_ID
+                    , GR.GRP_ROL_NM
+                    , GROUP_CONCAT(A.ROL_ID ORDER BY A.SYS_CD) AS ROL_ID
+                    , GROUP_CONCAT(A.SYS_CD ORDER BY A.SYS_CD) AS SYS_CD
+                    , GROUP_CONCAT(A.SYS_ABRV ORDER BY A.SYS_CD) AS SYS_ABRV
+                 FROM
+                     (
+                      SELECT GRR.GRP_ROL_ID
+                           , AR.ROL_ID
+                           , AR.ROL_NM
+                           , AR.SYS_CD
+                           , SI.SYS_ABRV
+                        FROM TSYS_GRP_ROL_RTNN GRR
+                  INNER JOIN TSYS_ADM_ROL AR
+                          ON GRR.ROL_ID = AR.ROL_ID
+                  INNER JOIN TDSP_SYS_INF SI
+                          ON SI.SYS_CD = AR.SYS_CD
+                       WHERE 1=1
+                         AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+                         AND AR.US_YN = 'Y'
+                     ) A
+      RIGHT OUTER JOIN TSYS_ADM_GRP_ROL GR
+                    ON A.GRP_ROL_ID = GR.GRP_ROL_ID
+              GROUP BY IFNULL(A.GRP_ROL_ID, GR.GRP_ROL_ID) , GRP_ROL_NM
+              ) A 
+      LEFT JOIN TSYS_ADM_GRP_ROL B
+             ON A.GRP_ROL_ID = B.GRP_ROL_ID
+       ORDER BY SRT_SEQ
+    </select>
+
+    <select id="selectTsysRolListAll"  parameterType="ParameterMap" resultType="TsysAdmRol">
+       /* [TsysAdmRol.xml][selectRolList][사이트별   권한 조회 ][TANINE] */
+        SELECT AR.ROL_ID
+             , AR.ROL_NM
+             , AR.US_YN
+             , AR.SYS_CD
+             , SYS_ABRV
+          FROM TSYS_ADM_ROL AR
+          INNER JOIN TDSP_SYS_INF SI
+		  ON AR.SYS_CD = SI.SYS_CD
+		   WHERE CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+		     AND AR.US_YN = 'Y'
+	 	 ORDER BY AR.SYS_CD, AR.ROL_ID
+    </select>
+    
+     <delete id="deleteGrpId" parameterType="TsysAdmGrpRolRtnn">
+        /*[TsysAdmGrpRolRtnnTrx.xml][deleteGrpId][해당 그룹 아이디 정보 삭제][TANINE]*/
+        DELETE FROM TSYS_ADM_GRP_ROL_RTNN
+         WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+    </delete>
+    
+    <insert id="insertGrpRolRtnn" parameterType="TsysAdmGrpRolRtnn">
+        /*[TsysAdmGrpRolRtnnTrx.xml][insertGrpRolRtnn][해당 그룹 권한 매핑 입력][TANINE]*/
+        INSERT INTO TSYS_ADM_GRP_ROL_RTNN
+        (
+             ROL_ID
+           , GRP_ROL_ID
+           , APL_ST_DT
+           , APL_ED_DT
+           , CRTR_ID
+           , CRT_DTTM
+           , UPDR_ID
+           , UPD_DTTM
+        )
+        VALUES
+        (
+             #{rol_id, jdbcType=VARCHAR}
+           , #{grp_rol_id, jdbcType=VARCHAR}
+           , (SELECT APL_ST_DT FROM TSYS_ADM_ROL WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR})
+           , (SELECT APL_ED_DT FROM TSYS_ADM_ROL WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR})
+           , #{usr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+           , #{usr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+        )
+    </insert>
+
+
+</mapper>

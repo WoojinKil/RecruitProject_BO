@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysOrgRolRtnnTrx">
+	
+	<insert id="insert" parameterType="TsysOrgRolRtnn">
+        /*[BaseTsysOrgRolRtnn.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ORG_ROL_RTNN
+		(
+			 ORG_CD
+		   , ROL_ID
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{org_cd, jdbcType=NUMERIC}
+		   , #{rol_id, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TsysOrgRolRtnn">
+        /*[BaseTsysOrgRolRtnn.xml][update][TANINE]*/
+		UPDATE TSYS_ORG_ROL_RTNN
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		 WHERE ORG_CD = #{org_cd, jdbcType=NUMERIC} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysOrgRolRtnn">
+        /*[BaseTsysOrgRolRtnn.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ORG_ROL_RTNN
+		 WHERE ORG_CD = #{org_cd, jdbcType=NUMERIC} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</delete>
+
+</mapper>

@@ -1,0 +1,1682 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmMnu">
+
+	<sql id="select-one-sql">
+		/*[TsysAdmMnu.xml][select][TANINE]*/
+		SELECT MNU_SEQ
+             , UP_MNU_SEQ
+             , MNU_NM
+             , MNU_DPTH
+             , FRNT_YN
+             , STF_ONLY_YN
+             , URL
+             , MNU_TP_CD
+             , MNU_YN
+             , US_YN
+             , LST_MNU_YN
+             , SRT_SEQ
+             , MNUL_ID
+             , MNU_DESC
+             , PGM_ID
+             , SYS_CD
+             , PRN_INF_SCRN_YN
+             , VDI_SCRN_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_MNU
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+	<insert id="insert" parameterType="TsysAdmMnu" useGeneratedKeys="true" keyProperty="mnu_seq">
+        /*[TsysAdmMnu.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_MNU
+		(    UP_MNU_SEQ
+		   , MNU_NM
+		   , MNU_DPTH
+		   , FRNT_YN
+		   , STF_ONLY_YN
+		   , MNU_TP_CD
+		   , MNU_YN
+		   , US_YN
+		   , LST_MNU_YN
+		   , SRT_SEQ
+		   , MNUL_ID
+		   , MNU_DESC
+		   , PGM_ID
+		   , SYS_CD
+           , PRN_INF_SCRN_YN
+           , VDI_SCRN_YN
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(    #{up_mnu_seq, jdbcType=NUMERIC}
+		   , #{mnu_nm, jdbcType=VARCHAR}
+		   , #{mnu_dpth, jdbcType=NUMERIC}
+		   , #{frnt_yn, jdbcType=VARCHAR}
+		   , #{stf_only_yn, jdbcType=VARCHAR}
+		   , #{mnu_tp_cd, jdbcType=VARCHAR}
+		   , #{mnu_yn, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{lst_mnu_yn, jdbcType=VARCHAR}
+		   , #{srt_seq, jdbcType=NUMERIC}
+		   , #{mnul_id, jdbcType=VARCHAR}
+		   , #{mnu_desc, jdbcType=LONGVARCHAR}
+		   , #{pgm_id, jdbcType=VARCHAR}
+		   , #{sys_cd, jdbcType=VARCHAR}
+  		   , #{prn_inf_scrn_yn, jdbcType=VARCHAR}
+		   , #{vdi_scrn_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][update][TANINE]*/
+		UPDATE TSYS_ADM_MNU
+		   SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_up_mnu_seq)">
+		     , UP_MNU_SEQ = #{up_mnu_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">
+		     , MNU_NM = #{mnu_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_mnu_dpth)">
+		     , MNU_DPTH = #{mnu_dpth, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(frnt_yn)">
+		     , FRNT_YN = #{frnt_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(stf_only_yn)">
+		     , STF_ONLY_YN = #{stf_only_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_tp_cd)">
+		     , MNU_TP_CD = #{mnu_tp_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_yn)">
+		     , MNU_YN = #{mnu_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lst_mnu_yn)">
+		     , LST_MNU_YN = #{lst_mnu_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_srt_seq)">
+		     , SRT_SEQ = #{srt_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnul_id)">
+		     , MNUL_ID = #{mnul_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_desc)">
+		     , MNU_DESC = #{mnu_desc, jdbcType=LONGVARCHAR}
+		       </if>
+		     , PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+		     , SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(prn_inf_scrn_yn)">
+		     , PRN_INF_SCRN_YN = #{prn_inf_scrn_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(vdi_scrn_yn)">
+		     , VDI_SCRN_YN = #{vdi_scrn_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url)">
+		     , URL = #{url, jdbcType=VARCHAR}
+		       </if>
+		       
+		WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delete" parameterType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_MNU
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}
+	</delete>
+
+	<!-- 하위 메뉴 삭제 -->
+    <delete id="deleteTsysAdmMnuLower" parameterType="TsysAdmMnu">
+        /* [TsysAdmMnuTrx.xml][deleteTsysLowerMnu][하위 메뉴 삭제][TANINE] */
+        DELETE
+        FROM TSYS_ADM_MNU
+        WHERE MNU_SEQ IN (
+					(SELECT TMP.MNU_SEQ
+						FROM(
+							SELECT MNU_SEQ
+							FROM TSYS_ADM_MNU
+							WHERE MNU_SEQ = #{mnu_seq ,jdbcType=NUMERIC}
+							OR UP_MNU_SEQ = (SELECT mnu_seq FROM TSYS_ADM_MNU WHERE MNU_SEQ = #{mnu_seq ,jdbcType=NUMERIC})
+							OR UP_MNU_SEQ IN (
+								SELECT MNU_SEQ
+								FROM TSYS_ADM_MNU
+								WHERE up_MNU_SEQ IN (SELECT MNU_SEQ FROM TSYS_ADM_MNU WHERE MNU_SEQ = #{mnu_seq ,jdbcType=NUMERIC})
+							)
+						 )tmp
+					 )
+				)
+    </delete>
+
+    <!-- Front 메뉴 등록 -->
+    <insert id="insertTsysAdmMnuFrnt" parameterType="TsysAdmMnu" useGeneratedKeys="true" keyProperty="mnu_seq">
+        /* [TsysAdmMnuTrx.xml][insertFrontMnu][Front 메뉴 등록][TANINE] */
+        INSERT INTO TSYS_ADM_MNU
+		(    UP_MNU_SEQ
+		   , MNU_NM
+		   , MNU_DPTH
+		   , FRNT_YN
+		   , STF_ONLY_YN
+		   , MNU_TP_CD
+		   , MNU_YN
+		   , US_YN
+		   , LST_MNU_YN
+		   , SRT_SEQ
+		   , MNUL_ID
+		   , MNU_DESC
+		   , PGM_ID
+		   , SYS_CD
+		   , PRN_INF_SCRN_YN
+		   , VDI_SCRN_YN
+		   , URL
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(    #{up_mnu_seq, jdbcType=NUMERIC}
+		   , #{mnu_nm, jdbcType=VARCHAR}
+		   , #{mnu_dpth, jdbcType=NUMERIC}
+		   , #{frnt_yn, jdbcType=VARCHAR}
+		   , #{stf_only_yn, jdbcType=VARCHAR}
+		   , #{mnu_tp_cd, jdbcType=VARCHAR}
+		   , #{mnu_yn, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{lst_mnu_yn, jdbcType=VARCHAR}
+		   , #{srt_seq, jdbcType=NUMERIC}
+		   , #{mnul_id, jdbcType=VARCHAR}
+		   , #{mnu_desc, jdbcType=LONGVARCHAR}
+		   , #{pgm_id, jdbcType=VARCHAR}
+		   , #{sys_cd, jdbcType=VARCHAR}
+  		   , #{prn_inf_scrn_yn, jdbcType=VARCHAR}
+		   , #{vdi_scrn_yn, jdbcType=VARCHAR}
+		   , #{url}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+    </insert>
+    <insert id="insertTsysAdmMnuCopy" parameterType="TsysAdmMnu"  useGeneratedKeys="true" keyProperty="mnu_seq">
+       		<!-- selectKey keyProperty="mnu_seq" resultType="string" order="BEFORE">
+    			   SELECT CONVERT(VARCHAR ,ISNULL(MAX(mnu_seq), 0) +1 ) FROM TSYS_ADM_MNU
+  			</selectKey -->
+            INSERT INTO TSYS_ADM_MNU (
+                MNU_NM
+              , MNU_YN
+              <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_mnu_seq)">,UP_MNU_SEQ</if>
+              , FRNT_YN
+              , MNU_DPTH
+              , SRT_SEQ
+              , URL
+              , MNU_DESC
+              , PGM_ID
+              , SYS_CD
+              , PRN_INF_SCRN_YN
+              , VDI_SCRN_YN
+              , CRTR_ID
+              , CRT_DTTM
+              , UPDR_ID
+              , UPD_DTTM
+        )
+        VALUES (
+               #{mnu_nm       ,jdbcType=VARCHAR}
+             , #{mnu_yn       ,jdbcType=VARCHAR}
+              <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_mnu_seq )">,#{up_mnu_seq      ,jdbcType=NUMERIC}</if>
+             , #{frnt_yn      ,jdbcType=VARCHAR}
+             , #{mnu_dpth     ,jdbcType=NUMERIC}
+       		  <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(up_mnu_seq)">
+       		 ,  (SELECT MAX(IFNULL(A.SRT_SEQ,0))+1 FROM TSYS_ADM_MNU A WHERE IFNULL(A.UP_MNU_SEQ,0)=0)
+     		 </if>
+     		  <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_mnu_seq)">
+     		 , (SELECT CASE WHEN COUNT(1) =0 THEN 1 ELSE MAX(IFNULL(A.SRT_SEQ,0))+1 END FROM TSYS_ADM_MNU A WHERE A.UP_MNU_SEQ = #{up_mnu_seq      ,jdbcType=NUMERIC} )
+     		 </if>
+             , #{url          ,jdbcType=VARCHAR}
+             , #{mnu_desc     ,jdbcType=VARCHAR}
+             , #{pgm_id    ,jdbcType=VARCHAR}
+             , #{sys_cd    ,jdbcType=VARCHAR}
+             , #{prn_inf_scrn_yn  ,jdbcType=VARCHAR}
+             , #{vdi_scrn_yn    ,jdbcType=VARCHAR}
+             , #{crtr_id      ,jdbcType=VARCHAR}
+             , SYSDATE()
+             , #{updr_id     ,jdbcType=VARCHAR}
+             , SYSDATE()
+        )
+    </insert>
+
+	<!-- 하위 메뉴 삭제 -->
+	<delete id="deleteTsysAdmMnuMappingAll" parameterType="HashMap">
+		/* [TsysAdmMnuTrx.xml][deleteTsysAdmMnuMappingAll][하위 메뉴 삭제][TANINE] */
+	    DELETE
+		FROM TSYS_ADM_MNU
+		WHERE mnu_seq IN (SELECT TMP.mnu_seq
+							FROM(
+								SELECT mnu_seq
+								FROM TSYS_ADM_MNU
+								WHERE mnu_seq = #{mnu_seq ,jdbcType=NUMERIC}
+								OR UP_mnu_seq = (SELECT mnu_seq FROM TSYS_ADM_MNU WHERE mnu_seq = #{mnu_seq ,jdbcType=NUMERIC} )
+								OR UP_mnu_seq IN (
+									SELECT mnu_seq
+									FROM TSYS_ADM_MNU
+									WHERE UP_mnu_seq IN (SELECT mnu_seq FROM TSYS_ADM_MNU WHERE mnu_seq = #{mnu_seq ,jdbcType=NUMERIC} )
+							)
+						 )TMP
+						)
+	</delete>
+    <!-- 관리자 메뉴 리스트 조회 -->
+    <select id="selectTsysAdmMnuList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+       /*[TsysAdmMnu.xml][selectTsysAdmMnuList][관리자 메뉴 리스트 조회][TANINE]*/
+        SELECT MNU_SEQ             -- 메뉴번호
+             , UP_MNU_SEQ          -- 상위메뉴아이디
+             , MNU_NM              -- 메뉴명
+             , MNU_DPTH            -- 메뉴깊이
+             , URL                 -- url
+             , MNU_TP_CD           -- 메뉴타입코드
+             , MNU_YN              -- 메뉴여부
+             , US_YN               -- 사용여부
+             , LST_MNU_YN          -- 마지막메뉴여부
+             , SRT_SEQ             -- 정렬순서(전시순서)
+             , MNUL_ID             -- 메뉴얼ID
+             , MNU_DESC            -- 메뉴설명
+             , PRN_INF_SCRN_YN       -- 개인정보 화면 여부
+             , VDI_SCRN_YN         -- VDI 화면 여부
+             , CRTR_ID             -- 생성자ID
+             , CRT_DTTM            -- 생성일시
+             , UPDR_ID             -- 수정자ID
+             , UPD_DTTM            -- 수정일시
+          FROM TSYS_ADM_MNU
+         WHERE 1=1
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_mnu_seq)">AND UP_MNU_SEQ = #{up_mnu_seq  ,jdbcType=VARCHAR}</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_tp_cd )">AND MNU_TP_CD  = #{mnu_tp_cd   ,jdbcType=VARCHAR}</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_dpth  )">AND MNU_DPTH   = #{mnu_dpth    ,jdbcType=NUMERIC}</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn     )">AND US_YN      = #{us_yn       ,jdbcType=VARCHAR}</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_yn    )">AND MNU_YN     = #{mnu_yn      ,jdbcType=VARCHAR}</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm    )">AND MNU_NM LIKE CONCAT('%',#{mnu_nm    ,jdbcType=VARCHAR},'%')</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url       )">AND URL        = #{url         ,jdbcType=VARCHAR}</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(frnt_yn   )">AND FRNT_YN    = #{frnt_yn     ,jdbcType=VARCHAR}</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(prn_inf_scrn_yn)">AND PRN_INF_SCRN_YN        = #{prn_inf_scrn_yn         ,jdbcType=VARCHAR}</if>
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(vdi_scrn_yn)">AND VDI_SCRN_YN    = #{vdi_scrn_yn     ,jdbcType=VARCHAR}</if>
+     ORDER BY UP_MNU_SEQ, MNU_NM
+    </select>
+
+    <!-- 관리자 시스템 메뉴 그리드 리스트 조회 -->
+    <select id="selectTsysAdmMnuDepthGridList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+     /*[TsysAdmMnu.xml][selectTsysAdmMnuDepthGridList][관리자 시스템 메뉴 그리드 리스트 조회 ][TANINE]*/
+     SELECT P.*
+          FROM (
+            SELECT Y.*
+                  ,CEIL(Y.ID / #{rows, jdbcType=NUMERIC})  PAGE
+                  ,@ROW_NUMBER TOTAL_COUNT
+                  ,CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})TOTAL_PAGE
+              FROM (
+                    SELECT V.*
+                         , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                      FROM ( SELECT MNU_SEQ
+                                  , UP_MNU_SEQ
+                                  , URL
+                                  , MNU_DPTH
+                                  , MNU_NM
+                                  , SRT_SEQ
+                                  , US_YN
+                                  , UPD_DTTM
+                                  , LST_MNU_YN
+                               FROM TSYS_ADM_MNU
+                              WHERE 1=1
+                                AND MNU_DPTH = #{mnu_dpth,jdbcType=NUMERIC}
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">AND US_YN           = #{us_yn      ,jdbcType=VARCHAR}</if>
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">AND MNU_NM LIKE CONCAT('%',#{mnu_nm    ,jdbcType=VARCHAR},'%')</if>
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_mnu_seq)">AND UP_MNU_SEQ = #{up_mnu_seq ,jdbcType=NUMERIC} </if>
+                            ) V
+                           ,(SELECT @ROW_NUMBER := 0) R
+                    ) Y
+               )P
+        WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+    </select>
+
+    <!-- 관리자 메뉴 그리드 리스트 조회 -->
+    <select id="selectTsysAdmMnuGridList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+     /*[TsysAdmMnu.xml][selectTsysAdmMnuGridList][관리자 메뉴 그리드 리스트 조회 ][TANINE]*/
+     SELECT P.*
+       FROM (
+            SELECT Y.*
+                 , CEIL(Y.ID / #{rows, jdbcType=NUMERIC})  PAGE
+                 , @ROW_NUMBER TOTAL_COUNT
+                 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+             FROM (
+                   SELECT V.*
+                        , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                        , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS SRT_SEQ
+                        , @PV := V.MIDD_MNU_SEQ AS PV
+                    FROM ( SELECT DISTINCT
+                                  TOP.MNU_SEQ   AS TOP_MNU_SEQ
+                                , TOP.MNU_NM    AS TOP_MNU_NM
+                                , TOP.SRT_SEQ   AS TOP_SRT_SEQ
+                                , MIDD.MNU_SEQ  AS MIDD_MNU_SEQ
+                                , MIDD.MNU_NM   AS MIDD_MNU_NM
+                                , MIDD.SRT_SEQ  AS MIDD_SRT_SEQ
+                                , BTM.MNU_SEQ
+                                , BTM.MNU_NM
+                                , BTM.SRT_SEQ  AS BTM_SRT_SEQ
+                                , BTM.MNU_TP_CD
+                                , CASE WHEN MIDD.URL IS NULL THEN BTM.URL END AS URL
+                                , CASE WHEN TOP.US_YN = 'Y'
+                                       THEN CASE WHEN MIDD.US_YN = 'Y'
+                                                 THEN BTM.US_YN ELSE MIDD.US_YN
+                                             END
+                                       ELSE TOP.US_YN
+                                   END AS US_YN
+                                , TOP.SYS_CD   AS SYS_CD
+                                , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = TOP.SYS_CD) AS SYS_NM
+                            FROM TSYS_ADM_MNU TOP   -- 최상단 메뉴
+                               , TSYS_ADM_MNU MIDD  -- 중단 메뉴
+                               , TSYS_ADM_MNU BTM   -- 하단 메뉴
+                           WHERE TOP.MNU_SEQ   = MIDD.UP_MNU_SEQ
+                             AND MIDD.MNU_SEQ  = BTM.UP_MNU_SEQ
+                             AND TOP.FRNT_YN  = 'N'
+                             AND MIDD.FRNT_YN = 'N'
+                             AND BTM.FRNT_YN  = 'N'
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">
+                             AND BTM.MNU_NM LIKE CONCAT('%',#{mnu_nm    ,jdbcType=VARCHAR},'%')
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+                             AND BTM.US_YN = #{us_yn    ,jdbcType=VARCHAR}
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+                            AND BTM.SYS_CD = #{sys_cd    ,jdbcType=NUMERIC}
+                         </if>
+                        ORDER BY TOP_SRT_SEQ, MIDD_SRT_SEQ, BTM_SRT_SEQ
+                         ) V
+                       , (SELECT @RN := 1) RN
+                       , (SELECT @PV := '') PV
+                       , (SELECT @ROW_NUMBER := 0) R
+                  ) Y
+            )P
+       WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+    </select>
+
+    <select id="selectTsysAdmMnuGridTreeList" parameterType="ParameterMap" resultType="TsysAdmMnuTree">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuGridTreeList][관리자 메뉴 그리드 리스트 조회 ][TANINE]*/
+        SELECT NULL           AS ID
+            , ''              AS PID
+            , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR}) AS NAME
+            , 0               AS MNU_DPTH
+            , 'Y'             AS US_YN
+            , 'Y'             AS MNU_YN
+            , 'TRUE'          AS OPEN
+            , 'TRUE'          AS ISPARENT
+            , 'Y'             AS ISSAVED
+            , 0               AS SRT_SEQ
+            , '10'            AS MNU_TP_CD
+            , ''              AS PGM_ID
+            , ''              AS PGM_NM
+            , 'Y'              AS PRN_INF_SCRN_YN
+            , 'Y'              AS VDI_SCRN_YN
+       UNION ALL
+       SELECT DC.MNU_SEQ      AS ID
+            , DC.UP_MNU_SEQ   AS PID
+            , DC.MNU_NM       AS NAME
+            , DC.MNU_DPTH
+            , DC.US_YN
+            , DC.MNU_YN
+            , CASE WHEN DC.MNU_DPTH = 3 THEN 'FALSE' ELSE  'TRUE' END AS OPEN
+            , CASE WHEN DC.MNU_DPTH = 3 THEN 'FALSE' ELSE  'TRUE' END AS ISPARENT
+            , 'Y' AS ISSAVED
+            , DC.SRT_SEQ
+            , DC.MNU_TP_CD
+            -- , DEPTH_FULLNAME
+            , DC.PGM_ID
+            , SI.PGM_NM
+            , DC.PRN_INF_SCRN_YN
+            , DC.VDI_SCRN_YN
+       FROM (
+              SELECT GET_TREE(MNU_SEQ) AS CODE
+                   , @LEVEL AS LEV
+                   , T1.MNU_NM
+                   , T1.SRT_SEQ
+                   , @CODE AS IDX2
+                FROM (
+                      SELECT @START_WITH := '0'
+                           , @CODE := @START_WITH
+                           , @LEVEL := 0
+                     ) VARS
+                   , (SELECT * FROM TSYS_ADM_MNU WHERE FRNT_YN='N' ORDER BY MNU_DPTH) T1
+               WHERE @CODE IS NOT NULL
+            ) DC2
+        JOIN TSYS_ADM_MNU DC
+          ON DC.MNU_SEQ = DC2.CODE
+        LEFT OUTER JOIN  TSYS_PGM_INF  SI
+          ON DC.PGM_ID = SI.PGM_ID
+       WHERE DC.FRNT_YN='N'
+          AND DC.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="selectTsysAdmMnuListByUserId" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuListByUserId][BO 조직별 권한 메뉴 리스트 조회 ][TANINE]*/
+        SELECT V.*
+             , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS SRT_SEQ
+             , @PV := V.MIDD_MNU_SEQ AS PV
+             ,(SELECT GROUP_CONCAT(PB.PGM_BTN_CD )
+                   FROM TSYS_PGM_BTN_INF PB
+                    WHERE V.PGM_ID = PB.PGM_ID
+                ) AS   BTN_INFO
+             , CONCAT(V.TOP_MNU_NM , '>' , V.MIDD_MNU_NM , '>' , V.MNU_NM) AS DEPTH_FULLNAME
+         FROM ( SELECT DISTINCT
+                       TOP.MNU_SEQ    AS TOP_MNU_SEQ
+                     , TOP.MNU_NM     AS TOP_MNU_NM
+                     , TOP.SRT_SEQ    AS TOP_SRT_SEQ
+                     , MIDD.MNU_SEQ   AS MIDD_MNU_SEQ
+                     , MIDD.MNU_NM    AS MIDD_MNU_NM
+                     , MIDD.SRT_SEQ   AS MIDD_SRT_SEQ
+                     , BTM.MNU_SEQ
+                     , BTM.MNU_NM
+                     , BTM.SRT_SEQ    AS BTM_SRT_SEQ
+                     , BTM.MNU_TP_CD
+                     , CASE WHEN (MIDD.URL IS NULL or TRIM(MIDD.URL) = '') THEN BTM.URL
+                        END AS URL
+                     , CASE WHEN TOP.US_YN = 'Y'
+                            THEN CASE WHEN MIDD.US_YN = 'Y'
+                                      THEN BTM.US_YN ELSE MIDD.US_YN
+                                  END
+                            ELSE TOP.US_YN
+                        END AS US_YN
+                     , CASE WHEN MIDD.PGM_ID IS NULL THEN BTM.PGM_ID END AS PGM_ID
+                  FROM TSYS_ADM_MNU TOP     -- 최상단 메뉴
+                     , TSYS_ADM_MNU MIDD    -- 중단 메뉴
+                     , TSYS_ADM_MNU BTM     -- 하단 메뉴
+                     , TSYS_ADM_ROL_RTNN URA
+                     , TSYS_ADM_MNU_ROL_RTNN MRA
+                     , TSYS_ADM_ROL AR
+                 <if test='mngr_tp_cd != "10"'>
+                     , TSYS_ORG_ROL_RTNN ORG
+                 </if>
+                 WHERE TOP.MNU_SEQ = MIDD.UP_MNU_SEQ
+                   AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                   AND TOP.FRNT_YN = 'N'
+                   AND MIDD.FRNT_YN = 'N'
+                   AND BTM.FRNT_YN = 'N'
+                   AND TOP.US_YN   = 'Y'
+                   AND TOP.US_YN   = MIDD.US_YN
+                   AND TOP.US_YN   = BTM.US_YN
+                   AND URA.ROL_ID  = MRA.ROL_ID
+                   AND URA.ROL_ID  = AR.ROL_ID
+                   AND MRA.MNU_SEQ = BTM.MNU_SEQ
+                   AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+                   AND CURRENT_TIMESTAMP BETWEEN URA.APL_ST_DT AND URA.APL_ED_DT
+                   AND AR.US_YN = 'Y'
+                   AND URA.USR_ID =  #{user_id ,jdbcType=VARCHAR}
+                <if test='mngr_tp_cd != "10"'>
+                   AND ORG.ROL_ID = URA.ROL_ID
+                   AND ORG.ORG_CD =  #{org_cd ,jdbcType=VARCHAR}
+                </if>
+                 ORDER BY TOP_SRT_SEQ, MIDD_SRT_SEQ, BTM_SRT_SEQ
+              ) V
+            , (SELECT @RN := 1) RN
+            , (SELECT @PV := '') PV
+    </select>
+
+    <select id="selectTsysAdmMnuListByUsrAuth" parameterType="ParameterMap" resultType="TsysAdmMnu" >
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuListByUsrAuth][BO 사용자별 권한 메뉴 리스트 조회 ][TANINE]*/
+        SELECT V.*
+             , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS SRT_SEQ
+             , @PV := V.MIDD_MNU_SEQ AS PV
+             ,(SELECT GROUP_CONCAT(PB.PGM_BTN_CD )
+                   FROM TSYS_PGM_BTN_INF PB
+                    WHERE V.PGM_ID = PB.PGM_ID
+                ) AS   BTN_INFO
+             , CONCAT(V.TOP_MNU_NM , '>' , V.MIDD_MNU_NM , '>' , V.MNU_NM) AS DEPTH_FULLNAME
+         FROM ( SELECT DISTINCT
+                       TOP.MNU_SEQ    AS TOP_MNU_SEQ
+                     , TOP.MNU_NM     AS TOP_MNU_NM
+                     , TOP.SRT_SEQ    AS TOP_SRT_SEQ
+                     , MIDD.MNU_SEQ   AS MIDD_MNU_SEQ
+                     , MIDD.MNU_NM    AS MIDD_MNU_NM
+                     , MIDD.SRT_SEQ   AS MIDD_SRT_SEQ
+                     , BTM.MNU_SEQ
+                     , BTM.MNU_NM
+                     , BTM.SRT_SEQ    AS BTM_SRT_SEQ
+                     , BTM.MNU_TP_CD
+                     , CASE WHEN (MIDD.URL IS NULL or TRIM(MIDD.URL) = '') THEN BTM.URL
+                        END AS URL
+                     , CASE WHEN TOP.US_YN = 'Y'
+                            THEN CASE WHEN MIDD.US_YN = 'Y'
+                                      THEN BTM.US_YN ELSE MIDD.US_YN
+                                  END
+                            ELSE TOP.US_YN
+                        END AS US_YN
+                     , CASE WHEN MIDD.PGM_ID IS NULL THEN BTM.PGM_ID END AS PGM_ID
+                  FROM TSYS_ADM_MNU TOP     -- 최상단 메뉴
+                     , TSYS_ADM_MNU MIDD    -- 중단 메뉴
+                     , TSYS_ADM_MNU BTM     -- 하단 메뉴
+                     , TSYS_ADM_ROL_RTNN URA
+                     , TSYS_ADM_MNU_ROL_RTNN MRA
+                     , TSYS_ADM_ROL AR
+                     , TSYS_ADM_MNU_RTNN MRN  -- 사용자별 메뉴권한 매핑
+                 WHERE TOP.MNU_SEQ = MIDD.UP_MNU_SEQ
+                   AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                   AND TOP.FRNT_YN = 'N'
+                   AND MIDD.FRNT_YN = 'N'
+                   AND BTM.FRNT_YN = 'N'
+                   AND TOP.US_YN   = 'Y'
+                   AND TOP.US_YN   = MIDD.US_YN
+                   AND TOP.US_YN   = BTM.US_YN
+                   AND URA.ROL_ID  = MRA.ROL_ID
+                   AND URA.ROL_ID  = AR.ROL_ID
+                   AND MRA.MNU_SEQ = BTM.MNU_SEQ
+                   AND URA.USR_ID  = MRN.USR_ID
+                   AND MRN.MNU_SEQ = BTM.MNU_SEQ
+                   AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+                   AND CURRENT_TIMESTAMP BETWEEN URA.APL_ST_DT AND URA.APL_ED_DT
+                   AND AR.US_YN = 'Y'
+                   AND URA.USR_ID =  #{user_id ,jdbcType=VARCHAR}
+                 ORDER BY TOP_SRT_SEQ, MIDD_SRT_SEQ, BTM_SRT_SEQ
+              ) V
+            , (SELECT @RN := 1) RN
+            , (SELECT @PV := '') PV
+    </select>
+
+
+    <!-- 관리자 메뉴 조회 (2018-02-10) -->
+    <select id="selectTsysAdmMnuListAll" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuListAll][관리자 메뉴 조회 (2018-02-10)][TANINE]*/
+        SELECT V.*
+             , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS SRT_SEQ
+             , @PV := V.MIDD_MNU_SEQ AS PV
+          FROM
+               ( SELECT DISTINCT
+                        TOP.MNU_SEQ  AS TOP_MNU_SEQ
+                      , TOP.MNU_NM   AS TOP_MNU_NM
+                      , TOP.SRT_SEQ     AS TOP_SRT_SEQ
+                      , MIDD.MNU_SEQ    AS MIDD_mnu_seq
+                      , MIDD.MNU_NM     AS MIDD_MNU_NM
+                      , MIDD.SRT_SEQ    AS MIDD_SRT_SEQ
+                      , BTM.MNU_SEQ
+                      , BTM.MNU_NM
+                      , BTM.SRT_SEQ     AS BTM_SRT_SEQ
+                      , BTM.MNU_TP_CD
+                      , CASE WHEN MIDD.URL IS NULL THEN BTM.URL END AS URL
+                      , CASE WHEN TOP.US_YN = 'Y'
+                             THEN CASE WHEN MIDD.US_YN = 'Y' THEN BTM.US_YN ELSE MIDD.US_YN END
+                             ELSE TOP.US_YN
+                        END AS US_YN
+                   FROM TSYS_ADM_MNU TOP        -- 최상단 메뉴
+                      , TSYS_ADM_MNU MIDD       -- 중단 메뉴
+                      , TSYS_ADM_MNU BTM        -- 하단 메뉴
+                      , TSYS_USR_ROL_RTNN URA
+                      , TSYS_ADM_MNU_ROL_RTNN MRA
+                      , TSYS_USR_ROL UR
+                  WHERE TOP.MNU_SEQ = MIDD.UP_MNU_SEQ
+                    AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                    AND URA.ROL_ID = MRA.ROL_ID
+                    AND URA.ROL_ID = UR.ROL_ID
+                    AND TOP.FRNT_YN = 'N'
+                    AND MIDD.FRNT_YN = 'N'
+                    AND BTM.FRNT_YN = 'N'
+                    AND UR.US_YN = 'Y'
+                  ORDER BY TOP_SRT_SEQ, MIDD_SRT_SEQ, BTM_SRT_SEQ
+               ) V
+             , (SELECT @RN := 1) RN
+             , (SELECT @PV := '') PV
+         WHERE V.US_YN = 'Y'
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(url)">AND V.URL = #{url ,jdbcType=VARCHAR}</if>
+    </select>
+
+    <!-- 사용자 아이디별 메뉴 권한 -->
+    <select id="selectTsysAdmMnuAuthByUserId" parameterType="ParameterMap" resultType="DataMap">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuAuthByUserId][사용자 아이디별 메뉴 권한][TANINE]*/
+        SELECT CASE WHEN SUM(CHK.STD_COUNT) > 0 AND SUM(CHK.EXISTS_COUNT) = 0 THEN 'F' ELSE 'S' END AUTH_RST
+             , CHK.MNU_SEQ
+          FROM (
+                SELECT COUNT(AM.MNU_SEQ) STD_COUNT
+                     , COUNT(U.MNU_SEQ)  EXISTS_COUNT
+                     , MAX(AM.MNU_SEQ)   MNU_SEQ
+                  FROM TSYS_ADM_MNU AM
+                  LEFT OUTER JOIN ( SELECT MRA.MNU_SEQ
+                                      FROM TSYS_USR_ROL_RTNN URA
+                                         , TSYS_USR_ROL UR
+                                         , TSYS_ADM_MNU_ROL_RTNN MRA
+                                     WHERE UR.ROL_ID = URA.ROL_ID
+                                       AND URA.USR_ID = #{usr_id, jdbcType=VARCHAR}
+                                       AND UR.ROL_ID = MRA.ROL_ID
+                                       AND SYSDATE() BETWEEN URA.APL_ST_DT AND URA.APL_ED_DT
+                                       AND SYSDATE() BETWEEN UR.APL_ST_DT AND UR.APL_ED_DT
+                                       AND UR.US_YN = 'Y') AS U ON U.MNU_SEQ = AM.MNU_SEQ
+                  WHERE AM.URL = #{url, jdbcType=VARCHAR}
+                AND  AM.US_YN = 'Y'
+        ) CHK
+    </select>
+
+    <!-- FRONT 메뉴 리스트 조회 -->
+    <select id="selectTsysAdmMnuFrntList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuFrntList][FRONT 메뉴 리스트 조회][TANINE]*/
+        SELECT MNU_SEQ
+             , UP_MNU_SEQ
+             , MNU_NM
+             , MNU_DPTH
+             , URL
+             , MNU_TP_CD
+             , MNU_YN
+             , US_YN
+             , LST_MNU_YN
+             , SRT_SEQ
+             , MNUL_ID
+             , MNU_DESC
+             , PRN_INF_SCRN_YN
+             , VDI_SCRN_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_MNU
+         WHERE FRNT_YN = 'Y'
+         ORDER BY MNU_DESC
+    </select>
+
+    <select id="selectTsysAdmMnuDownGridList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+     /*[TsysAdmMnu.xml][selectTsysAdmMnuDownGridList][][TANINE]*/
+     SELECT P.*
+          FROM (
+            SELECT Y.*
+                 , CEIL(Y.ID / #{rows, jdbcType=NUMERIC})  PAGE
+                 , @ROW_NUMBER TOTAL_COUNT
+                 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})TOTAL_PAGE
+              FROM (
+                    SELECT V.*
+                         , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                         , @PV := V.MNU_SEQ AS PV
+                      FROM ( SELECT A.MNU_SEQ
+                                  , A.UP_MNU_SEQ
+                                  , A.MNU_NM
+                                  , A.MNU_DPTH
+                                  , A.US_YN
+                                  , A.MNU_YN
+                                  , A.SRT_SEQ
+                                  , A.MNU_TP_CD
+                                  , A.PGM_ID
+                                  , A.SYS_CD
+                                  , A.PRN_INF_SCRN_YN
+                                  , A.VDI_SCRN_YN
+                                  , SI.PGM_NM
+                                  , SI.TRG_URL AS TARGET_URL
+                               FROM TSYS_ADM_MNU A
+                               LEFT OUTER JOIN  TSYS_PGM_INF  SI
+                                 ON A.PGM_ID = SI.PGM_ID
+                              WHERE 1=1
+                                AND A.UP_MNU_SEQ = #{up_mnu_seq ,jdbcType=NUMERIC}
+                                AND A.MNU_SEQ IS NOT NULL
+                               <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)" >
+                                AND A.SYS_CD = #{sys_cd ,jdbcType=NUMERIC}
+                               </if>
+                               <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                               ORDER BY A.SRT_SEQ
+                               </if>
+                           ) V
+                          , (SELECT @RN := 1) RN
+                          , (SELECT @PV := '') PV
+                          , (SELECT @ROW_NUMBER := 0) R
+                   ) Y
+               )P
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+         ORDER BY P.SRT_SEQ
+    </select>
+
+    <!-- BO 메뉴 개별 조회 -->
+    <select id="selectTsysAdmMnuTgt" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuTgt][BO 메뉴 개별 조회][TANINE]*/
+        SELECT A.MNU_SEQ
+             , A.UP_MNU_SEQ
+             , A.MNU_NM
+          FROM TSYS_ADM_MNU A
+          LEFT JOIN TSYS_PGM_INF B
+            ON A.PGM_ID = B.PGM_ID
+         WHERE A.FRNT_YN = 'N'
+           AND A.US_YN = 'Y'
+           AND B.TRG_URL = #{url ,jdbcType=VARCHAR}
+           AND A.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+    </select>
+
+    <!-- FO 메뉴 URL 조회 -->
+    <select id="selectTsysAdmMnuURL" parameterType="String" resultType="TsysAdmMnu">
+    /*[TsysAdmMnu.xml][selectURL][FO 메뉴 URL 조회][TANINE]*/
+        SELECT URL FROM TSYS_ADM_MNU WHERE URL LIKE #{url,  jdbcType=VARCHAR}
+    </select>
+
+    <!-- 메뉴아이디 얻기 -->
+    <select id="selectTsysAdmMnuId" parameterType="ParameterMap" resultType="java.lang.String">
+        /*[TsysAdmMnu.xml][selectMenuId][메뉴아이디 얻기][TANINE]*/
+       SELECT IFNULL(MAX(MNU_SEQ), 0)
+        FROM TSYS_ADM_MNU
+       WHERE US_YN = 'Y'
+          AND URL = #{url ,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 공통 > breadCrumb(홈 > 시스템관리 > 코드관리 > 코드관리) 메뉴 조회 -->
+    <select id="selectTsysAdmMnuBreadCrumb" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuBreadCrumb][breadCrumb 메뉴조회][TANINE]*/
+        SELECT TOP.MNU_SEQ  AS TOP_MNU_SEQ
+             , TOP.MNU_NM   AS TOP_MNU_NM
+             , MIDD.MNU_SEQ AS MIDD_MNU_SEQ
+             , MIDD.MNU_NM  AS MIDD_MNU_NM
+             , BTM.MNU_SEQ  AS MNU_SEQ
+             , BTM.MNU_NM   AS MNU_NM
+          FROM TSYS_ADM_MNU TOP
+         INNER JOIN TSYS_ADM_MNU MIDD
+            ON (TOP.MNU_SEQ = MIDD.UP_MNU_SEQ)
+         INNER JOIN TSYS_ADM_MNU BTM
+            ON (MIDD.MNU_SEQ = BTM.UP_MNU_SEQ)
+         WHERE BTM.MNU_SEQ = #{mnu_seq ,jdbcType=NUMERIC}
+    </select>
+
+    <!-- 권한의 메뉴 리스트 조회 -->
+    <select id="selectTsysAdmMnuRolRtnnGridList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuRolRtnnGridList][권한의 메뉴 리스트 조회][TANINE]*/
+        SELECT RM.ROL_ID                        AS ROL_ID
+             , AR.ROL_NM                        AS ROL_NM
+             , RM.MNU_SEQ                       AS MNU_SEQ
+             , MN.MNU_NM                        AS MNU_NM
+             , MN.UP_MNU_SEQ                    AS MIDD_MNU_SEQ
+             , (SELECT MNU_NM
+                  FROM TSYS_ADM_MNU
+                 WHERE MNU_SEQ = MN.UP_MNU_SEQ) AS MIDD_MNU_NM
+             , MN.SRT_SEQ                       AS SRT_SEQ
+             , MN.PGM_ID                        AS PGM_ID
+             , MN.SYS_CD                       AS SYS_CD
+             , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = MN.SYS_CD) AS SYS_NM
+             <!-- , (SELECT GROUP_CONCAT(PGM_BTN_CD SEPARATOR ',')
+                  FROM TSYS_PGM_BTN_INF PB
+                 WHERE PB.PGM_ID = MN.PGM_ID
+                   AND US_YN = 'Y')             AS PGM_BTN
+             , ( SELECT GROUP_CONCAT(PGM_BTN_CD SEPARATOR ',')
+                  FROM TSYS_ORG_BTN_ROL_RTNN RB
+                 WHERE RB.ROL_ID = RM.ROL_ID
+                   AND RB.MNU_SEQ = RM.MNU_SEQ
+                   AND RB.PGM_ID = MN.PGM_ID
+                   AND US_YN = 'Y')             AS ROL_BTN -->
+          FROM TSYS_ADM_MNU             MN
+             , TSYS_ADM_MNU_ROL_RTNN    RM
+             , TSYS_ADM_ROL             AR
+         WHERE MN.MNU_SEQ   = RM.MNU_SEQ
+           AND RM.ROL_ID = AR.ROL_ID
+           AND MN.MNU_DPTH  = 3
+           AND MN.FRNT_YN   = 'N'
+           AND MN.MNU_YN    = 'Y'
+           AND MN.US_YN     = 'Y'
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_id)">
+           AND RM.ROL_ID    = #{rol_id, jdbcType=VARCHAR}
+        </if>
+        <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+           AND MN.SYS_CD   = #{sys_cd, jdbcType=VARCHAR}
+        </if>
+         ORDER BY MIDD_MNU_SEQ, SRT_SEQ
+    </select>
+
+    <!-- 권한 메뉴의 버튼 리스트 조회 -->
+    <select id="selectTsysAdmMnuRolRtnnBtnGridList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuRolRtnnBtnGridList][권한 메뉴의 버튼 리스트 조회][TANINE]*/
+          SELECT (SELECT GROUP_CONCAT(PB.PGM_BTN_CD SEPARATOR ',')
+                  FROM TSYS_PGM_BTN_INF PB
+                 WHERE PB.PGM_ID = T1.PGM_ID)                    AS PGM_BTN
+             , ( SELECT GROUP_CONCAT(RB.PGM_BTN_CD SEPARATOR ',')
+                  FROM TSYS_ORG_BTN_ROL_RTNN RB
+                 WHERE RB.PGM_ID = T1.PGM_ID
+                   AND RB.ROL_ID =  #{rol_id, jdbcType=VARCHAR}
+                   AND RB.MNU_SEQ = #{mnu_seq, jdbcType=VARCHAR}) AS ROL_BTN
+          FROM TSYS_PGM_INF T1
+         WHERE T1.PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+           AND T1.US_YN = 'Y'
+    </select>
+
+    <!-- 권한 추가를 위한 메뉴 리스트 조회 -->
+    <select id="selectTsysAdmMnuBtnList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuBtnList][권한 추가 대상 메뉴/버튼 조회][TANINE]*/
+        SELECT P.*
+          FROM (SELECT V.*
+                     , CEIL(V.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                     , @ROW_NUMBER                                      AS TOTAL_COUNT
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})    AS TOTAL_PAGE
+                  FROM (SELECT MN.*
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1) ID
+                          FROM (SELECT MN.MNU_SEQ                       AS MNU_SEQ
+                                     , MN.MNU_NM                        AS MNU_NM
+                                     , MN.UP_MNU_SEQ                    AS MIDD_MNU_SEQ
+                                     , (SELECT MNU_NM
+                                          FROM TSYS_ADM_MNU
+                                         WHERE MNU_SEQ = MN.UP_MNU_SEQ) AS MIDD_MNU_NM
+                                     , MN.SRT_SEQ                       AS SRT_SEQ
+                                     , MN.PGM_ID                        AS PGM_ID
+                                     , (SELECT GROUP_CONCAT(PGM_BTN_CD SEPARATOR ',')
+                                          FROM TSYS_PGM_BTN_INF PB
+                                         WHERE PB.PGM_ID = MN.PGM_ID
+                                           AND US_YN = 'Y')             AS PGM_BTN
+                                     , MN.MNU_DPTH                      AS MNU_DPTH
+                                     , MN.SYS_CD                       AS SYS_CD
+                                     , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = MN.SYS_CD) AS SYS_NM
+                                  FROM TSYS_ADM_MNU MN
+                                 WHERE 1 = 1
+                                   AND MN.FRNT_YN   = 'N'
+                                   AND MN.MNU_YN    = 'Y'
+                                   AND MN.US_YN     = 'Y'
+                                   AND IFNULL(MN.PGM_ID,'') != ''
+                                   AND IFNULL(MN.MNU_SEQ,'') != ''
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+                                   AND MN.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                                </if>
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">
+                                   AND MN.MNU_NM LIKE CONCAT('%', #{mnu_nm, jdbcType=VARCHAR}, '%')
+                                </if>
+                               ) MN
+                             , (SELECT @ROW_NUMBER := 0) RN
+                         WHERE MN.MNU_DPTH = 3
+                       ) V
+                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY MIDD_MNU_SEQ, SRT_SEQ
+                </if>
+               ) P
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+         </if>
+    </select>
+
+    <select id="selectTsysAdmMnuListByMnuList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuListByMnuList][BO 사용자별 권한 메뉴 리스트 조회][TANINE]*/
+        SELECT V.*
+             , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS SRT_SEQ
+             , @PV := V.MIDD_MNU_SEQ AS PV
+         FROM (
+                SELECT DISTINCT VV.*
+                      , (
+                         SELECT GROUP_CONCAT(PB.PGM_BTN_CD )
+                           FROM TSYS_PGM_BTN_INF PB                                                        /* 프로그램 버튼 정보 테이블 */
+                          WHERE VV.PGM_ID = PB.PGM_ID
+                         )                                                             AS BTN_INFO         /* 버튼정보 */
+                      , CONCAT(VV.TOP_MNU_NM , '>' , VV.MIDD_MNU_NM , '>' , VV.MNU_NM) AS DEPTH_FULLNAME   /* 메뉴네비 풀경로 */
+                      , PG.TRG_URL  AS URL                                                                 /* PG TGR URL */
+                  FROM (
+                        SELECT   /*조직별 통합 그룹 권한 */
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y'
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                             , TMBR_ADM_LGN_INF      ALI
+                     LEFT JOIN (SELECT USR_ID
+	                                 , MAX(SYS_CL_CD) AS SYS_CL_CD
+	                                 , MAX(ORG_CD) AS ORG_CD
+	                                 , MAX(GRP_ROL_ID) AS GRP_ROL_ID
+	                                 , MAX(BLSTR_CD) AS BLSTR_CD
+	                                 , MAX(UM.BSLE_HDOFIC_CD) AS BSLE_HDOFIC_CD
+	                                 , GROUP_CONCAT(MSM.CSTR_CD) AS MSTR_CD
+	                                 , GROUP_CONCAT(MSM.CSTR_NM) AS MSTR_NM
+	                                 , GROUP_CONCAT(CSM.CSTR_CD) AS CSTR_CD
+	                                 , GROUP_CONCAT(CSM.CSTR_NM) AS CSTR_NM
+	                                 , MAX(SHOP_GRDE_CD) AS SHOP_GRDE_CD
+	                                 , MAX(BUY_GRDE_CD) AS BUY_GRDE_CD
+	                                 , MAX(MSTRS_USPR_ID) AS MSTR_USPR_ID
+	                                 , MAX(EXCV_YN) AS EXCV_YN
+	                                 , MAX(RGN_LDR_YN) AS RGN_LDR_YN
+	                              FROM TB_BCPC_USPRATHR_M  UM
+	                                 , TB_BCPC_STR_M MSM
+	                                 , TB_BCPC_STR_M CSM
+	                             WHERE 1=1
+	                               AND USR_ID = #{user_id ,jdbcType=VARCHAR}
+	                               AND UM.MSTR_CD = MSM.CSTR_CD
+	                               AND UM.CSTR_CD = CSM.CSTR_CD
+                              GROUP BY USR_ID
+                                )
+                               T
+                            ON ALI.USR_ID = T.USR_ID
+                             , TSYS_ADM_ROL AR
+                             , TSYS_ADM_GRP_ROL_RTNN GRR
+                             , TSYS_ADM_MNU_ROL_RTNN MRR
+                         WHERE 1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND ALI.USR_ID =  #{user_id ,jdbcType=VARCHAR}
+                           AND ALI.APVL_YN = 'Y'
+                           AND GRR.GRP_ROL_ID = T.GRP_ROL_ID
+                           AND GRR.ROL_ID = AR.ROL_ID
+                           AND AR.ROL_ID = MRR.ROL_ID
+                           AND MRR.MNU_SEQ = BTM.MNU_SEQ
+                           AND AR.US_YN = 'Y'
+                           AND AR.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                           AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+                  UNION
+                        SELECT   /*개인 권한별 메뉴 조회*/
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y' 
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                             , TMBR_ADM_LGN_INF ALI
+                             , TSYS_ADM_ROL_RTNN ARR
+                             , TSYS_ADM_ROL AR
+                             , TSYS_ADM_MNU_ROL_RTNN AMRR
+                         WHERE 1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND BTM.SYS_CD = AR.SYS_CD
+                           AND BTM.MNU_SEQ = AMRR.MNU_SEQ
+                           AND AR.ROL_ID = AMRR.ROL_ID
+                           AND AR.ROL_ID = ARR.ROL_ID
+                           AND ALI.USR_ID = ARR.USR_ID
+                           AND AR.US_YN = 'Y'
+                           AND ALI.APVL_YN = 'Y'
+                           AND ALI.USR_ID = #{user_id ,jdbcType=VARCHAR}
+                           AND AR.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                           AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+                  UNION
+                        SELECT   /*개인 메뉴 조회*/
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y'
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                             , TMBR_ADM_LGN_INF ALI
+                             , TSYS_ADM_MNU_RTNN AMR
+                         WHERE  1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND ALI.USR_ID = AMR.USR_ID
+                           AND AMR.MNU_SEQ = BTM.MNU_SEQ
+                           AND AMR.APVL_YN = 'Y'
+                           AND ALI.APVL_YN = 'Y'
+                           AND ALI.USR_ID = #{user_id ,jdbcType=VARCHAR}
+                           AND BTM.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                        ) VV LEFT JOIN TSYS_PGM_INF PG
+                               ON VV.PGM_ID=PG.PGM_ID
+                         ORDER BY VV.TOP_SRT_SEQ, VV.MIDD_SRT_SEQ, VV.BTM_SRT_SEQ
+              ) V
+            , (SELECT @RN := 1) RN
+            , (SELECT @PV := '') PV
+    </select>
+    
+    <select id="selectUsrMnuListCnt" parameterType="ParameterMap" resultType="int">
+        /*[TsysAdmMnu.xml][selectUsrMnuListCnt][BO 사용자별 개인권한 메뉴 수 조회][TANINE]*/
+        SELECT COUNT(1)
+         FROM (
+                SELECT DISTINCT VV.*
+                      , (
+                         SELECT GROUP_CONCAT(PB.PGM_BTN_CD )
+                           FROM TSYS_PGM_BTN_INF PB                                                        /* 프로그램 버튼 정보 테이블 */
+                          WHERE VV.PGM_ID = PB.PGM_ID
+                         )                                                             AS BTN_INFO         /* 버튼정보 */
+                      , CONCAT(VV.TOP_MNU_NM , '>' , VV.MIDD_MNU_NM , '>' , VV.MNU_NM) AS DEPTH_FULLNAME   /* 메뉴네비 풀경로 */
+                      , PG.TRG_URL  AS URL                                                                 /* PG TGR URL */
+                  FROM (
+                        SELECT   /*개인 권한별 메뉴 조회*/
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y'
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                             , TMBR_ADM_LGN_INF ALI
+                             , TSYS_ADM_ROL_RTNN ARR
+                             , TSYS_ADM_ROL AR
+                             , TSYS_ADM_MNU_ROL_RTNN AMRR
+                         WHERE 1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND BTM.SYS_CD = AR.SYS_CD
+                           AND BTM.MNU_SEQ = AMRR.MNU_SEQ
+                           AND AR.ROL_ID = AMRR.ROL_ID
+                           AND AR.ROL_ID = ARR.ROL_ID
+                           AND ALI.USR_ID = ARR.USR_ID
+                           AND AR.US_YN = 'Y'
+                           AND ALI.APVL_YN = 'Y'
+                           AND ALI.USR_ID = #{user_id ,jdbcType=VARCHAR}
+                           AND AR.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                           AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+                        ) VV LEFT JOIN TSYS_PGM_INF PG
+                               ON VV.PGM_ID=PG.PGM_ID
+                         ORDER BY VV.TOP_SRT_SEQ, VV.MIDD_SRT_SEQ, VV.BTM_SRT_SEQ
+              ) V
+            , (SELECT @RN := 1) RN
+            , (SELECT @PV := '') PV
+    </select>
+    
+    
+    
+    <select id="selectTsysAdmMnuListUsrByMnuList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuListUsrByMnuList][BO 사용자별 개인권한 메뉴 리스트 조회][TANINE]*/
+        SELECT V.*
+             , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS SRT_SEQ
+             , @PV := V.MIDD_MNU_SEQ AS PV
+         FROM (
+                SELECT DISTINCT VV.*
+                      , (
+                         SELECT GROUP_CONCAT(PB.PGM_BTN_CD )
+                           FROM TSYS_PGM_BTN_INF PB                                                        /* 프로그램 버튼 정보 테이블 */
+                          WHERE VV.PGM_ID = PB.PGM_ID
+                         )                                                             AS BTN_INFO         /* 버튼정보 */
+                      , CONCAT(VV.TOP_MNU_NM , '>' , VV.MIDD_MNU_NM , '>' , VV.MNU_NM) AS DEPTH_FULLNAME   /* 메뉴네비 풀경로 */
+                      , PG.TRG_URL  AS URL                                                                 /* PG TGR URL */
+                  FROM (
+                        SELECT   /*개인 권한별 메뉴 조회*/
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y'
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                             , BTM.VDI_SCRN_YN                                   AS VDI_SCRN_YN  /* 사이트 번호 */
+                             , BTM.PRN_INF_SCRN_YN                                 AS PRN_INF_SCRN_YN /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                             , TMBR_ADM_LGN_INF ALI
+                             , TSYS_ADM_ROL_RTNN ARR
+                             , TSYS_ADM_ROL AR
+                             , TSYS_ADM_MNU_ROL_RTNN AMRR
+                         WHERE 1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND BTM.SYS_CD = AR.SYS_CD
+                           AND BTM.MNU_SEQ = AMRR.MNU_SEQ
+                           AND AR.ROL_ID = AMRR.ROL_ID
+                           AND AR.ROL_ID = ARR.ROL_ID
+                           AND ALI.USR_ID = ARR.USR_ID
+                           AND AR.US_YN = 'Y'
+                           AND ALI.APVL_YN = 'Y'
+                           AND ALI.USR_ID = #{user_id ,jdbcType=VARCHAR}
+                           AND AR.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                           AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+                     UNION
+                        SELECT   /*개인 메뉴 조회*/
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y'
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                             , BTM.VDI_SCRN_YN                                   AS VDI_SCRN_YN  /* 사이트 번호 */
+                             , BTM.PRN_INF_SCRN_YN                                 AS PRN_INF_SCRN_YN /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                             , TMBR_ADM_LGN_INF ALI
+                             , TSYS_ADM_MNU_RTNN AMR
+                         WHERE  1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND ALI.USR_ID = AMR.USR_ID
+                           AND AMR.MNU_SEQ = BTM.MNU_SEQ
+                           AND ALI.APVL_YN = 'Y'
+                           AND ALI.USR_ID = #{user_id ,jdbcType=VARCHAR}
+                           AND BTM.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                           
+                        ) VV LEFT JOIN TSYS_PGM_INF PG
+                               ON VV.PGM_ID=PG.PGM_ID
+                         ORDER BY VV.TOP_SRT_SEQ, VV.MIDD_SRT_SEQ, VV.BTM_SRT_SEQ
+              ) V
+            , (SELECT @RN := 1) RN
+            , (SELECT @PV := '') PV
+    </select>
+    
+    <select id="selectTsysAdmMnuListOrgByMnuList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuListOrgByMnuList][BO 사용자별 조직권한 메뉴 리스트 조회][TANINE]*/
+        SELECT V.*
+             , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS SRT_SEQ
+             , @PV := V.MIDD_MNU_SEQ AS PV
+         FROM (
+                SELECT DISTINCT VV.*
+                      , (
+                         SELECT GROUP_CONCAT(PB.PGM_BTN_CD )
+                           FROM TSYS_PGM_BTN_INF PB                                                        /* 프로그램 버튼 정보 테이블 */
+                          WHERE VV.PGM_ID = PB.PGM_ID
+                         )                                                             AS BTN_INFO         /* 버튼정보 */
+                      , CONCAT(VV.TOP_MNU_NM , '>' , VV.MIDD_MNU_NM , '>' , VV.MNU_NM) AS DEPTH_FULLNAME   /* 메뉴네비 풀경로 */
+                      , PG.TRG_URL  AS URL                                                                 /* PG TGR URL */
+                  FROM (
+                        SELECT   /*조직별 통합 그룹 권한 */
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y'
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                             , BTM.VDI_SCRN_YN                                   AS VDI_SCRN_YN  /* 사이트 번호 */
+                             , BTM.PRN_INF_SCRN_YN                                 AS PRN_INF_SCRN_YN /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                             , TMBR_ADM_LGN_INF      ALI
+                     LEFT JOIN (SELECT USR_ID
+                                     , MAX(SYS_CL_CD) AS SYS_CL_CD
+                                     , MAX(ORG_CD) AS ORG_CD
+                                     , MAX(GRP_ROL_ID) AS GRP_ROL_ID
+                                     , MAX(BLSTR_CD) AS BLSTR_CD
+                                     , MAX(UM.BSLE_HDOFIC_CD) AS BSLE_HDOFIC_CD
+                                     , GROUP_CONCAT(MSM.CSTR_CD) AS MSTR_CD
+                                     , GROUP_CONCAT(MSM.CSTR_NM) AS MSTR_NM
+                                     , GROUP_CONCAT(CSM.CSTR_CD) AS CSTR_CD
+                                     , GROUP_CONCAT(CSM.CSTR_NM) AS CSTR_NM
+                                     , MAX(SHOP_GRDE_CD) AS SHOP_GRDE_CD
+                                     , MAX(BUY_GRDE_CD) AS BUY_GRDE_CD
+                                     , MAX(MSTRS_USPR_ID) AS MSTR_USPR_ID
+                                     , MAX(EXCV_YN) AS EXCV_YN
+                                     , MAX(RGN_LDR_YN) AS RGN_LDR_YN
+                                  FROM TB_BCPC_USPRATHR_M  UM
+                                     , TB_BCPC_STR_M MSM
+                                     , TB_BCPC_STR_M CSM
+                                 WHERE 1=1
+                                   AND USR_ID = #{user_id ,jdbcType=VARCHAR}
+                                   AND UM.MSTR_CD = MSM.CSTR_CD
+                                   AND UM.CSTR_CD = CSM.CSTR_CD
+                              GROUP BY USR_ID
+                                )
+                               T
+                            ON ALI.USR_ID = T.USR_ID
+                             , TSYS_ADM_ROL AR
+                             , TSYS_ADM_GRP_ROL_RTNN GRR
+                             , TSYS_ADM_MNU_ROL_RTNN MRR
+                         WHERE 1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND ALI.USR_ID =  #{user_id ,jdbcType=VARCHAR}
+                           AND ALI.APVL_YN = 'Y'
+                           AND GRR.GRP_ROL_ID = T.GRP_ROL_ID
+                           AND GRR.ROL_ID = AR.ROL_ID
+                           AND AR.ROL_ID = MRR.ROL_ID
+                           AND MRR.MNU_SEQ = BTM.MNU_SEQ
+                           AND AR.US_YN = 'Y'
+                           AND AR.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                           AND CURRENT_TIMESTAMP BETWEEN AR.APL_ST_DT  AND AR.APL_ED_DT
+                     UNION
+                        SELECT   /*개인 메뉴 조회*/
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y'
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                             , BTM.VDI_SCRN_YN                                   AS VDI_SCRN_YN  /* 사이트 번호 */
+                             , BTM.PRN_INF_SCRN_YN                                 AS PRN_INF_SCRN_YN /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                             , TMBR_ADM_LGN_INF ALI
+                             , TSYS_ADM_MNU_RTNN AMR
+                         WHERE  1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND ALI.USR_ID = AMR.USR_ID
+                           AND AMR.MNU_SEQ = BTM.MNU_SEQ
+                           AND ALI.APVL_YN = 'Y'
+                           AND ALI.USR_ID = #{user_id ,jdbcType=VARCHAR}
+                           AND BTM.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                        ) VV LEFT JOIN TSYS_PGM_INF PG
+                               ON VV.PGM_ID=PG.PGM_ID
+                         ORDER BY VV.TOP_SRT_SEQ, VV.MIDD_SRT_SEQ, VV.BTM_SRT_SEQ
+              ) V
+            , (SELECT @RN := 1) RN
+            , (SELECT @PV := '') PV
+    </select>
+
+
+    <select id="getTsysAdmRolAppMnu" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][getTsysAdmRolAppMnu][개인 권한 신청][TANINE]*/
+        SELECT V.*
+             , @RN := IF(@PV=V.MIDD_MNU_SEQ,@RN+1,1) AS SRT_SEQ
+             , @PV := V.MIDD_MNU_SEQ AS PV
+         FROM (
+                SELECT DISTINCT VV.*
+                      , (
+                         SELECT GROUP_CONCAT(PB.PGM_BTN_CD )
+                           FROM TSYS_PGM_BTN_INF PB                                                        /* 프로그램 버튼 정보 테이블 */
+                          WHERE VV.PGM_ID = PB.PGM_ID
+                         )                                                             AS BTN_INFO         /* 버튼정보 */
+                      , CONCAT(VV.TOP_MNU_NM , '>' , VV.MIDD_MNU_NM , '>' , VV.MNU_NM) AS DEPTH_FULLNAME   /* 메뉴네비 풀경로 */
+                      , PG.TRG_URL  AS URL                                                                 /* PG TGR URL */
+                  FROM (
+                        SELECT
+                               DISTINCT
+                               TOP.MNU_SEQ                                       AS TOP_MNU_SEQ  /* 상위메뉴번호 */
+                             , TOP.MNU_NM                                        AS TOP_MNU_NM   /* 상위메뉴명 */
+                             , TOP.SRT_SEQ                                       AS TOP_SRT_SEQ  /* 상위전시순서 */
+                             , MIDD.MNU_SEQ                                      AS MIDD_MNU_SEQ /* 중단메뉴번호 */
+                             , MIDD.MNU_NM                                       AS MIDD_MNU_NM  /* 중단메뉴명 */
+                             , MIDD.SRT_SEQ                                      AS MIDD_SRT_SEQ /* 중단전시순서 */
+                             , BTM.MNU_SEQ                                       AS MNU_SEQ      /* 하단메뉴번호 */
+                             , BTM.MNU_NM                                        AS MNU_NM       /* 하단메뉴명 */
+                             , BTM.SRT_SEQ                                       AS BTM_SRT_SEQ  /* 하단전시순서 */
+                             , BTM.MNU_TP_CD                                     AS MNU_TP_CD    /* 메뉴타입코드 */
+                             , CASE WHEN TOP.US_YN = 'Y'
+                                    THEN CASE WHEN MIDD.US_YN = 'Y'
+                                              THEN BTM.US_YN ELSE MIDD.US_YN
+                                          END
+                                    ELSE TOP.US_YN
+                                END                                              AS US_YN        /* 사용여부 */
+                             , BTM.PGM_ID                                        AS PGM_ID       /* 프로그램 ID */
+                             , BTM.SYS_CD                                       AS SYS_CD      /* 사이트 번호 */
+                          FROM TSYS_ADM_MNU          TOP                                         /* 최상단 메뉴 */
+                             , TSYS_ADM_MNU          MIDD                                        /* 중단 메뉴   */
+                             , TSYS_ADM_MNU          BTM
+                         WHERE  1=1
+                           AND TOP.MNU_SEQ  = MIDD.UP_MNU_SEQ
+                           AND MIDD.MNU_SEQ = BTM.UP_MNU_SEQ
+                           AND TOP.FRNT_YN  = 'N'                                                /* 프론트여부 */
+                           AND TOP.FRNT_YN  = MIDD.FRNT_YN
+                           AND TOP.FRNT_YN  = BTM.FRNT_YN
+                           AND TOP.US_YN    = 'Y'
+                           AND TOP.US_YN    = MIDD.US_YN
+                           AND TOP.US_YN    = BTM.US_YN
+                           AND BTM.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_seq)">
+                           AND BTM.MNU_SEQ IN
+                               <foreach collection="mnu_seq" item="mnu_seq" open="(" close=")" separator=",">
+                                   #{mnu_seq, jdbcType=VARCHAR}
+                                </foreach>
+                           </if>
+                        ) VV LEFT JOIN TSYS_PGM_INF PG
+                               ON VV.PGM_ID=PG.PGM_ID
+                         ORDER BY VV.TOP_SRT_SEQ, VV.MIDD_SRT_SEQ, VV.BTM_SRT_SEQ
+              ) V
+            , (SELECT @RN := 1) RN
+            , (SELECT @PV := '') PV
+    </select>
+
+    <!-- 사용자 권한 메뉴 신청 목록 조회 -->
+    <select id="selectTsysAdmMnuUsrRtnnGrdList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuUsrRtnnGrdList][사용자 권한 메뉴 신청 목록 조회/버튼 조회][TANINE]*/
+        SELECT P.*
+          FROM (SELECT V.*
+                     , CEIL(V.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                     , @ROW_NUMBER                                      AS TOTAL_COUNT
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})    AS TOTAL_PAGE
+                  FROM (SELECT MN.*
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1) ID
+                          FROM (SELECT MN.MNU_SEQ                       AS MNU_SEQ
+                                     , MN.MNU_NM                        AS MNU_NM
+                                     , MN.UP_MNU_SEQ                    AS MIDD_MNU_SEQ
+                                     , (SELECT MNU_NM
+                                          FROM TSYS_ADM_MNU
+                                         WHERE MNU_SEQ = MN.UP_MNU_SEQ) AS MIDD_MNU_NM
+                                     , MN.SRT_SEQ                       AS SRT_SEQ
+                                     , MN.PGM_ID                        AS PGM_ID
+                                     , (SELECT GROUP_CONCAT(PGM_BTN_CD SEPARATOR ',')
+                                          FROM TSYS_PGM_BTN_INF PB
+                                         WHERE PB.PGM_ID = MN.PGM_ID
+                                           AND US_YN = 'Y')             AS PGM_BTN
+                                     , MN.MNU_DPTH                      AS MNU_DPTH
+                                     , MN.SYS_CD                       AS SYS_CD
+                                     , (SELECT GROUP_CONCAT(PGM_BTN_CD SEPARATOR ',')
+                                          FROM TSYS_ADM_MNU_BTN_RTNN MBR
+                                         WHERE MBR.PGM_ID = MN.PGM_ID
+                                           AND MBR.MNU_SEQ = MN.MNU_SEQ
+                                           AND MBR.USR_ID = #{user_id, jdbcType=VARCHAR})   AS USR_PGM_BTN
+                                     , ( SELECT GROUP_CONCAT(PGM_BTN_CD SEPARATOR ',')
+                                           FROM TSYS_ORG_BTN_ROL_RTNN RB
+                                          WHERE RB.PGM_ID = MN.PGM_ID
+                                            AND RB.ROL_ID =  (
+                                                                SELECT ARR.ROL_ID
+                                                                  FROM TSYS_ADM_ROL AR, TSYS_ADM_ROL_RTNN ARR
+                                                                 WHERE AR.ROL_ID = ARR.ROL_ID
+                                                                   AND AR.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                                                                   AND ARR.USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                               )
+                                            AND RB.MNU_SEQ = MN.MNU_SEQ ) AS ROL_BTN
+                                     , ( SELECT AA.ROL_ID
+                                           FROM TSYS_ADM_MNU_ROL_RTNN AA LEFT JOIN
+                                                ( SELECT ARR.ROL_ID
+                                                    FROM TSYS_ADM_ROL AR, TSYS_ADM_ROL_RTNN ARR
+                                                   WHERE AR.ROL_ID = ARR.ROL_ID
+                                                     AND AR.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                                                     AND ARR.USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                  )  BB
+                                             ON AA.ROL_ID = BB.ROL_ID
+                                          WHERE AA.MNU_SEQ = MN.MNU_SEQ
+                                        ) AS ROL_ID
+                                  FROM TSYS_ADM_MNU MN
+                                 WHERE 1 = 1
+                                   AND MN.FRNT_YN   = 'N'
+                                   AND MN.MNU_YN    = 'Y'
+                                   AND MN.US_YN     = 'Y'
+                                   AND IFNULL(MN.PGM_ID,'') != ''
+                                   AND IFNULL(MN.MNU_SEQ,'') != ''
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+                                   AND MN.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                                </if>
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">
+                                   AND MN.MNU_NM LIKE CONCAT('%', #{mnu_nm, jdbcType=VARCHAR}, '%')
+                                </if>
+                               ) MN
+                             , (SELECT @ROW_NUMBER := 0) RN
+                         WHERE MN.MNU_DPTH = 3
+                       ) V
+                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY MIDD_MNU_SEQ, SRT_SEQ
+                </if>
+               ) P
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+         </if>
+    </select>
+
+
+
+    <!-- 사용자 권한 메뉴 신청 승인 목록 조회 -->
+    <select id="selectTsysAdmMnuUsrRtnnApplGrdList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+        /*[TsysAdmMnu.xml][selectTsysAdmMnuUsrRtnnApplGrdList][사용자 권한 메뉴 신청 승인 목록 조회/버튼 조회][TANINE]*/
+        SELECT P.*
+          FROM (SELECT V.*
+                     , CEIL(V.ID / #{rows, jdbcType=NUMERIC})           AS PAGE
+                     , @ROW_NUMBER                                      AS TOTAL_COUNT
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})    AS TOTAL_PAGE
+                  FROM (SELECT MN.*
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1) ID
+                          FROM (SELECT MN.MNU_SEQ                       AS MNU_SEQ
+                                     , MN.MNU_NM                        AS MNU_NM
+                                     , MN.UP_MNU_SEQ                    AS MIDD_MNU_SEQ
+                                     , (SELECT MNU_NM
+                                          FROM TSYS_ADM_MNU
+                                         WHERE MNU_SEQ = MN.UP_MNU_SEQ) AS MIDD_MNU_NM
+                                     , MN.SRT_SEQ                       AS SRT_SEQ
+                                     , MN.PGM_ID                        AS PGM_ID
+                                     , (SELECT GROUP_CONCAT(PGM_BTN_CD SEPARATOR ',')
+                                          FROM TSYS_PGM_BTN_INF PB
+                                         WHERE PB.PGM_ID = MN.PGM_ID
+                                           AND US_YN = 'Y')             AS PGM_BTN
+                                     , MN.MNU_DPTH                      AS MNU_DPTH
+                                     , MN.SYS_CD                       AS SYS_CD
+                                     , (SELECT GROUP_CONCAT(PGM_BTN_CD SEPARATOR ',')
+                                          FROM TSYS_ADM_MNU_BTN_RTNN MBR
+                                         WHERE MBR.PGM_ID = MN.PGM_ID
+                                           AND MBR.MNU_SEQ = MN.MNU_SEQ
+                                           AND MBR.USR_ID = #{user_id, jdbcType=VARCHAR})   AS USR_PGM_BTN
+                                     , AMR.USR_ID                       AS USR_ID
+                                     , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = AMR.USR_ID) AS USR_NM
+                                  FROM TSYS_ADM_MNU MN, TSYS_ADM_MNU_RTNN AMR
+                                 WHERE 1 = 1
+                                   AND MN.MNU_SEQ = AMR.MNU_SEQ
+                                   AND MN.FRNT_YN   = 'N'
+                                   AND MN.MNU_YN    = 'Y'
+                                   AND MN.US_YN     = 'Y'
+                                   AND IFNULL(MN.PGM_ID,'') != ''
+                                   AND IFNULL(MN.MNU_SEQ,'') != ''
+                                   AND AMR.APVL_YN = 'N'
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+                                   AND MN.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                                </if>
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_nm)">
+                                   AND MN.MNU_NM LIKE CONCAT('%', #{mnu_nm, jdbcType=VARCHAR}, '%')
+                                </if>
+                               ) MN
+                             , (SELECT @ROW_NUMBER := 0) RN
+                         WHERE MN.MNU_DPTH = 3
+                       ) V
+                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY MIDD_MNU_SEQ, SRT_SEQ
+                </if>
+               ) P
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+         </if>
+    </select>
+
+
+    <select id="selectTsysAdmMnuInfo" resultType="TbLgapMnuH" parameterType="ParameterMap">
+    /* [TsysAdmMnu.xml][selectTsysAdmMnuInfo][메뉴 이력 관련][TANINE] */
+            SELECT #{mnu_seq, jdbcType=VARCHAR} AS MNU_SEQ            -- 메뉴번호
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mnu_seq)">
+             , (SELECT MNU_NM FROM TSYS_ADM_MNU WHERE MNU_SEQ = #{mnu_seq, jdbcType=VARCHAR}) AS MNU_NM
+             </if>
+             , #{up_mnu_seq, jdbcType=VARCHAR} AS UP_MNU_SEQ         -- 상위메뉴아이디
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(up_mnu_seq)">
+             , (SELECT MNU_NM FROM TSYS_ADM_MNU WHERE MNU_SEQ = #{up_mnu_seq, jdbcType=VARCHAR}) AS UP_MNU_NM
+             </if>
+             , #{sys_cd, jdbcType=VARCHAR} AS SYS_CD         -- 시스템번호
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+             , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR}) AS SYS_NM
+             </if>
+             , #{pgm_id, jdbcType=VARCHAR} AS PGM_ID         -- 시스템번호
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pgm_id)">
+             , (SELECT PGM_NM FROM TSYS_PGM_INF WHERE PGM_ID = #{pgm_id, jdbcType=VARCHAR}) AS PGM_NM
+             </if>
+             , #{hist_stat_cd, jdbcType=VARCHAR} AS HIST_STAT_CD         -- 이력코드
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(hist_stat_cd)">
+             , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD = 'HIST_STAT_CD' AND CD = #{hist_stat_cd, jdbcType=VARCHAR}) AS HIST_STAT_NM
+             </if>
+             , #{mnu_dpth, jdbcType=VARCHAR} AS MNU_DPTH           -- 메뉴깊이
+             , #{mnu_tp_cd, jdbcType=VARCHAR} AS MNU_TP_CD          -- 메뉴타입코드
+             , #{mnu_yn, jdbcType=VARCHAR} AS MNU_YN             -- 메뉴여부
+             , #{us_yn, jdbcType=VARCHAR} AS US_YN              -- 사용여부
+             , #{srt_seq, jdbcType=VARCHAR} AS SRT_SEQ            -- 정렬순서(전시순서)
+             , #{prn_inf_scrn_yn, jdbcType=VARCHAR} AS PRN_INF_SCRN_YN      -- 개인정보 화면 여부
+             , #{vdi_scrn_yn, jdbcType=VARCHAR} AS VDI_SCRN_YN       -- VDI 화면 여부
+             , #{crtr_id, jdbcType=VARCHAR} AS CRTR_ID            -- 생성자ID
+             , SYSDATE() AS CRT_DTTM          -- 생성일시
+             , #{updr_id, jdbcType=VARCHAR} AS UPDR_ID            -- 수정자ID
+             , SYSDATE() AS UPD_DTTM           -- 수정일시
+    </select>
+
+    <select id="selectTsysAdmMnuOneInfo" resultType="TbLgapMnuH" parameterType="ParameterMap">
+    /* [TsysAdmMnu.xml][selectTsysAdmMnuOneInfo][메뉴 이력 관련][TANINE] */
+            SELECT M.MNU_SEQ            -- 메뉴번호
+             , MNU_NM
+             , M.UP_MNU_SEQ         -- 상위메뉴아이디
+             , (SELECT MNU_NM FROM TSYS_ADM_MNU WHERE MNU_SEQ = M.UP_MNU_SEQ) AS UP_MNU_NM
+             , M.SYS_CD         -- 시스템번호
+             , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = M.SYS_CD) AS SYS_NM
+             , M.PGM_ID         -- 시스템번호
+             , (SELECT PGM_NM FROM TSYS_PGM_INF WHERE PGM_ID = M.PGM_ID) AS PGM_NM
+             , #{hist_stat_cd, jdbcType=VARCHAR} AS HIST_STAT_CD         -- 이력코드
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(hist_stat_cd)">
+             , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD = 'HIST_STAT_CD' AND CD = #{hist_stat_cd, jdbcType=VARCHAR}) AS HIST_STAT_NM
+             </if>
+             , M.MNU_DPTH           -- 메뉴깊이
+             , M.MNU_TP_CD          -- 메뉴타입코드
+             , M.MNU_YN             -- 메뉴여부
+             , M.US_YN              -- 사용여부
+             , M.SRT_SEQ            -- 정렬순서(전시순서)
+             , M.PRN_INF_SCRN_YN      -- 개인정보 화면 여부
+             , M.VDI_SCRN_YN       -- VDI 화면 여부
+             , #{crtr_id, jdbcType=VARCHAR} AS CRTR_ID            -- 생성자ID
+             , SYSDATE() AS CRT_DTTM          -- 생성일시
+             , #{updr_id, jdbcType=VARCHAR} AS UPDR_ID            -- 수정자ID
+             , SYSDATE() AS UPD_DTTM           -- 수정일시
+          FROM TSYS_ADM_MNU M
+         WHERE M.MNU_SEQ = #{mnu_seq, jdbcType=VARCHAR}
+    </select>
+         <select id="selectExistTsysAdmMnu" parameterType="ParameterMap" resultType="int">
+        /*[TsysAdmMnu.xml][selectExistTsysAdmMnu][개인정보화면 조회 여부][TANINE]*/
+       SELECT count(1) as cnt
+        FROM TSYS_ADM_MNU
+       WHERE US_YN = 'Y'
+          AND MNU_SEQ = #{_mnu_seq ,jdbcType=VARCHAR}
+          AND PRN_INF_SCRN_YN = 'Y'
+
+	</select>
+</mapper>

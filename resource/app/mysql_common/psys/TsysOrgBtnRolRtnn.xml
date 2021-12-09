@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysOrgBtnRolRtnn">
+
+	<sql id="select-one-sql">
+		/*[BaseTsysOrgBtnRolRtnn.xml][select][TANINE]*/
+		SELECT ROL_ID
+             , MNU_SEQ
+             , PGM_ID
+             , PGM_BTN_CD
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ORG_BTN_ROL_RTNN
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR} 
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysOrgBtnRolRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TsysOrgBtnRolRtnn">
+        /*[BaseTsysOrgBtnRolRtnn.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ORG_BTN_ROL_RTNN
+		(
+			 ROL_ID
+		   , MNU_SEQ
+		   , PGM_ID
+		   , PGM_BTN_CD
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{rol_id, jdbcType=VARCHAR}
+		   , #{mnu_seq, jdbcType=NUMERIC}
+		   , #{pgm_id, jdbcType=VARCHAR}
+		   , #{pgm_btn_cd, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysOrgBtnRolRtnn">
+        /*[BaseTsysOrgBtnRolRtnn.xml][update][TANINE]*/
+		UPDATE TSYS_ORG_BTN_ROL_RTNN
+		   SET UPDR_ID	= #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}
+           AND PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR}
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="delete" parameterType="TsysOrgBtnRolRtnn">
+        /*[BaseTsysOrgBtnRolRtnn.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ORG_BTN_ROL_RTNN
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR} 
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+           AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+	</delete>
+	
+	
+
+    <select id="selectTsysOrgBtnRolRtnn" parameterType="TsysOrgBtnRolRtnn" resultType="TsysOrgBtnRolRtnn">
+        /*[TbLgapMnurolrtnnH.xml][insert][TANINE]*/
+        SELECT ROL_ID
+         , MNU_SEQ
+         , PGM_ID
+         , PGM_BTN_CD
+         , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD ='SYS001' AND CD = PGM_BTN_CD) AS PGM_BTN_NM
+         , CRTR_ID
+         , CRT_DTTM
+         , UPDR_ID
+         , UPD_DTTM
+      FROM TSYS_ORG_BTN_ROL_RTNN
+     WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+       AND ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+    </select>
+    
+    <delete id="deleteTsysOrgBtnRolRtnn" parameterType="TsysOrgBtnRolRtnn">
+		/* [TsysOrgBtnRolRtnnTrx.xml][deleteTsysOrgBtnRolRtnn][권한-메뉴 버튼 삭제][TANINE] */
+		DELETE
+		  FROM TSYS_ORG_BTN_ROL_RTNN
+		 WHERE ROL_ID	= #{rol_id,	 jdbcType=VARCHAR}
+		   AND MNU_SEQ	= #{mnu_seq, jdbcType=NUMERIC}
+    </delete>
+
+</mapper>

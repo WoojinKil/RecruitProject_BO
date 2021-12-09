@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrCluHst">
+
+	<sql id="select-one-sql">
+		/*[BaseTmbrCluHst.xml][select][TANINE]*/
+		SELECT CLU_HST_SEQ
+             , CLU_SEQ
+             , CLU_CLS_CD
+             , CLU_TP_CD
+             , CLU_CTS
+             , US_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TMBR_CLU_HST
+		 WHERE CLU_HST_SEQ = #{clu_hst_seq, jdbcType=NUMERIC}
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TmbrCluHst">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TmbrCluHst">
+        /*[BaseTmbrCluHstTrx.xml][insert][TANINE]*/
+        INSERT INTO TMBR_CLU_HST
+		(
+		     CLU_SEQ
+		   , CLU_CLS_CD
+		   , CLU_TP_CD
+		   , CLU_CTS
+		   , US_YN
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+		     #{clu_seq, jdbcType=NUMERIC}
+		   , #{clu_cls_cd, jdbcType=VARCHAR}
+		   , #{clu_tp_cd, jdbcType=VARCHAR}
+		   , #{clu_cts, jdbcType=LONGVARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TmbrCluHst">
+        /*[BaseTmbrCluHstTrx.xml][update][TANINE]*/
+		UPDATE TMBR_CLU_HST
+		   SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_clu_seq)">
+		     , CLU_SEQ = #{clu_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(clu_cls_cd)">
+		     , CLU_CLS_CD = #{clu_cls_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(clu_tp_cd)">
+		     , CLU_TP_CD = #{clu_tp_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(clu_cts)">
+		     , CLU_CTS = #{clu_cts, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		WHERE CLU_HST_SEQ = #{clu_hst_seq, jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delete" parameterType="TmbrCluHst">
+        /*[BaseTmbrCluHstTrx.xml][delete][TANINE]*/
+		DELETE FROM TMBR_CLU_HST
+		 WHERE CLU_HST_SEQ = #{clu_hst_seq, jdbcType=NUMERIC}
+	</delete>
+
+	<select id="getTmbrCluHstList" parameterType="parameterMap" resultType="TmbrCluHst">
+		/* [TmbrCluHst.xml][getTmbrCluHstList][약관관리기록 그리드 출력][TANINE] */
+		SELECT P.*
+		  FROM (SELECT V.*
+					<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+					 , CEIL(V.ID / #{rows, jdbcType=NUMERIC})			AS PAGE
+					 , @ROW_NUMBER										AS TOTAL_COUNT
+					 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})	AS TOTAL_PAGE
+					</if>
+				  FROM (SELECT Y.*
+							 , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+						  FROM (SELECT A.CLU_SEQ        			AS CLU_SEQ
+									 , A.CLU_HST_SEQ				AS CLU_HST_SEQ
+									 , A.CLU_TP_CD					AS CLU_TP_CD
+									 , (SELECT CD_NM
+										  FROM TCMN_CD_DTL 
+									 	 WHERE MST_CD = #{tp_mst_cd, jdbcType=VARCHAR} <!-- MBR0001 -->
+										   AND CD = A.CLU_TP_CD)	AS CLU_TP_CD_NM
+									 , A.CLU_CLS_CD					AS CLU_CLS_CD
+									 , B.CD_NM						AS CLU_CLS_CD_NM
+									 , A.CLU_CTS				AS CLU_CTS
+									 , A.US_YN						AS US_YN
+									 , A.CRTR_ID					AS CRTR_ID
+									 , A.CRT_DTTM					AS CRT_DTTM
+									 , A.UPDR_ID					AS UPDR_ID
+									 , A.UPD_DTTM       			AS UPD_DTTM 
+								  FROM TMBR_CLU_HST	A
+									 , TCMN_CD_DTL	B
+								 WHERE B.CD     = A.CLU_CLS_CD
+								   AND B.MST_CD = #{ds_mst_cd, jdbcType=VARCHAR} <!-- MBR0002 -->
+								<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_cd_nm)">
+								   AND B.CD_NM LIKE CONCAT('%', #{sch_cd_nm,jdbcType=VARCHAR}, '%')
+								</if>
+								) Y
+							  , (SELECT @ROW_NUMBER := 0) RN
+					   )V
+				ORDER BY V.UPD_DTTM DESC
+			   ) P
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+		 WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+		</if>
+	</select>
+</mapper>

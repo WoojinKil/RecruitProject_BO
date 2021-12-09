@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsWikiFlInf">
+
+	<sql id="select-one-sql">
+    SELECT WIKI_FL_SEQ
+         , WIKI_DOC_SEQ
+         , ORGN_FL_NM
+         , ATCH_FL_PTH_NM
+         , FL_SIZE
+         , ATCH_FL_TP_CD
+      FROM TBBS_WIKI_FL_INF
+     WHERE WIKI_FL_SEQ = #{wiki_fl_seq}
+    </sql>
+
+    <!-- 위키 첨부파일 정보 개별 조회 -->
+    <select id="selectMap" parameterType="ParameterMap" resultType="hashmap">
+    /*[BaseTbbsWikiFlInf.xml][selectMap][TANINE]*/
+    <include refid="select-one-sql"></include>
+    </select>
+    
+     <insert id="insert" parameterType="ParameterMap">
+    /*[BaseTbbsWikiFlInfTrx.xml][insert][TANINE]*/
+    INSERT INTO TBBS_WIKI_FL_INF (
+           WIKI_FL_SEQ
+         , WIKI_DOC_SEQ
+         , ORGN_FL_NM
+         , ATCH_FL_PTH_NM
+         , FL_SIZE
+         , ATCH_FL_TP_CD
+         , CRTR_ID
+         , CRT_DTTM
+         , UPDR_ID
+         , UPD_DTTM
+         ) VALUES (
+           #{wiki_fl_seq,jdbcType=NUMERIC}
+         , #{wiki_doc_seq         ,jdbcType=NUMERIC}
+         , #{orgn_fl_nm      ,jdbcType=VARCHAR}
+         , #{atch_fl_pth_nm ,jdbcType=VARCHAR}
+         , #{fl_size     ,jdbcType=VARCHAR}
+         , #{atch_fl_tp_cd   ,jdbcType=VARCHAR}
+         , #{crtr_id          ,jdbcType=VARCHAR}
+         , SYSDATE()
+         , #{updr_id          ,jdbcType=VARCHAR}
+         , SYSDATE()
+    )
+    </insert>
+
+    <update id="update" parameterType="ParameterMap">
+    /*[BaseTbbsWikiFlInfTrx.xml][update][TANINE]*/
+    </update>
+
+    <delete id="delete" parameterType="ParameterMap">
+    /*[BaseTbbsWikiFlInfTrx.xml][delete][TANINE]*/
+    DELETE
+      FROM TBBS_WIKI_FL_INF
+     WHERE WIKI_FL_SEQ = #{wiki_fl_seq,jdbcType=NUMERIC}
+    </delete>
+    
+    
+
+    <!-- 2020-04-07, 위키 메뉴얼 첨부파일  bbs_sno -->
+    <select id="getPbbs5002BbsAtchFleSrno" parameterType="ParameterMap" resultType="int">
+    /*[TbbsWikiFlInf.xml][getPbbs5002BbsAtchFleSrno][위키 메뉴얼 첨부파일  wiki_fl_seq][TANINE]*/
+    SELECT ifnull(MAX(wiki_fl_seq) + 1, 1) as wiki_fl_seq FROM TBBS_WIKI_FL_INF
+    </select>
+
+    <!-- 2020-04-13 위키 메뉴얼 첨부파일 목록 -->
+    <select id="getPbbs5003Bbsfiles" parameterType="ParameterMap" resultType="hashmap">
+    /*[TbbsWikiFlInf.xml][getPbbs5003BbsOne][위키 메뉴얼 첨부파일 목록][TANINE]*/
+    SELECT wiki_fl_seq
+         , wiki_doc_seq
+         , orgn_fl_nm
+         , atch_fl_pth_nm
+         , fl_size
+         , atch_fl_tp_cd
+      FROM TBBS_WIKI_FL_INF
+     WHERE wiki_doc_seq = #{wiki_doc_seq, jdbcType=NUMERIC}
+     ORDER BY upd_dttm DESC
+    </select>
+    
+     <update id="updatePbbs5002FleMapping" parameterType="ParameterMap">
+    /* [TbbsWikiFlInfTrx.xml][updatePbbs5002FleMapping][위키 게시글 파일정보 매핑][TANINE] */
+    UPDATE TBBS_WIKI_FL_INF
+       SET
+           WIKI_DOC_SEQ = #{wiki_doc_seq,jdbcType=NUMERIC}
+         , UPDR_ID = #{updr_id ,jdbcType=VARCHAR}
+         , UPD_DTTM  = SYSDATE()
+     WHERE WIKI_FL_SEQ IN<foreach collection="wiki_fl_seq_list" item="list" separator="," open="(" close=")">#{list}</foreach>
+    </update>
+
+</mapper>

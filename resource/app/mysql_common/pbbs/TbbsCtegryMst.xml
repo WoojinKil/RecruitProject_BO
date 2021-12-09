@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 마스터 코드 조회 XML -->
+<mapper namespace="TbbsCtegryMst">
+
+	<sql id="select-one-sql">
+		/*[TbbsCtegryMst.xml][select][TANINE]*/
+		SELECT CTEGRY_MST_CD
+             , CTEGRY_MST_NM
+             , CTEGRY_MST_DESC
+             , US_YN
+             , SYS_CD
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TBBS_CTEGRY_MST
+		 WHERE CTEGRY_MST_CD = #{ctegry_mst_cd, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbbsCtegryMst">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    <insert id="insert" parameterType="TbbsCtegryMst">
+        /*[TbbsCtegryMst.xml][insert][TANINE]*/
+        INSERT INTO TBBS_CTEGRY_MST
+		(
+			 CTEGRY_MST_CD      /* 카테고리마스터코드 */
+		   , CTEGRY_MST_NM      /* 카테고리마스터코드명 */
+		   , CTEGRY_MST_DESC    /* 카테고리마스터코드설명 */
+		   , US_YN             /* 사용여부 */
+		   , SYS_CD            /* 사이트번호 */
+		   , CRTR_ID            /* 등록자아이디 */
+		   , CRT_DTTM           /* 등록일시 */
+		   , UPDR_ID           /* 수정자아이디 */
+		   , UPD_DTTM          /* 수정일시 */
+		)
+		VALUES
+		(
+			 #{ctegry_mst_cd, jdbcType=VARCHAR}
+		   , #{ctegry_mst_nm, jdbcType=VARCHAR}
+		   , #{ctegry_mst_desc, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{sys_cd, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TbbsCtegryMst">
+        /*[TbbsCtegryMst.xml][update][TANINE]*/
+		UPDATE TBBS_CTEGRY_MST
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_mst_nm)">
+		       CTEGRY_MST_NM = #{ctegry_mst_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_mst_desc)">
+		     , CTEGRY_MST_DESC = #{ctegry_mst_desc, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+		     , SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dttm)">
+		     , CRT_DTTM = #{crt_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(updr_id)">
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(upd_dttm)">
+		     , UPD_DTTM = #{upd_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE CTEGRY_MST_CD = #{ctegry_mst_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TbbsCtegryMst">
+        /*[TbbsCtegryMst.xml][delete][TANINE]*/
+		DELETE FROM TBBS_CTEGRY_MST
+		 WHERE CTEGRY_MST_CD = #{ctegry_mst_cd, jdbcType=VARCHAR} 
+	</delete>
+
+    <!-- 마스터 코드 리스트 조회 -->
+    <select id="selectTbbsCtegryMstList" parameterType="ParameterMap" resultType="TbbsCtegryMst">
+        /* [TbbsCtegryMst.xml][selectTbbsCtegryMstList][마스터 코드 리스트 조회][TANINE] */
+        SELECT CTEGRY_MST_CD           /* 카테고리마스터코드 */
+             , CTEGRY_MST_NM           /* 카테고리마스터코드명  */
+             , CTEGRY_MST_DESC         /* 카테고리마스터설명  */
+             , SYS_CD                 /* 시스템명 */
+             , US_YN                  /* 사용여부 */
+             , CRTR_ID                 /* 등록자ID */
+             , CRT_DTTM                /* 등록일시  */
+             , UPDR_ID                /* 수정자ID */
+             , UPD_DTTM               /* 수정일시 */
+		  FROM TBBS_CTEGRY_MST
+    </select>
+
+    <!-- 시스템 명에 따라 마스터코드 목록 조회 -->
+    <select id="selectSitMst" parameterType="ParameterMap" resultType="TbbsCtegryMst">
+        /* [TbbsCtegryMst.xml][selectSitMst][마스터 코드 리스트 조회][TANINE] */
+        SELECT CTEGRY_MST_CD           /* 카테고리마스터코드 */
+             , CTEGRY_MST_NM           /* 카테고리마스터코드명  */
+             , CTEGRY_MST_DESC         /* 카테고리마스터설명  */
+             , SYS_CD                 /* 시스템명 */
+             , US_YN                  /* 사용여부 */
+             , CRTR_ID                 /* 등록자ID */
+             , CRT_DTTM                /* 등록일시  */
+             , UPDR_ID                /* 수정자ID */
+             , UPD_DTTM               /* 수정일시 */
+		  FROM TBBS_CTEGRY_MST
+		 WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+    </select>
+
+    <!-- 마스터 코드 그리드 리스트 조회  -->
+    <select id="selectTbbsCtegryMstGridList" parameterType="ParameterMap" resultType="TbbsCtegryMst">
+	/*[TbbsCtegryMst.xml][selectTbbsCtegryMstGridList][마스터 코드 그리드 리스트 조회][TANINE]*/
+		SELECT P.*
+		  FROM (SELECT CEIL(V.ID / #{rows, jdbcType=NUMERIC})        AS PAGE        /* 페이지 번호 */
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE  /* 전체 페이지 */
+                     , @ROW_NUMBER                                   AS TOTAL_COUNT /* 전제 ROW수 */
+                     , V.*
+				  FROM (SELECT CM.CTEGRY_MST_CD                             AS CTEGRY_MST_CD      /* 마스터코드 */
+                             , CM.CTEGRY_MST_NM                          AS CTEGRY_MST_NM   /* 마스터코드명 */
+                             , CM.CTEGRY_MST_DESC                        AS CTEGRY_MST_DESC /* 마스터코드설명 */
+                             , CM.US_YN                              AS US_YN       /* 사용여부 */
+                             , CM.UPD_DTTM                           AS UPD_DTTM    /* 수정일시 */
+                             , DATE_FORMAT(CM.UPD_DTTM, '%Y-%m-%d %H:%i:%s')  AS F_UPD_DTTM  /* 수정일자 */
+                             ,( @row_number := @row_number + 1 )     AS ID          /* MYSQL ROWNUM */
+                             , CM.SYS_CD AS SYS_CD
+                          FROM TBBS_CTEGRY_MST               CM          /* 마스터코드 */
+                             , (SELECT @ROW_NUMBER := 0) RN          /* MYSQL ROWNUM */
+                         WHERE 1 = 1
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_mst_cd)">
+						   AND CM.CTEGRY_MST_CD = #{ctegry_mst_cd, jdbcType=VARCHAR}
+                       </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_mst_nm)">
+						   AND CM.CTEGRY_MST_NM LIKE CONCAT('%',#{ctegry_mst_nm, jdbcType=VARCHAR}, '%')
+                       </if>
+                       ) V
+               ) P
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+            WHERE P.PAGE = #{page, jdbcType=NUMERIC}
+		</if>
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+            ORDER BY P.CTEGRY_MST_CD
+		</if>
+    </select>
+    
+    <!-- 엑셀다운로드  -->
+    <select id="excelTbbsCtegryMstGridList" parameterType="ParameterMap" resultType="TbbsCtegryMst">
+	/*[TbbsCtegryMst.xml][excelTbbsCtegryMstGridList][엑셀다운로드][TANINE]*/
+		SELECT P.*
+		  FROM (SELECT CEIL(V.ID / #{rows, jdbcType=NUMERIC})        AS PAGE        /* 페이지 번호 */
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE  /* 전체 페이지 */
+                     , @ROW_NUMBER                                   AS TOTAL_COUNT /* 전제 ROW수 */
+                     , V.*
+				  FROM (SELECT CM.CTEGRY_MST_CD                             AS CTEGRY_MST_CD      /* 마스터코드 */
+                             , CM.CTEGRY_MST_NM                          AS CTEGRY_MST_NM   /* 마스터코드명 */
+                             , CM.CTEGRY_MST_DESC                        AS CTEGRY_MST_DESC /* 마스터코드설명 */
+                             , CM.US_YN                              AS US_YN       /* 사용여부 */
+                             , CM.UPD_DTTM                           AS UPD_DTTM    /* 수정일시 */
+                             , DATE_FORMAT(CM.UPD_DTTM, '%Y-%m-%d %H:%i:%s')  AS F_UPD_DTTM  /* 수정일자 */
+                             ,( @row_number := @row_number + 1 )     AS ID          /* MYSQL ROWNUM */
+                             , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = CM.SYS_CD) AS SYS_NM
+                          FROM TBBS_CTEGRY_MST               CM          /* 마스터코드 */
+                             , (SELECT @ROW_NUMBER := 0) RN          /* MYSQL ROWNUM */
+                         WHERE 1 = 1
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_mst_cd)">
+						   AND CM.CTEGRY_MST_CD = #{ctegry_mst_cd, jdbcType=VARCHAR}
+                       </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ctegry_mst_nm)">
+						   AND CM.CTEGRY_MST_NM LIKE CONCAT('%',#{ctegry_mst_nm, jdbcType=VARCHAR}, '%')
+                       </if>
+                       ) V
+               ) P
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page, jdbcType=NUMERIC}
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+            ORDER BY P.CTEGRY_MST_CD
+		</if>
+		</if>
+    </select>
+
+    <!-- 마스터 코드 수 -->
+    <select id="selectTbbsCtegryMstCnt" parameterType="ParameterMap" resultType="Integer">
+		/*[TbbsCtegryMst.xml][selectTbbsCtegryMstCnt][마스터 코드 수][TANINE]*/
+		SELECT COUNT(1)
+		  FROM TBBS_CTEGRY_MST
+		 WHERE CTEGRY_MST_CD = UPPER(#{ctegry_mst_cd, jdbcType=VARCHAR})
+    </select>
+    
+        <!-- 마스터 코드 / 상세 코드 삭제 -->
+    <delete id="deleteTbbsCtegryDtl" parameterType="TbbsCtegryMst">
+		/* [TcmnCdmstTrx.xml][deleteTcmnCdDtl][마스터 코드 / 상세 코드 삭제][TANINE] */
+		DELETE
+          FROM TBBS_CTEGRY_DTL
+         WHERE CTEGRY_MST_CD = #{ctegry_mst_cd, jdbcType=VARCHAR}
+    </delete>
+
+</mapper>
+
+

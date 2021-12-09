@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMetaCmpnySvrMTrx">
+	
+	<insert id="insert" parameterType="TbMetaCmpnySvrM">
+        /*[TbMetaCmpnySvrM.xml][insert][TANINE]*/
+        INSERT INTO TB_META_CMPNY_SVR_M
+		(
+			 CMPNY_CD
+		   , SVR_HOST_CD
+		   , SVR_OPR_GBCD
+		   , SVR_NM
+		   , SVR_IP
+		   , SVR_CNTS
+		   , SVR_RMK
+		   , PORT
+		   , SVR_ACCT_ID
+		   , SVR_ACCT_PSWD
+		   , SSL_REFLCT_YN
+		   , SVR_US_YN
+		   , CRT_DTM
+		   , CRT_ID
+		   , MDF_DTM
+		   , MDF_ID
+		)
+		VALUES
+		(
+			 #{cmpny_cd, jdbcType=VARCHAR}
+		   , #{svr_host_cd, jdbcType=VARCHAR}
+		   , #{svr_opr_gbcd, jdbcType=VARCHAR}
+		   , #{svr_nm, jdbcType=VARCHAR}
+		   , #{svr_ip, jdbcType=VARCHAR}
+		   , #{svr_cnts, jdbcType=VARCHAR}
+		   , #{svr_rmk, jdbcType=VARCHAR}
+		   , #{port, jdbcType=NUMERIC}
+		   , #{svr_acct_id, jdbcType=VARCHAR}
+		   , #{svr_acct_pswd, jdbcType=VARCHAR}
+		   , #{ssl_reflct_yn, jdbcType=VARCHAR}
+		   , #{svr_us_yn, jdbcType=VARCHAR}
+		   , #{crt_dtm, jdbcType=TIMESTAMP}
+		   , #{crt_id, jdbcType=VARCHAR}
+		   , #{mdf_dtm, jdbcType=TIMESTAMP}
+		   , #{mdf_id, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="update" parameterType="tbMetaCmpnySvrM">
+        /*[TbMetaCmpnySvrM.xml][update][TANINE]*/
+		UPDATE TB_META_CMPNY_SVR_M
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(svr_opr_gbcd)">
+		       SVR_OPR_GBCD = #{svr_opr_gbcd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(svr_nm)">
+		     , SVR_NM = #{svr_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(svr_ip)">
+		     , SVR_IP = #{svr_ip, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(svr_cnts)">
+		     , SVR_CNTS = #{svr_cnts, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(svr_rmk)">
+		     , SVR_RMK = #{svr_rmk, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_port)">
+		     , PORT = #{port, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(svr_acct_id)">
+		     , SVR_ACCT_ID = #{svr_acct_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(svr_acct_pswd)">
+		     , SVR_ACCT_PSWD = #{svr_acct_pswd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ssl_reflct_yn)">
+		     , SSL_REFLCT_YN = #{ssl_reflct_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(svr_us_yn)">
+		     , SVR_US_YN = #{svr_us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dtm)">
+		     , CRT_DTM = #{crt_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_id)">
+		     , CRT_ID = #{crt_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_dtm)">
+		     , MDF_DTM = #{mdf_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_id)">
+		     , MDF_ID = #{mdf_id, jdbcType=VARCHAR}
+		       </if>
+		WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND SVR_HOST_CD = #{svr_host_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TbMetaCmpnySvrM">
+        /*[TbMetaCmpnySvrM.xml][delete][TANINE]*/
+		DELETE FROM TB_META_CMPNY_SVR_M
+		 WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND SVR_HOST_CD = #{svr_host_cd, jdbcType=VARCHAR} 
+	</delete>
+
+</mapper>

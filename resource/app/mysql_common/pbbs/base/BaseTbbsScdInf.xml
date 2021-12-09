@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsScdInf">
+	
+	<sql id="select-one-sql">
+		/*[BaseTbbsScdInf.xml][select][TANINE]*/
+		SELECT SCD_SEQ
+             , SCD_NM
+             , ST_DTTM
+             , ED_DTTM
+             , LCT
+             , CTS
+             , ADY_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TBBS_SCD_INF
+		 WHERE SCD_SEQ = #{scd_seq, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbbsScdInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

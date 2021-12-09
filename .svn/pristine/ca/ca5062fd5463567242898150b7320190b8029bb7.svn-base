@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsCmtInfTrx">
+	<!-- 댓글 정보 갱신 -->
+	<update id="updateTbbsCmtInf" parameterType="TbbsCmtInf">
+		/*[TbbsCmtInfTrx.xml][updateSysCommentsInfo][댓글 정보 갱신 ][TANINE]*/
+		UPDATE TBBS_CMT_INF
+		   SET UPD_DTTM = SYSDATE()
+		       , UPD_ID = #{user_id, JDBCTYPE=NUMERIC}
+		       , CTS    = #{cts, JDBCTYPE=VARCHAR}
+		 WHERE CMT_SEQ  = #{cmt_seq, JDBCTYPE=NUMERIC}
+		   AND MODL_SEQ = #{modl_seq, JDBCTYPE=NUMERIC}
+		   AND DOC_SEQ  = #{doc_seq, JDBCTYPE=NUMERIC}
+	</update>
+
+	<!-- 댓글 정보 삭제 -->
+	<delete id="deleteTbbsCmtInf" parameterType="TbbsCmtInf">
+		/*[TbbsCmtInfTrx.xml][deleteSysCommentsInfo][댓글 정보 삭제][TANINE]*/
+		DELETE
+		  FROM TBBS_CMT_INF
+		 WHERE CMT_SEQ  = #{cmt_seq, JDBCTYPE=NUMERIC}
+		   AND MODL_SEQ = #{modl_seq, JDBCTYPE=NUMERIC}
+		   AND DOC_SEQ  = #{doc_seq, JDBCTYPE=NUMERIC}
+	</delete>
+	
+	<!-- 하위 댓글 정보 삭제 -->
+    <delete id="deleteTbbsCmtInfAllChd" parameterType="TbbsCmtInf">
+        /*[TbbsCmtInfTrx.xml][deleteTbbsCmtInfAllChd][하위 댓글 정보 삭제][TANINE]*/
+        DELETE 
+		  FROM TBBS_CMT_INF
+		 WHERE PARENT_SRL = #{cmt_seq, jdbcType=NUMERIC}
+    </delete>
+</mapper>

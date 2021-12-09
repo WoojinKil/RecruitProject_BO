@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardInf">
+
+    <!-- 게시판 목록 조회 : TYPE 2 -->
+    <select id="selectNoticeList" parameterType="ParameterMap" resultType="map">
+        /*{TbbsDocInf.selectTbbsDocInfType2List}*/
+        SELECT allc.*
+        FROM   (
+				        SELECT   0 AS PAGE
+				       , 0 AS TOTAL_PAGE
+				       , 0 AS TOTAL_COUNT
+				       , 0 AS ROW_NUM
+				       , D.MODL_SEQ
+				       , D.DOC_SEQ
+				       , D.LGN_ID
+				       , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = D.LGN_ID) AS USR_NM
+				       , D.TITL
+				       , D.NOTC_YN
+				       , D.CTEGRY_MST_CD
+				       , D.CTEGRY_DTL_CD
+				       , IFNULL((SELECT CTEGRY_MST_NM FROM TBBS_CTEGRY_MST WHERE CTEGRY_MST_CD = D.CTEGRY_MST_CD), '없음') AS CTEGRY_MST_NM
+				       , IFNULL((SELECT CTEGRY_DTL_NM FROM TBBS_CTEGRY_DTL WHERE CTEGRY_MST_CD = D.CTEGRY_MST_CD AND CTEGRY_DTL_CD = D.CTEGRY_DTL_CD), '없음') AS CTEGRY_DTL_NM
+				       , (CASE WHEN D.DSPLY_YN IS NULL || D.DSPLY_YN = 'N' THEN '임시저장' WHEN D.DSPLY_ED_DTTM > NOW() THEN '게시중' ELSE '게시종료' END) AS DSPLY_STAT
+				       , M.MODL_NM
+				       , D.CRT_DTTM
+				       , D.UPD_DTTM
+				       , (SELECT COUNT(1) FROM TBBS_FL_INF A WHERE A.DOC_SEQ = D.DOC_SEQ AND IFNULL(A.THUMB_YN,'N') = 'N') AS FL_CNT
+				       , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = M.SYS_CD) AS SYS_NM
+				       , M.SYS_CD
+				  FROM TBBS_DOC_INF D
+				   INNER JOIN TBBS_MODL_INF M ON (D.MODL_SEQ = M.MODL_SEQ)
+				   INNER JOIN TCMN_CD_DTL C ON (M.MODL_TP = C.CD AND C.MST_CD = 'BBS0001')
+				  WHERE 1=1
+				    AND M.MODL_TP ='B_TYPE2'
+				    AND IFNULL(D.DSPLY_YN,'N') ='Y'
+				    AND DATE_FORMAT(sysdate(),'%Y%m%d')  BETWEEN DATE_FORMAT(D.DSPLY_ST_DTTM,'%Y%m%d')  AND  DATE_FORMAT(D.DSPLY_ED_DTTM,'%Y%m%d')
+				    AND D.NOTC_YN = 'Y'
+				    AND D.DEL_YN = 'N'
+				UNION ALL
+				SELECT basc.*
+				  FROM (
+				            SELECT CAST(CEILING(ttt1.ROW_NUM / #{rows, jdbcType=NUMERIC}) AS UNSIGNED) AS PAGE
+				                , CAST(CEILING(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS UNSIGNED) AS TOTAL_PAGE
+				                , @ROW_NUMBER AS TOTAL_COUNT
+				                , ttt1.*
+				            FROM(
+				                    SELECT (@ROW_NUMBER := @ROW_NUMBER + 1) AS ROW_NUM
+				                         , tt1.*
+				                      FROM (
+				                                SELECT   D.MODL_SEQ
+				                                       , D.DOC_SEQ
+				                                       , D.LGN_ID
+				                                       , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = D.LGN_ID) AS USR_NM
+				                                       , D.TITL
+				                                       , D.NOTC_YN
+				                                       , D.CTEGRY_MST_CD
+				                                       , D.CTEGRY_DTL_CD
+				                                       , IFNULL((SELECT CTEGRY_MST_NM FROM TBBS_CTEGRY_MST WHERE CTEGRY_MST_CD = D.CTEGRY_MST_CD), '없음') AS CTEGRY_MST_NM
+				                                           , IFNULL((SELECT CTEGRY_DTL_NM FROM TBBS_CTEGRY_DTL WHERE CTEGRY_MST_CD = D.CTEGRY_MST_CD AND CTEGRY_DTL_CD = D.CTEGRY_DTL_CD), '없음') AS CTEGRY_DTL_NM
+				                                       , (CASE WHEN D.DSPLY_YN IS NULL || D.DSPLY_YN = 'N' THEN '임시저장' WHEN D.DSPLY_ED_DTTM > NOW() THEN '게시중' ELSE '게시종료' END) AS DSPLY_STAT
+				                                       , M.MODL_NM
+				                                       , D.CRT_DTTM
+				                                       , D.UPD_DTTM
+				                                       , (SELECT COUNT(1) FROM TBBS_FL_INF A WHERE A.DOC_SEQ = D.DOC_SEQ AND IFNULL(A.THUMB_YN,'N') = 'N') AS FL_CNT
+				                                       , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = M.SYS_CD) AS SYS_NM
+				                                       , M.SYS_CD
+				                                  FROM TBBS_DOC_INF D
+				                                   INNER JOIN TBBS_MODL_INF M ON (D.MODL_SEQ = M.MODL_SEQ)
+				                                   INNER JOIN TCMN_CD_DTL C ON (M.MODL_TP = C.CD AND C.MST_CD = 'BBS0001')
+				                                  WHERE 1=1
+				                                    AND M.MODL_TP ='B_TYPE2'
+				                                    AND IFNULL(D.DSPLY_YN,'N') ='Y'
+				                                    AND DATE_FORMAT(sysdate(),'%Y%m%d')  BETWEEN DATE_FORMAT(D.DSPLY_ST_DTTM,'%Y%m%d')  AND  DATE_FORMAT(D.DSPLY_ED_DTTM,'%Y%m%d')
+				                                    AND D.NOTC_YN = 'N'
+				                                    AND D.DEL_YN = 'N'
+				                                 ORDER BY  UPD_DTTM DESC
+				                    ) tt1
+				                    , (SELECT @ROW_NUMBER := 0) TT2
+				            )ttt1
+						ORDER BY  UPD_DTTM DESC
+				  ) basc
+                WHERE  basc.page = #{page, jdbcType=NUMERIC}
+               ) allc
+                ORDER BY ROW_NUM
+    </select>
+
+    <!-- 게시판 상세 정보 조회 : TYPE 2 -->
+    <select id="selectNoticeView" parameterType="ParameterMap" resultType="map">
+    /*[TbbsDocInf.xml][selectNoticeView][게시판 상세 정보 조회 : TYPE 2][TANINE]*/
+        SELECT   D.MODL_SEQ
+                  , D.DOC_SEQ
+                  , D.LGN_ID
+                  , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = D.LGN_ID) AS USR_NM
+                  , D.TITL
+                  , D.CTS
+                  , D.NOTC_YN
+                  , D.CTEGRY_MST_CD
+                  , D.CTEGRY_DTL_CD
+                  , IFNULL((SELECT CTEGRY_MST_NM FROM TBBS_CTEGRY_MST WHERE CTEGRY_MST_CD = D.CTEGRY_MST_CD), '없음') AS CTEGRY_MST_NM
+                  , IFNULL((SELECT CTEGRY_DTL_NM FROM TBBS_CTEGRY_DTL WHERE CTEGRY_MST_CD = D.CTEGRY_MST_CD AND CTEGRY_DTL_CD = D.CTEGRY_DTL_CD), '없음') AS CTEGRY_DTL_NM
+                  , (CASE WHEN D.DSPLY_YN IS NULL || D.DSPLY_YN = 'N' THEN '임시저장' WHEN D.DSPLY_ED_DTTM > NOW() THEN '게시중' ELSE '게시종료' END) AS DSPLY_STAT
+                  , M.MODL_NM
+                  , D.CRT_DTTM
+                  , D.UPD_DTTM
+                  , (SELECT COUNT(1) FROM TBBS_FL_INF A WHERE A.DOC_SEQ = D.DOC_SEQ AND IFNULL(A.THUMB_YN,'N') = 'N') AS FL_CNT
+                  , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = M.SYS_CD) AS SYS_NM
+                  , M.SYS_CD
+      FROM TBBS_DOC_INF D
+       INNER JOIN TBBS_MODL_INF M ON (D.MODL_SEQ = M.MODL_SEQ)
+       INNER JOIN TCMN_CD_DTL C ON (M.MODL_TP = C.CD AND C.MST_CD = 'BBS0001')
+      WHERE 1=1
+        AND M.MODL_TP ='B_TYPE2'
+        AND IFNULL(D.DSPLY_YN,'N') ='Y'
+        AND D.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+        AND D.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+    </select>
+    <select id="selectTbbsFlInfList" parameterType="ParameterMap" resultType="map">
+		/*[TbbsFlInf.xml][selectTbbsFlInfList][파일 목록 조회][TANINE]*/
+	    SELECT FL_SEQ       AS FL_SEQ       /* 파일번호 */
+		     , ORI_FL_NM    AS ORI_FL_NM    /* 원본파일명 */
+		     , UPL_FL_NM    AS UPL_FL_NM    /* 업로드된파일명 */
+		     , FL_EXT       AS FL_EXT       /* 파일확장명 */
+		     , FL_SIZE      AS FL_SIZE      /* 파일사이즈 */
+		     , THUMB_YN     AS THUMB_YN     /* 썸네일여부 */
+		     , UPL_TRG_TP
+		  FROM TBBS_FL_INF
+		 WHERE MODL_SEQ    = #{modl_seq,    jdbcType=NUMERIC}
+		   AND DOC_SEQ = #{doc_seq,     jdbcType=NUMERIC}
+	</select>
+	
+	<select id="selectPopNotice" resultType="map">
+	/*[TbbsDocInf.xml][getPopNotice][빅데이터 포탈 공지사항 통합게시글 리스트 조회 ][TANINE]*/
+          SELECT Y.*
+            FROM (
+                 SELECT DD.MODL_SEQ
+                      , DD.DOC_SEQ
+                      , DD.LGN_ID
+                      , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = DD.LGN_ID) AS USR_NM
+                      , DD.TITL
+                      , DD.NOTC_YN
+                      , DD.OTP_STAT
+                      , DD.INQ_CNT
+                      , DD.CTEGRY_MST_CD
+                      , DD.CTEGRY_DTL_CD
+                      , DD.DSPLY_ST_DTTM
+                      , DD.DSPLY_ED_DTTM
+                      , IFNULL((SELECT CTEGRY_MST_NM FROM TBBS_CTEGRY_MST WHERE CTEGRY_MST_CD = DD.CTEGRY_MST_CD), '없음') AS CTEGRY_MST_NM
+                      , IFNULL((SELECT CTEGRY_DTL_NM FROM TBBS_CTEGRY_DTL WHERE CTEGRY_MST_CD = DD.CTEGRY_MST_CD AND CTEGRY_DTL_CD = DD.CTEGRY_DTL_CD), '없음') AS CTEGRY_DTL_NM
+                      , (CASE WHEN DD.DSPLY_YN IS NULL || DD.DSPLY_YN = 'N' THEN '임시저장' WHEN DD.DSPLY_ED_DTTM > NOW() THEN '게시중' ELSE '게시종료' END) AS DSPLY_STAT
+                      , M.MODL_TP
+                      , M.MODL_NM
+                      , M.TMP_SEQ
+                      , (SELECT COUNT(1) FROM TBBS_QA_CMT_INF QA_CMT WHERE QA_CMT.MODL_SEQ = DD.MODL_SEQ AND QA_CMT.DOC_SEQ = DD.DOC_SEQ) AS QA_CNT
+                      , C.CD_NM
+                      , C.REF_1
+                      , CTS
+                      , CONCAT(SUBSTR(DD.CRT_DTTM,1,4), '-', SUBSTR(DD.CRT_DTTM,6,2), '-', SUBSTR(DD.CRT_DTTM,9,2)) AS F_CRT_DTTM
+                      , CONCAT(SUBSTR(DD.UPD_DTTM,1,4), '-', SUBSTR(DD.UPD_DTTM,6,2), '-', SUBSTR(DD.UPD_DTTM,9,2)) AS F_UPD_DTTM
+                      , (SELECT COUNT(1) FROM TBBS_FL_INF A WHERE A.DOC_SEQ = DD.DOC_SEQ AND IFNULL(A.THUMB_YN,'N') = 'N') AS FL_CNT
+                      , F.UPL_FL_NM
+                      , M.SYS_CD
+                      , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = M.SYS_CD) AS SYS_NM
+                      , DD.UPD_DTTM
+                  FROM 
+                      (SELECT D.DOC_SEQ
+                            , D.MODL_SEQ
+                            , D.CTEGRY_DTL_CD
+                            , D.CTEGRY_MST_CD
+                            , D.CTEGRY_DTL_CD
+                            , D.NOTC_YN
+                            , D.TITL
+                            , D.CTS
+                            , D.INQ_CNT
+                            , D.CMT_CNT
+                            , D.SCP_CNT
+                            , D.DEL_YN
+                            , D.LGN_ID
+                            , D.IP_ADDR
+                            , D.SCP_PMS_YN
+                            , D.CMT_PMS_STAT
+                            , D.NICKNAME
+                            , D.OTP_STAT
+                            , D.UPL_CNT
+                            , D.URL_INF
+                            , D.DSPLY_YN
+                            , D.DSPLY_ST_DTTM
+                            , D.DSPLY_ED_DTTM
+                            , D.CSTR_CD
+                            , D.USPR_NM
+                            , D.CRTR_ID
+                            , D.CRT_DTTM
+                            , D.UPDR_ID
+                            , D.UPD_DTTM
+                       FROM
+                   (TBBS_DOC_INF D INNER JOIN
+                   (SELECT CD.CTEGRY_MST_CD,CD.CTEGRY_DTL_CD 
+                   FROM 
+                   (SELECT CTEGRY_MST_CD FROM TBBS_CTEGRY_MST WHERE US_YN = 'Y') CM INNER JOIN (SELECT CTEGRY_MST_CD,CTEGRY_DTL_CD FROM TBBS_CTEGRY_DTL WHERE US_YN = 'Y') CD 
+                   ON CM.CTEGRY_MST_CD = CD.CTEGRY_MST_CD) CTE
+                   ON D.CTEGRY_DTL_CD = CTE.CTEGRY_DTL_CD AND D.CTEGRY_MST_CD = CTE.CTEGRY_MST_CD)) DD
+                   LEFT OUTER JOIN TBBS_MODL_INF M ON (DD.MODL_SEQ = M.MODL_SEQ)
+                   INNER JOIN TCMN_CD_DTL C ON (M.MODL_TP = C.CD AND C.MST_CD = 'BBS0001')
+                   LEFT OUTER JOIN TBBS_FL_INF F ON (F.DOC_SEQ = DD.DOC_SEQ AND THUMB_YN = 'Y')
+                   WHERE 1=1
+                     AND DD.MODL_SEQ = '15073'  
+                     AND M.MODL_TP  = 'B_TYPE2' 
+                     AND M.SYS_CD  = '0'
+                     AND DD.NOTC_YN IN ('P')
+                     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt)">
+                     AND DD.CRT_DTTM BETWEEN REPLACE(#{sch_st_dt ,jdbcType=VARCHAR},'-','') AND REPLACE(#{sch_ed_dt, jdbcType=VARCHAR},'-','')
+                     </if>
+                 ORDER BY DD.NOTC_YN DESC, F_UPD_DTTM DESC, DD.DOC_SEQ DESC
+      ) Y
+      WHERE 1=1
+      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(front_notice_yn)">
+      AND SYSDATE() BETWEEN Y.DSPLY_ST_DTTM AND Y.DSPLY_ED_DTTM
+      </if>
+      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(dsply_stat)">
+      AND Y.DSPLY_STAT = #{dsply_stat, jdbcType=VARCHAR}
+      </if>
+     ORDER BY Y.NOTC_YN DESC, Y.UPD_DTTM DESC, Y.DOC_SEQ DESC
+     LIMIT 1
+	</select>
+	
+</mapper>

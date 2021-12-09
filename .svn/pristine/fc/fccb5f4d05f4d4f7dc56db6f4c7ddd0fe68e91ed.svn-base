@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrConnStts">
+	
+	<sql id="select-one-sql">
+		/*[BaseTmbrConnStts.xml][select][TANINE]*/
+		SELECT CRT_DTTM        /* 생성일시 */
+             , VISR_CNT        /* 방문자수 */
+             , SCRN_ACS_CNT    /* 화면접근수 */
+          FROM TMBR_CONN_STTS
+		 WHERE CRT_DTTM = #{crt_dttm, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TmbrConnStts">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

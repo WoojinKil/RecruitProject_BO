@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TbbsFlInf">
+
+	<sql id="select-one-sql">
+		/*[TbbsFlInf.xml][select][TANINE]*/
+		SELECT FL_SEQ         /* 파일번호 */
+             , DOC_SEQ    /* 업로드타겟번호 */
+             , UPL_TRG_TP     /* 업로드타겟유형 */
+             , MODL_SEQ       /* 게시판번호 */
+             , USR_ID         /* 사용자ID */
+             , DWLD_CNT       /* 다운로드수 */
+             , ORI_FL_NM      /* 원본파일명 */
+             , UPL_FL_NM      /* 업로드된파일명 */
+             , FL_EXT         /* 파일확장명 */
+             , FL_SIZE        /* 파일사이즈 */
+             , CMT            /* 코멘트 */
+             , VLD_YN         /* 유효성여부 */
+             , IP_ADDR        /* 작성자ID */
+             , SID            /* SID */
+             , DRC_DWLD_YN    /* 직접다운로드여부 */
+             , THUMB_YN       /* 썸네일여부 */
+             , CRTR_ID        /* 생성자ID */
+             , CRT_DTTM       /* 생성일시 */
+             , UPDR_ID        /* 수정자ID */
+             , UPD_DTTM       /* 수정일시 */
+          FROM TBBS_FL_INF
+		 WHERE FL_SEQ = #{fl_seq, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbbsFlInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<!-- 파일 등록 -->
+	<insert id="insert" parameterType="TbbsFlInf">
+        /*[BaseTbbsFlInfTrx.xml][insert][TANINE]*/
+        INSERT INTO TBBS_FL_INF
+		(
+		<!-- FL_SEQ  -->
+		     DOC_SEQ
+		   , UPL_TRG_TP
+		   , MODL_SEQ
+		   , USR_ID
+		   , DWLD_CNT
+		   , ORI_FL_NM
+		   , UPL_FL_NM
+		   , FL_EXT
+		   , FL_SIZE
+		   , CMT
+		   , VLD_YN
+		   , IP_ADDR
+		   , SID
+		   , DRC_DWLD_YN
+		   , THUMB_YN
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+		<!-- #{fl_seq, jdbcType=NUMERIC}  -->
+		     #{doc_seq, jdbcType=NUMERIC}
+		   , #{upl_trg_tp, jdbcType=VARCHAR}
+		   , #{modl_seq, jdbcType=NUMERIC}
+		   , #{usr_id, jdbcType=VARCHAR}
+		   , #{dwld_cnt, jdbcType=NUMERIC}
+		   , #{ori_fl_nm, jdbcType=VARCHAR}
+		   , #{upl_fl_nm, jdbcType=VARCHAR}
+		   , #{fl_ext, jdbcType=VARCHAR}
+		   , #{fl_size, jdbcType=NUMERIC}
+		   , #{cmt, jdbcType=VARCHAR}
+		   , #{vld_yn, jdbcType=VARCHAR}
+		   , #{ip_addr, jdbcType=VARCHAR}
+		   , #{sid, jdbcType=VARCHAR}
+		   , #{drc_dwld_yn, jdbcType=VARCHAR}
+		   , #{thumb_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<!-- 파일 수정 -->
+	<update id="update" parameterType="TbbsFlInf">
+        /*[BaseTbbsFlInfTrx.xml][update][TANINE]*/
+		UPDATE TBBS_FL_INF
+		   SET UPD_DTTM = SYSDATE()
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		   	   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_doc_seq)">
+		     , DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(upl_trg_tp)">
+		     , UPL_TRG_TP = #{upl_trg_tp, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_modl_seq)">
+		     , MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(usr_id)">
+		     , USR_ID = #{usr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_dwld_cnt)">
+		     , DWLD_CNT = #{dwld_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ori_fl_nm)">
+		     , ORI_FL_NM = #{ori_fl_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(upl_fl_nm)">
+		     , UPL_FL_NM = #{upl_fl_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(fl_ext)">
+		     , FL_EXT = #{fl_ext, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_fl_size)">
+		     , FL_SIZE = #{fl_size, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cmt)">
+		     , CMT = #{cmt, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(vld_yn)">
+		     , VLD_YN = #{vld_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ip_addr)">
+		     , IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sid)">
+		     , SID = #{sid, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(drc_dwld_yn)">
+		     , DRC_DWLD_YN = #{drc_dwld_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(thumb_yn)">
+		     , THUMB_YN = #{thumb_yn, jdbcType=VARCHAR}
+		       </if>
+		WHERE FL_SEQ = #{fl_seq, jdbcType=NUMERIC} 
+	</update>
+
+	<!-- 파일 1건 삭제 -->
+	<delete id="delete" parameterType="TbbsFlInf">
+        /*[BaseTbbsFlInfTrx.xml][delete][파일 1건 삭제][TANINE]*/
+		DELETE FROM TBBS_FL_INF
+		 WHERE FL_SEQ = #{fl_seq, jdbcType=NUMERIC} 
+	</delete>
+
+	<!-- 파일 목록 조회 -->
+	<select id="selectTbbsFlInfList" parameterType="ParameterMap" resultType="TbbsFlInf">
+		/*[TbbsFlInf.xml][selectTbbsFlInfList][파일 목록 조회][TANINE]*/
+	    SELECT FL_SEQ       AS FL_SEQ       /* 파일번호 */
+		     , ORI_FL_NM    AS ORI_FL_NM    /* 원본파일명 */
+		     , UPL_FL_NM    AS UPL_FL_NM    /* 업로드된파일명 */
+		     , FL_EXT       AS FL_EXT       /* 파일확장명 */
+		     , FL_SIZE      AS FL_SIZE      /* 파일사이즈 */
+		     , THUMB_YN     AS THUMB_YN     /* 썸네일여부 */
+		     , UPL_TRG_TP
+		  FROM TBBS_FL_INF
+		 WHERE MODL_SEQ    = #{modl_seq,    jdbcType=NUMERIC}
+		   AND DOC_SEQ = #{doc_seq,     jdbcType=NUMERIC}
+	</select>
+
+	<!-- 파일 조회 -->
+	<select id="selectTbbsFlInfInfo" parameterType="String" resultType="TbbsFlInf">
+		/*[TbbsFlInf.xml][selectTbbsFlInfList][파일 조회][TANINE]*/
+		SELECT FL_SEQ       AS FL_SEQ       /* 파일번호 */
+			 , DWLD_CNT     AS DWLD_CNT     /* 다운로드수 */
+			 , ORI_FL_NM    AS ORI_FL_NM    /* 원본파일명 */
+			 , UPL_FL_NM    AS UPL_FL_NM    /* 업로드된파일명 */
+			 , UPL_TRG_TP
+		  FROM TBBS_FL_INF
+		 WHERE FL_SEQ = #{fl_seq}
+	</select>
+	
+	 <!-- 게시글 작성 시 파일 정보 매핑 -->
+    <update id="updateTbbsFlInfList" parameterType="ParameterMap">
+		/*[TbbsFlInfTrx.xml][updateTbbsFlInfList][게시글 작성 시 파일 정보 매핑][TANINE]*/
+		UPDATE TBBS_FL_INF
+           SET MODL_SEQ    = #{modl_seq,    jdbcType=NUMERIC}
+             , DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+		 WHERE FL_SEQ IN
+		<foreach collection="fl_seq_list" item="list" separator="," open="(" close=")">
+			#{list.FL_SEQ}
+		</foreach>
+		   AND MODL_SEQ    = -1
+		   AND DOC_SEQ = -1
+    </update>
+
+     <update id="updateTbbsFlInfQaCmtList" parameterType="ParameterMap">
+		/*[TbbsFlInfTrx.xml][updateTbbsFlInfQaCmtList][게시글 답변작성 시 파일 정보 매핑][TANINE]*/
+		UPDATE TBBS_FL_INF
+           SET CMT_SEQ    = #{cmt_seq,    jdbcType=NUMERIC}
+		 WHERE FL_SEQ IN
+		<foreach collection="fl_seq_list" item="list" separator="," open="(" close=")">
+			#{list.FL_SEQ}
+		</foreach>
+		   AND MODL_SEQ    =#{modl_seq,    jdbcType=NUMERIC}
+		   AND DOC_SEQ = #{doc_seq,    jdbcType=NUMERIC}
+		    AND UPL_TRG_TP = 'RE'
+    </update>
+
+    <!-- 다운로드 횟수 증가 -->
+    <update id="updateTbbsFlInfDwldCnt" parameterType="String">
+        /*[TbbsFlInfTrx.xml][updateTbbsFlInfDwldCnt][다운로드 횟수 증가][TANINE]*/
+        UPDATE TBBS_FL_INF
+           SET DWLD_CNT = DWLD_CNT + 1
+		 WHERE FL_SEQ = #{FL_SEQ, jdbcType=NUMERIC}
+    </update>
+
+</mapper>

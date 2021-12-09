@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsDocUsrRtnnTrx">
+	
+	<insert id="insert" parameterType="TbbsDocUsrRtnn">
+        /*[BaseTbbsDocUsrRtnn.xml][insert][TANINE]*/
+        INSERT INTO TBBS_DOC_USR_RTNN
+		(
+			 USR_ID
+		   , MODL_SEQ
+		   , DOC_SEQ
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{usr_id, jdbcType=VARCHAR}
+		   , #{modl_seq, jdbcType=NUMERIC}
+		   , #{doc_seq, jdbcType=NUMERIC}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tbbsDocUsrRtnn">
+        /*[BaseTbbsDocUsrRtnn.xml][update][TANINE]*/
+		UPDATE TBBS_DOC_USR_RTNN
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC} 
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TbbsDocUsrRtnn">
+        /*[BaseTbbsDocUsrRtnn.xml][delete][TANINE]*/
+		DELETE FROM TBBS_DOC_USR_RTNN
+		 WHERE DOC_SEQ = #{doc_seq, jdbcType=NUMERIC} 
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</delete>
+
+</mapper>

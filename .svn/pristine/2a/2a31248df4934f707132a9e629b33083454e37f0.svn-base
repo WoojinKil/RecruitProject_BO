@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmMnuBtnRtnn">
+	
+	<sql id="select-one-sql">
+		/*[TsysAdmMnuBtnRtnn.xml][select][TANINE]*/
+		SELECT USR_ID
+             , MNU_SEQ
+             , PGM_ID
+             , PGM_BTN_CD
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_ADM_MNU_BTN_RTNN
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR}
+           AND PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR}
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysAdmMnuBtnRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    
+	<insert id="insert" parameterType="TsysAdmMnuBtnRtnn">
+        /*[TsysAdmMnuBtnRtnnTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_MNU_BTN_RTNN 
+		(
+			 USR_ID
+		   , MNU_SEQ
+		   , PGM_ID
+		   , PGM_BTN_CD
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{usr_id, jdbcType=VARCHAR}
+		   , #{mnu_seq, jdbcType=NUMERIC}
+		   , #{pgm_id, jdbcType=VARCHAR}
+		   , #{pgm_btn_cd, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TsysAdmMnuBtnRtnn">
+        /*[TsysAdmMnuBtnRtnnTrx.xml][update][TANINE]*/
+		UPDATE TSYS_ADM_MNU_BTN_RTNN
+		   SET UPD_DTTM = SYSDATE()
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR} 
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pgm_btn_cd)">
+		     , PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR}
+		       </if>
+		 WHERE USR_ID = #{usr_id, jdbcType=VARCHAR}
+		   AND MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+           AND PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysAdmMnuBtnRtnn">
+        /*[TsysAdmMnuBtnRtnnTrx.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_MNU_BTN_RTNN
+		 WHERE USR_ID = #{usr_id, jdbcType=VARCHAR} 
+           AND MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pgm_btn_cd)">
+           AND PGM_BTN_CD = #{pgm_btn_cd, jdbcType=VARCHAR} 
+           </if>
+	</delete>
+	
+	<select id="selectTsysAdmMnuBtnRtnnInf" parameterType="ParameterMap" resultType="TsysAdmMnuBtnRtnn">
+        /*[TsysAdmMnuBtnRtnn.xml][selectTsysAdmMnuBtnRtnnInf][권리자메뉴버튼할당 정보 조회][TANINE]*/
+        SELECT (SELECT S1.CD_NM
+			       FROM TCMN_CD_DTL S1
+				   WHERE S1.CD = T1.SYS_CD) AS SYS_NM
+			 , T1.PGM_ID
+			 , T1.PGM_NM
+			 , T1.PGM_DESC
+			 , T1.US_YN
+			 , (SELECT GROUP_CONCAT(S1.PGM_BTN_CD ORDER BY S1.PGM_BTN_CD) 
+		          FROM TSYS_PGM_BTN_INF S1
+		         WHERE S1.PGM_ID = T1.PGM_ID
+		         GROUP BY S1.PGM_ID) AS BTN_INF
+		     , (SELECT GROUP_CONCAT(S1.PGM_BTN_CD ORDER BY S1.PGM_BTN_CD)
+		          FROM TSYS_ADM_MNU_BTN_RTNN S1
+		         WHERE S1.PGM_ID = T1.PGM_ID
+		           AND S1.USR_ID = #{usr_id, jdbcType=VARCHAR}
+		           AND S1.MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC}
+		         GROUP BY S1.USR_ID, S1.MNU_SEQ, S1.PGM_ID) AS MPP_BTN_INF
+		  FROM TSYS_PGM_INF T1
+		 WHERE T1.PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+	</select>
+	<select id="selectTsysAdmMnuBtnRtnnList" parameterType="TsysAdmMnuBtnRtnn" resultType="TsysAdmMnuBtnRtnn">
+	/*[TsysAdmMnuBtnRtnn.xml][selectTsysAdmMnuBtnRtnnList][권리자메뉴버튼할당 정보 조회][TANINE]*/
+    	SELECT MBR.USR_ID
+             , MBR.MNU_SEQ
+             , MBR.PGM_ID
+             , MBR.PGM_BTN_CD
+             , (SELECT CD_NM FROM TCMN_CD_DTL WHERE MST_CD ='SYS001' AND CD = MBR.PGM_BTN_CD) AS PGM_BTN_NM
+             , MBR.CRTR_ID
+             , MBR.CRT_DTTM
+             , MBR.UPDR_ID
+             , MBR.UPD_DTTM
+          FROM TSYS_ADM_MNU_BTN_RTNN MBR
+         WHERE MBR.MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND MBR.PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+           AND MBR.USR_ID = #{usr_id, jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteTsysAdmMnuBtnRtnnInf" parameterType="TsysAdmMnuBtnRtnn">
+        /*[TsysAdmMnuBtnRtnnTrx.xml][deleteTsysAdmMnuBtnRtnnInf][권리자메뉴버튼할당 정보 삭제][TANINE]*/
+		DELETE FROM TSYS_ADM_MNU_BTN_RTNN
+		 WHERE USR_ID = #{usr_id, jdbcType=VARCHAR} 
+           AND MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+           AND PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+	</delete>
+	
+</mapper>

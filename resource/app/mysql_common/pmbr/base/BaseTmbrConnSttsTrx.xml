@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrConnSttsTrx">
+	
+	<insert id="insert" parameterType="TmbrConnStts">
+        /*[BaseTmbrConnSttsTrx.xml][insert][TANINE]*/
+        INSERT INTO TMBR_CONN_STTS
+		(
+			 CRT_DTTM        /* 생성일시 */
+		   , VISR_CNT        /* 방문자수 */
+		   , SCRN_ACS_CNT    /* 화면접근수 */
+		)
+		VALUES
+		(
+			 DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		   , #{visr_cnt, jdbcType=NUMERIC}
+		   , #{scrn_acs_cnt, jdbcType=NUMERIC}
+		)
+	</insert>
+
+	<update id="update" parameterType="TmbrConnStts">
+        /*[BaseTmbrConnSttsTrx.xml][update][TANINE]*/
+		UPDATE TMBR_CONN_STTS
+		   SET CRT_DTTM = #{crt_dttm, jdbcType=NUMERIC} 
+			   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(visr_cnt)">
+		     , VISR_CNT = #{visr_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(scrn_acs_cnt)">
+		     , SCRN_ACS_CNT = #{scrn_acs_cnt, jdbcType=NUMERIC}
+		       </if>
+		 WHERE CRT_DTTM = #{crt_dttm, jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delete" parameterType="TmbrConnStts">
+        /*[BaseTmbrConnSttsTrx.xml][delete][TANINE]*/
+		DELETE FROM TMBR_CONN_STTS
+		 WHERE CRT_DTTM = #{crt_dttm, jdbcType=NUMERIC}
+	</delete>
+
+</mapper>

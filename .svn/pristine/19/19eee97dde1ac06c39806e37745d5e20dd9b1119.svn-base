@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMetaBasicSettingM">
+	
+	<sql id="select-one-sql">
+		/*[TbMetaBasicSettingM.xml][select][TANINE]*/
+		SELECT CMPNY_CD
+             , MULTI_DOMN_REFLCT_YN
+             , KO_SCHMA_PERM_YN
+             , ALPHA_RULE_CD
+             , REGRT_EMPNO
+             , REG_DY
+             , US_YN
+             , CRT_DTM
+             , CRT_ID
+             , MDF_DTM
+             , MDF_ID
+          FROM TB_META_BASIC_SETTING_M
+		 WHERE CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbMetaBasicSettingM">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

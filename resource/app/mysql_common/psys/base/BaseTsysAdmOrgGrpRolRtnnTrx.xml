@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmOrgGrpRolRtnnTrx">
+	
+	<insert id="insert" parameterType="TsysAdmOrgGrpRolRtnn">
+        /*[TsysAdmOrgGrpRolRtnn.xml][insert][TANINE]*/
+        INSERT INTO TSYS_ADM_ORG_GRP_ROL_RTNN
+		(
+			 ORG_CD
+		   , GRP_ROL_ID
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{org_cd, jdbcType=VARCHAR}
+		   , #{grp_rol_id, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysAdmOrgGrpRolRtnn">
+        /*[TsysAdmOrgGrpRolRtnn.xml][update][TANINE]*/
+		UPDATE TSYS_ADM_ORG_GRP_ROL_RTNN
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		       CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dttm)">
+		     , CRT_DTTM = #{crt_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(updr_id)">
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(upd_dttm)">
+		     , UPD_DTTM = #{upd_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND ORG_CD = #{org_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysAdmOrgGrpRolRtnn">
+        /*[TsysAdmOrgGrpRolRtnn.xml][delete][TANINE]*/
+		DELETE FROM TSYS_ADM_ORG_GRP_ROL_RTNN
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND ORG_CD = #{org_cd, jdbcType=VARCHAR} 
+	</delete>
+
+</mapper>

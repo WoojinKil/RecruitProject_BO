@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysUsrRolRtnn">
+
+	<sql id="select-one-sql">
+		/*[BaseTsysUsrRolRtnn.xml][select][TANINE]*/
+		SELECT USR_ID
+             , ROL_ID
+             , APL_ST_DT
+             , APL_ED_DT
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_USR_ROL_RTNN
+		 WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysUsrRolRtnn">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+	
+	<insert id="insert" parameterType="TsysUsrRolRtnn">
+        /*[BaseTsysUsrRolRtnnTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_USR_ROL_RTNN
+		(
+			 USR_ID
+		   , ROL_ID
+		   , APL_ST_DT
+		   , APL_ED_DT
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{usr_id, jdbcType=VARCHAR}
+		   , #{rol_id, jdbcType=VARCHAR}
+		   , #{apl_st_dt, jdbcType=VARCHAR}
+		   , #{apl_ed_dt, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+	
+	<update id="update" parameterType="TsysUsrRolRtnn">
+        /*[BaseTsysUsrRolRtnnTrx.xml][update][TANINE]*/
+		UPDATE TSYS_USR_ROL_RTNN
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+	         , UPD_DTTM = SYSDATE()
+	           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(apl_st_dt)">
+		       APL_ST_DT = #{apl_st_dt, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(apl_ed_dt)">
+		     , APL_ED_DT = #{apl_ed_dt, jdbcType=VARCHAR}
+		       </if>
+		WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysUsrRolRtnn">
+        /*[BaseTsysUsrRolRtnnTrx.xml][delete][TANINE]*/
+		DELETE FROM TSYS_USR_ROL_RTNN
+		 WHERE ROL_ID = #{rol_id, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</delete>
+
+    <!-- 사용자 권한 할당 그리드 리스트 -->
+    <select id="selectTsysUsrRolRtnnGridList" parameterType="ParameterMap" resultType="TmbrAdmLgnInf">
+         /*[TsysUsrRolRtnn.xml][selectTsysUsrRolRtnnGridList][사용자 권한 목록 (전체)][TANINE]*/
+         SELECT P.*
+          FROM (
+                SELECT V.*
+                     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                     , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                     , @ROW_NUMBER TOTAL_COUNT
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                     </if>
+                  FROM (
+                        SELECT Y.*
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1) ID 
+                          FROM (
+                                SELECT U.USR_ID        -- 사용자ID
+                                     , U.USR_NM        -- 사용자명
+                                     , U.LGN_ID        -- 로그인ID
+                                     , U.LGN_PWD       -- 로그인비밀번호
+                                     , U.MNGR_TP_CD    -- 관리자유형코드
+                                     , U.USR_EML_ADDR   -- 사용자이메일주소
+                                     , U.ACTV_YN       -- 활성화여부
+                                     , U.PWD_FAIL_CNT  -- 비밀번호실패건수
+                                     , U.PWD_FAIL_DTTM -- 비밀번호실패일시
+                                     , U.PWD_UPD_DTTM  -- 비밀번호수정일시
+                                     , U.CRTR_ID       -- 등록자ID
+                                     , U.CRT_DTTM      -- 등록일시
+                                     , U.UPDR_ID       -- 수정자ID
+                                     , U.UPD_DTTM      -- 수정일시
+                                     , DATEDIFF(SYSDATE(), (CASE WHEN IFNULL(U.PWD_UPD_DTTM, '') = '' THEN SYSDATE() ELSE U.PWD_UPD_DTTM END))
+                                       AS PW_UPD_TR    -- 비밀번호수정기간
+                                     , URA.ROL_ID      -- 권한아이디
+                                     , URA.APL_ST_DT   -- 적용시작일시
+                                     , URA.APL_ED_DT   -- 적용종료일시
+                                  FROM TMBR_ADM_LGN_INF U
+                                 INNER JOIN TSYS_USR_ROL_RTNN URA
+                                    ON U.USR_ID = URA.USR_ID
+                                 WHERE 1 = 1
+                                 <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rol_id)">AND URA.ROL_ID = #{rol_id, jdbcType=VARCHAR}</if>                   
+                               ) Y
+                             , (SELECT @row_number := 0) RN
+                       ) V
+                 <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+                 ORDER BY V.USR_NM
+                 </if>
+               ) P
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+         </if> 
+    </select>
+    
+    <!-- 사용자 권한 신청  그리드 리스트 -->
+    <select id="selectTsysUsrRolRtnnAppGridList" parameterType="ParameterMap" resultType="TsysUsrRolRtnn">
+         /*[TsysUsrRolRtnn.xml][selectTsysUsrRolRtnnAppGridList][ 사용자 권한 신청  그리드 리스트][TANINE]*/
+         SELECT P.*
+          FROM (
+                SELECT V.*
+                     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+                     , CEIL(V.ID / #{rows, jdbcType=NUMERIC}) PAGE
+                     , @ROW_NUMBER TOTAL_COUNT
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+                     </if>
+                  FROM (
+                        SELECT Y.*
+                             , (@ROW_NUMBER := @ROW_NUMBER + 1) ID 
+                          FROM (
+                               SELECT T.*
+                                    , X.SRT_SEQ 
+                                 FROM (
+                                     SELECT #{user_id, jdbcType=VARCHAR} AS USR_ID
+                                            , (SELECT USR_NM FROM TMBR_ADM_LGN_INF WHERE USR_ID = #{user_id, jdbcType=VARCHAR} ) AS USR_NM
+                                            ,  #{org_cd, jdbcType=VARCHAR} AS ORG_CD
+                                            , (SELECT ORG_NM FROM TSYS_ORG WHERE ORG_CD = #{org_cd, jdbcType=VARCHAR} ) AS ORG_NM
+                                            , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = AA.SYS_CD) AS SYS_NM 
+                                            , (SELECT CSTR_CD FROM TSYS_ORG WHERE ORG_CD = #{org_cd, jdbcType=VARCHAR}) AS CSTR_CD
+                                            , (SELECT M.CSTR_NM FROM TSYS_ORG O , TB_BCPC_STR_M M WHERE O.CSTR_CD = M.CSTR_CD AND O.ORG_CD = #{org_cd, jdbcType=VARCHAR}) AS CSTR_NM
+                                            , AA.SYS_CD
+                                            , SUBSTRING(GROUP_CONCAT(AA.ROL_ID, ":", AA.ROL_NM,";" SEPARATOR ''),1,(CHAR_LENGTH(GROUP_CONCAT(AA.ROL_ID, ":" ,AA.ROL_NM,";" SEPARATOR '')) - 1)) AS ROL_IDS
+                                            , (SELECT SUBSTRING(GROUP_CONCAT(BB.ROL_ID, ":" , BB.ROL_NM, ";" SEPARATOR ''),1,(CHAR_LENGTH(GROUP_CONCAT(BB.ROL_ID, ":" , BB.ROL_NM,";" SEPARATOR '')) - 1)) AS ROL_ID
+                                                 FROM
+                                                     (
+                                                      SELECT AR.ROL_ID -- 개인 권한
+                                                           , AR.ROL_NM
+                                                           , AR.SYS_CD
+                                                        FROM TSYS_ADM_ROL AR
+                                                           , TSYS_ADM_ROL_RTNN ARR
+                                                           , TMBR_ADM_LGN_INF ALI
+                                                            WHERE AR.ROL_ID = ARR.ROL_ID
+                                                              AND ARR.USR_ID = ALI.USR_ID
+                                                              AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                              AND SYSDATE() BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+                                                       UNION
+                                                      SELECT AR.ROL_ID  -- 조직 그룹 권한
+                                                           , AR.ROL_NM
+                                                           , AR.SYS_CD
+                                                        FROM (
+                                                              SELECT USR_ID
+                                                                   , MAX(SYS_CL_CD) AS SYS_CL_CD
+                                                                   , MAX(ORG_CD) AS ORG_CD
+                                                                   , MAX(GRP_ROL_ID) AS GRP_ROL_ID
+                                                                   , MAX(BLSTR_CD) AS BLSTR_CD
+                                                                   , MAX(UM.BSLE_HDOFIC_CD) AS BSLE_HDOFIC_CD
+                                                                   , GROUP_CONCAT(MSM.CSTR_CD) AS MSTR_CD
+                                                                   , GROUP_CONCAT(MSM.CSTR_NM) AS MSTR_NM
+                                                                   , GROUP_CONCAT(CSM.CSTR_CD) AS CSTR_CD
+                                                                   , GROUP_CONCAT(CSM.CSTR_NM) AS CSTR_NM
+                                                                   , MAX(SHOP_GRDE_CD) AS SHOP_GRDE_CD
+                                                                   , MAX(BUY_GRDE_CD) AS BUY_GRDE_CD
+                                                                   , MAX(MSTRS_USPR_ID) AS MSTR_USPR_ID
+                                                                   , MAX(EXCV_YN) AS EXCV_YN
+                                                                   , MAX(RGN_LDR_YN) AS RGN_LDR_YN
+                                                                FROM TB_BCPC_USPRATHR_M  UM
+                                                                   , TB_BCPC_STR_M MSM
+                                                                   , TB_BCPC_STR_M CSM
+                                                               WHERE 1=1
+                                                                 AND USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                                 AND UM.MSTR_CD = MSM.CSTR_CD
+                                                                 AND UM.CSTR_CD = CSM.CSTR_CD
+                                                           GROUP BY USR_ID 
+                                                                ) T
+                                                                , TSYS_ADM_GRP_ROL_RTNN GRR
+                                                                , TSYS_ADM_ROL AR 
+                                                              WHERE T.GRP_ROL_ID = GRR.GRP_ROL_ID
+                                                                AND GRR.ROL_ID = AR.ROL_ID
+                                                         ) BB
+                                                WHERE BB.SYS_CD = AA.SYS_CD
+                                              ) AS ROL_ID                                                 -- 현재 갖고 있는 권한
+                                            , (SELECT GROUP_CONCAT(BB.ROL_NM) AS ROL_NM
+                                                 FROM
+                                                     (
+                                                      SELECT AR.ROL_ID -- 개인 권한
+                                                           , AR.ROL_NM
+                                                           , AR.SYS_CD
+                                                        FROM TSYS_ADM_ROL AR
+                                                           , TSYS_ADM_ROL_RTNN ARR
+                                                           , TMBR_ADM_LGN_INF ALI
+                                                            WHERE AR.ROL_ID = ARR.ROL_ID
+                                                              AND ARR.USR_ID = ALI.USR_ID
+                                                              AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                              AND SYSDATE() BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+                                                       UNION
+                                                      SELECT AR.ROL_ID  -- 조직 그룹 권한
+                                                           , AR.ROL_NM
+                                                           , AR.SYS_CD
+                                                        FROM (
+                                                              SELECT USR_ID
+                                                                   , MAX(SYS_CL_CD) AS SYS_CL_CD
+                                                                   , MAX(ORG_CD) AS ORG_CD
+                                                                   , MAX(GRP_ROL_ID) AS GRP_ROL_ID
+                                                                   , MAX(BLSTR_CD) AS BLSTR_CD
+                                                                   , MAX(UM.BSLE_HDOFIC_CD) AS BSLE_HDOFIC_CD
+                                                                   , GROUP_CONCAT(MSM.CSTR_CD) AS MSTR_CD
+                                                                   , GROUP_CONCAT(MSM.CSTR_NM) AS MSTR_NM
+                                                                   , GROUP_CONCAT(CSM.CSTR_CD) AS CSTR_CD
+                                                                   , GROUP_CONCAT(CSM.CSTR_NM) AS CSTR_NM
+                                                                   , MAX(SHOP_GRDE_CD) AS SHOP_GRDE_CD
+                                                                   , MAX(BUY_GRDE_CD) AS BUY_GRDE_CD
+                                                                   , MAX(MSTRS_USPR_ID) AS MSTR_USPR_ID
+                                                                   , MAX(EXCV_YN) AS EXCV_YN
+                                                                   , MAX(RGN_LDR_YN) AS RGN_LDR_YN
+                                                                FROM TB_BCPC_USPRATHR_M  UM
+                                                                   , TB_BCPC_STR_M MSM
+                                                                   , TB_BCPC_STR_M CSM
+                                                               WHERE 1=1
+                                                                 AND USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                                 AND UM.MSTR_CD = MSM.CSTR_CD
+                                                                 AND UM.CSTR_CD = CSM.CSTR_CD
+                                                           GROUP BY USR_ID 
+                                                                ) T
+                                                                , TSYS_ADM_GRP_ROL_RTNN GRR
+                                                                , TSYS_ADM_ROL AR 
+                                                              WHERE T.GRP_ROL_ID = GRR.GRP_ROL_ID
+                                                                AND GRR.ROL_ID = AR.ROL_ID
+                                                         ) BB 
+                                                WHERE BB.SYS_CD = AA.SYS_CD
+                                              ) AS ROL_NM
+                                            , (SELECT GROUP_CONCAT(
+                                                                        AR.ROL_ID
+                                                                       , ":"
+                                                                       , AR.ROL_NM
+                                                                       , ":"
+                                                                       , DATE_FORMAT(BAA.CRT_DTTM, '%Y.%m.%d')
+                                                                       , ":"
+                                                                       , BAA.APPL_RSN_CONT
+                                                                       , ";" SEPARATOR ''
+                                                      ) AS ROL_ID
+                                                 FROM TSYS_ADM_ROL AR -- 현재 신청 중인 권한
+                                                    , TB_BCPC_ATHR_APP BAA
+                                                    , TMBR_ADM_LGN_INF ALI
+                                                WHERE AR.ROL_ID = BAA.ROL_ID
+                                                  AND BAA.USR_ID = ALI.USR_ID
+                                                  AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                  AND BAA.APVL_YN = 'N'
+                                                  AND BAA.APPL_STAT_CD = '20' -- 미 승인
+                                                  AND SYSDATE() BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT
+                                                  AND AR.SYS_CD = AA.SYS_CD
+                                               ) AS APP_ROL_ID
+                                            , DATE_FORMAT( -- 마지막 승인 날짜
+                                                            (
+                                                              SELECT MAX(WW.APVL_DTTM) 
+                                                                FROM (
+                                                                      SELECT BAA.APVL_DTTM 
+                                                                           , AR.SYS_CD
+                                                                        FROM TB_BCPC_ATHR_APP BAA
+                                                                           , TSYS_ADM_ROL AR
+                                                                           , (
+                                                                               SELECT AR.ROL_ID  -- 조직 그룹 권한
+                                                                                    , AR.ROL_NM
+                                                                                    , AR.SYS_CD
+                                                                                 FROM (
+                                                                                       SELECT USR_ID
+                                                                                            , MAX(SYS_CL_CD) AS SYS_CL_CD
+                                                                                            , MAX(ORG_CD) AS ORG_CD
+                                                                                            , MAX(GRP_ROL_ID) AS GRP_ROL_ID
+                                                                                            , MAX(BLSTR_CD) AS BLSTR_CD
+                                                                                            , MAX(UM.BSLE_HDOFIC_CD) AS BSLE_HDOFIC_CD
+                                                                                            , GROUP_CONCAT(MSM.CSTR_CD) AS MSTR_CD
+                                                                                            , GROUP_CONCAT(MSM.CSTR_NM) AS MSTR_NM
+                                                                                            , GROUP_CONCAT(CSM.CSTR_CD) AS CSTR_CD
+                                                                                            , GROUP_CONCAT(CSM.CSTR_NM) AS CSTR_NM
+                                                                                            , MAX(SHOP_GRDE_CD) AS SHOP_GRDE_CD
+                                                                                            , MAX(BUY_GRDE_CD) AS BUY_GRDE_CD
+                                                                                            , MAX(MSTRS_USPR_ID) AS MSTR_USPR_ID
+                                                                                            , MAX(EXCV_YN) AS EXCV_YN
+                                                                                            , MAX(RGN_LDR_YN) AS RGN_LDR_YN
+                                                                                         FROM TB_BCPC_USPRATHR_M  UM
+                                                                                            , TB_BCPC_STR_M MSM
+                                                                                            , TB_BCPC_STR_M CSM
+                                                                                        WHERE 1=1
+                                                                                          AND USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                                                          AND UM.MSTR_CD = MSM.CSTR_CD
+                                                                                          AND UM.CSTR_CD = CSM.CSTR_CD
+                                                                                     GROUP BY USR_ID 
+                                                                                       ) T
+                                                                                    , TSYS_ADM_GRP_ROL_RTNN GRR
+                                                                                    , TSYS_ADM_ROL AR 
+                                                                                WHERE T.GRP_ROL_ID = GRR.GRP_ROL_ID
+                                                                                  AND GRR.ROL_ID = AR.ROL_ID
+                                                                                    ) OO
+                                                              WHERE BAA.ROL_ID = AR.ROL_ID
+                                                                AND BAA.APPL_STAT_CD = '10' -- 승인 
+                                                                AND BAA.USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                                AND OO.ROL_ID = AR.ROL_ID
+                                                              UNION 
+                                                             SELECT ARR.CRT_DTTM AS APVL_DTTM
+                                                                   , AR.SYS_CD
+                                                               FROM TSYS_ADM_ROL AR
+                                                                  , TSYS_ADM_ROL_RTNN ARR
+                                                                  , TMBR_ADM_LGN_INF ALI
+                                                              WHERE AR.ROL_ID = ARR.ROL_ID
+                                                                AND ARR.USR_ID = ALI.USR_ID
+                                                                AND ALI.USR_ID = #{user_id, jdbcType=VARCHAR}
+                                                                AND SYSDATE() BETWEEN AR.APL_ST_DT AND AR.APL_ED_DT  
+                                                               ) WW
+                                                               WHERE 1=1 
+                                                                 AND WW.SYS_CD  = AA.SYS_CD
+                                                      ),'%Y.%m.%d'
+                                               ) AS F_APVL_DTTM
+                                         FROM TSYS_ADM_ROL AA
+                                        WHERE SYSDATE() BETWEEN AA.APL_ST_DT AND AA.APL_ED_DT 
+                                     GROUP BY AA.SYS_CD
+                                     ) T
+                                     , TDSP_SYS_INF X
+                                WHERE X.SYS_CD = T.SYS_CD
+                                  AND X.ROL_YN = 'Y'
+                                  AND X.US_YN = 'Y'
+                               ) Y
+                             , (SELECT @row_number := 0) RN
+                       ) V
+               ) P
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+         </if>
+       ORDER BY P.SRT_SEQ
+    </select>
+    
+    
+	<!-- 사용자 권한 할당 -->
+    <insert id="insertTsysUsrRolRtnn" parameterType="TsysUsrRolRtnn">
+    	/*[BaseTsysUsrRolRtnnTrx.xml][insertTsysUsrRolRtnn][사용자 권한 할당][TANINE]*/
+   		INSERT INTO TSYS_USR_ROL_RTNN (
+			 USR_ID
+		   , ROL_ID
+		   , APL_ST_DT
+		   , APL_ED_DT
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		) 
+		SELECT #{usr_id, jdbcType=VARCHAR} as USR_ID    
+		     , ROL_ID
+		     , APL_ST_DT
+		     , APL_ED_DT
+		     , CRTR_ID
+		     , SYSDATE()
+		     , UPDR_ID
+		     , SYSDATE()
+		  FROM SYS_USER_ROLE
+		 WHERE SYSDATE() BETWEEN APL_ST_DT AND APL_ED_DT
+		   AND ROL_ID = #{rol_id, jdbcType=VARCHAR}
+    </insert>
+    
+</mapper>

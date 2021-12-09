@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrClu">
+
+	<sql id="select-one-sql">
+		/*[BaseTmbrClu.xml][select][TANINE]*/
+		SELECT CLU_SEQ
+             , CLU_CLS_CD
+             , CLU_TP_CD
+             , CLU_CTS
+             , US_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TMBR_CLU
+		 WHERE CLU_SEQ = #{clu_seq, jdbcType=NUMERIC}
+	</sql>
+
+	<select id="select" parameterType="ParameterMap" resultType="TmbrClu">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<insert id="insert" parameterType="TmbrClu">
+        /*[BaseTmbrCluTrx.xml][insert][약관 관리 저장][TANINE]*/
+        INSERT INTO TMBR_CLU
+		(
+		     CLU_CLS_CD
+		   , CLU_TP_CD
+		   , CLU_CTS
+		   , US_YN
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+		     #{clu_cls_cd, jdbcType=VARCHAR}
+		   , #{clu_tp_cd, jdbcType=VARCHAR}
+		   , #{clu_cts, jdbcType=LONGVARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TmbrClu">
+        /*[BaseTmbrCluTrx.xml][update][약관 관리 수정][TANINE]*/
+		UPDATE TMBR_CLU
+		   SET UPDR_ID  = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(clu_cls_cd)">
+		     , CLU_CLS_CD = #{clu_cls_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(clu_tp_cd)">
+		     , CLU_TP_CD = #{clu_tp_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(clu_cts)">
+		     , CLU_CTS = #{clu_cts, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		WHERE CLU_SEQ = #{clu_seq, jdbcType=NUMERIC}
+	</update>
+
+	<delete id="delete" parameterType="TmbrClu">
+        /*[BaseTmbrCluTrx.xml][delete][약관 관리 삭제][TANINE]*/
+		DELETE FROM TMBR_CLU
+		 WHERE CLU_SEQ = #{clu_seq, jdbcType=NUMERIC}
+	</delete>
+
+    <select id="getTmbrCluList" parameterType="ParameterMap" resultType="TmbrClu">
+            /* [TmbrClu.xml][getTmbrCluList][약관관리 그리드 출력][TANINE] */
+            SELECT A.CLU_SEQ                                            AS CLU_SEQ
+                 , B.CD                                                 AS CLU_CLS_CD
+                 , B.CD_NM                                              AS CLU_CLS_CD_NM
+                 , IFNULL(A.CLU_TP_CD, #{clu_tp_cd, jdbcType=VARCHAR})  AS CLU_TP_CD
+                 , (SELECT CD_NM
+                      FROM TCMN_CD_DTL
+                     WHERE MST_CD = #{tp_mst_cd, jdbcType=VARCHAR} <!-- MBR0001 -->
+                       AND CD     = IFNULL(A.CLU_TP_CD, #{clu_tp_cd, jdbcType=VARCHAR})
+                   )                                                    AS CLU_TP_CD_NM
+                 , A.CLU_CTS                                       AS CLU_CTS
+                 , IFNULL(A.US_YN, 'N')                                 AS US_YN
+                 , A.CRTR_ID                                            AS CRTR_ID
+                 , A.CRT_DTTM                                           AS CRT_DTTM
+              FROM TCMN_CD_DTL  B
+   LEFT OUTER JOIN TMBR_CLU     A
+                ON B.CD       = A.CLU_CLS_CD
+               AND A.CLU_TP_CD = #{clu_tp_cd, jdbcType=VARCHAR} <!-- MBR0001 _ 10 : BO / 20 : FO -->
+             WHERE B.MST_CD    = #{ds_mst_cd, jdbcType=VARCHAR} <!-- MBR0002 -->
+               AND B.US_YN ='Y'
+            <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_cd_nm)">
+               AND B.CD_NM like CONCAT('%', #{sch_cd_nm, jdbcType=VARCHAR}, '%')
+            </if>
+    </select>
+
+    <select id="getTmbrCluCode" parameterType="parameterMap" resultType="TmbrClu">
+    /* [TmbrClu.xml][getTmbrCluCode][가입약관 조회][TANINE] */
+          SELECT CLU_CTS
+            FROM TMBR_CLU
+           WHERE CLU_TP_CD = #{clu_tp_cd, jdbcType=VARCHAR}
+             AND US_YN     = 'Y'
+           ORDER BY CLU_CLS_CD
+    </select>
+
+
+    <select id="getTmbrCluExistYN" parameterType="parameterMap" resultType="String">
+    /* [TmbrClu.xml][getTmbrCluExistYN][약관존재여부][TANINE] */
+            SELECT CASE WHEN COUNT(1) > 0 THEN 'Y'
+                        ELSE 'N'
+                   END  EXISTYN
+             FROM TMBR_CLU
+            WHERE CLU_CLS_CD = #{clu_cls_cd, jdbcType=VARCHAR}
+              AND CLU_TP_CD = #{clu_tp_cd, jdbcType=VARCHAR}
+    </select>
+    
+    <insert id="insertTmbrCluHst" parameterType="TmbrClu">
+        /*[TmbrCluTrx.xml][insertTmbrCluHst][약관 이력 생성][TANINE]*/
+        INSERT INTO TMBR_CLU_HST
+		(
+		     CLU_SEQ
+		   , CLU_CLS_CD
+		   , CLU_TP_CD
+		   , CLU_CTS
+		   , US_YN
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+		     #{clu_seq, jdbcType=NUMERIC}
+		   , #{clu_cls_cd, jdbcType=VARCHAR}
+		   , #{clu_tp_cd, jdbcType=VARCHAR}
+		   , #{clu_cts, jdbcType=LONGVARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+</mapper>

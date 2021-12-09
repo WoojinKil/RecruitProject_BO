@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 도움말 조회 XML -->
+<mapper namespace="TsysHcoInf">
+
+	<sql id="select-one-sql">
+		/*[TsysHcoInf.xml][select][TANINE]*/
+		SELECT MNU_SEQ      /* 메뉴번호 */
+             , HCO_CTS      /* 도움말내용 */
+             , CRTR_ID      /* 생성자ID */
+             , CRT_DTTM     /* 생성일시 */
+             , UPDR_ID      /* 수정자ID */
+             , UPD_DTTM     /* 수정일시 */
+          FROM TSYS_HCO_INF
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysHcoInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    <insert id="insert" parameterType="TsysHcoInf">
+        /*[BaseTsysHcoInfTrx.xml][insert][TANINE]*/
+        INSERT INTO TSYS_HCO_INF
+		(
+			 MNU_SEQ     /* 메뉴번호 */
+		   , HCO_CTS     /* 도움말내용 */
+		   , CRTR_ID     /* 생성자ID */
+		   , CRT_DTTM    /* 생성일시 */
+		   , UPDR_ID     /* 수정자ID */
+		   , UPD_DTTM    /* 수정일시 */
+		)
+		VALUES
+		(
+			 #{mnu_seq, jdbcType=NUMERIC}
+		   , #{hco_cts, jdbcType=LONGVARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TsysHcoInf">
+        /*[BaseTsysHcoInfTrx.xml][update][TANINE]*/
+		UPDATE TSYS_HCO_INF
+		   SET UPD_DTTM = SYSDATE()
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(hco_cts)">
+		     , HCO_CTS = #{hco_cts, jdbcType=LONGVARCHAR}
+		       </if>
+		WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+	</update>
+
+	<delete id="delete" parameterType="TsysHcoInf">
+        /*[BaseTsysHcoInfTrx.xml][delete][TANINE]*/
+		DELETE FROM TSYS_HCO_INF
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+	</delete>
+    
+    
+
+	<!-- 도움말 조회 -->
+	<select id="getTsysHcoInfList" parameterType="ParameterMap" resultType="TsysHcoInf">
+		/*[TsysHcoInf.xml][getTsysHcoInfList][도움말 조회][TANINE]*/
+		SELECT P.*
+          FROM (SELECT V.*
+					<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+					 , CEIL(V.ID / #{rows, jdbcType=NUMERIC})                AS PAGE
+					 , @ROW_NUMBER                                           AS TOTAL_COUNT
+					 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})         AS TOTAL_PAGE                  
+					</if>
+				  FROM (SELECT HI.*
+				  			 , (@ROW_NUMBER := @ROW_NUMBER + 1) ID 
+				  		  FROM (SELECT HI.MNU_SEQ                            AS MNU_SEQ		/* 메뉴번호 */
+				  					 , HI.HCO_CTS                            AS HCO_CTS     /* 도움말내용 */
+				  					 , AL.LGN_ID                             AS LGN_ID      /* 로그인ID */
+				  					 , HI.CRT_DTTM                           AS CRT_DTTM    /* 생성일시 */
+				  					 , DATE_FORMAT(HI.CRT_DTTM, '%Y-%m-%d')  AS F_CRT_DTTM  /* 생성일자 */
+				  					 , AM.MNU_NM                             AS MNU_NM      /* 메뉴명 */
+				  					 , AM.FRNT_YN                            AS FRNT_YN     /* 프론트여부 */
+				  					 , AM.SYS_CD                            AS SYS_CD     /* 사이트번호 */
+				  					 , (SELECT SYS_NM FROM TDSP_SYS_INF WHERE SYS_CD = AM.SYS_CD) AS SYS_NM   /* 사이트명 */
+				  				  FROM TSYS_HCO_INF        HI
+				  			 LEFT JOIN TSYS_ADM_MNU        AM
+				  					ON HI.MNU_SEQ = AM.MNU_SEQ
+				  			 LEFT JOIN TMBR_ADM_LGN_INF    AL
+				  					ON HI.CRTR_ID = AL.USR_ID
+				  				 WHERE 1=1
+						  		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_mnu_nm)">
+						  		   AND AM.MNU_NM LIKE CONCAT('%', #{sch_mnu_nm, jdbcType=VARCHAR}, '%')   
+						  		</if>
+                                <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+                                   AND AM.SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+                                </if>
+							   ) HI
+				  			 , (SELECT @ROW_NUMBER := 0) RN
+					   ) V
+				<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">     
+				 ORDER BY V.MNU_SEQ
+				</if>           
+			   ) P
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page, jdbcType=NUMERIC}
+		</if> 
+	</select>
+	
+	<!-- 메뉴 목록 -->
+	<select id="getTsysAdmMnuList" parameterType="ParameterMap" resultType="TsysAdmMnu">
+		/*[TsysHcoInf.xml][getTsysAdmMnuList][메뉴 목록][TANINE]*/	
+		SELECT P.*
+		  FROM (SELECT V.*
+					<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+					 , CEIL(V.ID / #{rows, jdbcType=NUMERIC})        AS PAGE
+					 , @ROW_NUMBER                                   AS TOTAL_COUNT
+					 , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE
+                  </if>
+				  FROM (SELECT AM.*
+							 , (@ROW_NUMBER := @ROW_NUMBER + 1) ID 
+						  FROM (SELECT MNU_SEQ                       AS MNU_SEQ    /* 메뉴번호 */
+							         , MNU_NM                        AS MNU_NM     /* 메뉴명 */
+							         , FRNT_YN                       AS FRNT_YN    /* 프론트여부 */
+								  FROM TSYS_ADM_MNU    AM
+								 WHERE 1 = 1
+								   AND MNU_SEQ NOT IN (SELECT MNU_SEQ FROM TSYS_HCO_INF)
+								   AND PGM_ID IS NOT NULL
+                                   AND PGM_ID != ''
+								<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+								   AND SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+								</if>
+								<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_mnu_nm)">
+								   AND MNU_NM LIKE CONCAT('%', #{sch_mnu_nm, jdbcType=VARCHAR}, '%') 
+								</if>
+							   ) AM
+							 , (SELECT @ROW_NUMBER := 0) RN
+					   ) V
+				<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">     
+				 ORDER BY V.MNU_SEQ
+				</if>           
+			   ) P
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+		 WHERE P.PAGE = #{page, jdbcType=NUMERIC}
+		</if> 
+	</select>
+	
+	<select id="selectTsysHcoInfCnt" parameterType="ParameterMap" resultType="int">
+        /*[TsysHcoInf.xml][selectTsysHcoInfCnt][메뉴 목록][TANINE]*/	
+		SELECT COUNT(1)
+          FROM TSYS_HCO_INF
+		 WHERE MNU_SEQ = #{mnu_seq, jdbcType=NUMERIC} 
+    </select>
+    
+</mapper>

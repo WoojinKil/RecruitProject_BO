@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysJobInf">
+
+	<sql id="select-one-sql">
+		/*[TsysJobInf.xml][select][TANINE]*/
+		SELECT JOB_CD
+             , JOB_NM
+             , SRT_SEQ
+             , SYS_CD
+             , US_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_JOB_INF
+		 WHERE JOB_CD = #{job_cd, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysJobInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+	
+	
+	<insert id="insert" parameterType="TsysJobInf">
+        /*[TsysJobInf.xml][insert][TANINE]*/
+        INSERT INTO TSYS_JOB_INF
+		(
+               JOB_CD
+             , JOB_NM
+             , SRT_SEQ
+             , SYS_CD
+             , US_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+		)
+		VALUES
+		(
+               #{job_cd}
+             , #{job_nm
+             , #{srt_seq}
+             , #{sys_cd}
+             , #{us_yn}
+             , #{crtr_id}
+             , SYSDATE()
+             , #{updr_id}
+             , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysJobInf">
+        /*[TsysJobInf.xml][update][TANINE]*/
+		UPDATE TSYS_JOB_INF
+		   SET UPD_DTTM = SYSDATE()
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(job_nm)">
+		     , JOB_NM = #{job_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(srt_seq)">
+		     , SRT_SEQ = #{srt_seq, jdbcType=VARCHAR}
+		       </if>
+		WHERE JOB_CD = #{job_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysJobInf">
+        /*[TsysJobInf.xml][delete][TANINE]*/
+		DELETE FROM TSYS_JOB_INF
+		 WHERE JOB_CD = #{job_cd, jdbcType=VARCHAR} 
+	</delete>
+
+    <select id="selectTsysJobInfGridList" parameterType="ParameterMap" resultType="TsysJobInf">
+    /*[TsysJobInf.xml][selectTsysJobInfGridList][직무 정보 조회][TANINE]*/
+            SELECT JOB_CD
+                 , JOB_NM
+                 , SRT_SEQ
+                 , SYS_CD
+                 , US_YN
+                 , CRTR_ID
+                 , CRT_DTTM
+                 , UPDR_ID
+                 , UPD_DTTM
+              FROM TSYS_JOB_INF
+             WHERE 1=1
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(job_nm)">
+               AND JOB_NM LIKE CONCAT('%', #{job_nm ,jdbcType=VARCHAR}, '%')
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jbfn_lrcls_nm)">
+               AND JBFN_MDCLS_NM LIKE CONCAT('%', #{jbfn_lrcls_nm ,jdbcType=VARCHAR}, '%')
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jbfn_mdcls_nm)">
+               AND JBFN_MDCLS_NM LIKE CONCAT('%', #{jbfn_mdcls_nm ,jdbcType=VARCHAR}, '%')
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jbfn_smcls_nm)">
+               AND JBFN_SMCLS_NM LIKE CONCAT('%', #{jbfn_smcls_nm ,jdbcType=VARCHAR}, '%')
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jbfn_grde_nm)">
+               AND JBFN_GRDE_NM LIKE CONCAT('%', #{jbfn_grde_nm ,jdbcType=VARCHAR}, '%')
+             </if>
+             <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(jbfn_crde_cd)">
+               AND JBFN_CRDE_CD LIKE CONCAT('%', #{jbfn_crde_cd ,jdbcType=VARCHAR}, '%')
+             </if>
+          
+      ORDER BY SRT_SEQ DESC, JOB_NM ASC
+    </select>
+    
+    <select id="selectTsysJobInfNms" parameterType="ParameterMap" resultType="String">
+        SELECT GROUP_CONCAT(JOB_NM)
+          FROM TSYS_JOB_INF
+         WHERE 1=1
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(job_cd)">
+           AND JOB_CD IN
+         <foreach collection="job_cd" item="job_cd" open="(" close=")" separator=",">
+               #{job_cd}
+         </foreach>
+         </if>
+    </select>
+
+</mapper>

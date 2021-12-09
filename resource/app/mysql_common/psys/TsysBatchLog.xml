@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysBatchLog">
+
+	<sql id="select-one-sql">
+		/*[TsysBatchLog.xml][select][TANINE]*/
+		SELECT LOG_SEQ
+             , BATCH_SEQ
+             , BATCH_RSLT_CD
+             , BATCH_LOG_1_CTS
+             , BATCH_LOG_2_CTS
+             , BATCH_ST_DT
+             , BATCH_ED_DT
+             , BATCH_WRK_ST_DT
+             , BATCH_WRK_ED_DT
+             , SELECT_CNT
+             , UPDATE_CNT
+             , DELETE_CNT
+             , INSERT_CNT
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_BATCH_LOG
+		 WHERE LOG_SEQ = #{log_seq, jdbcType=NUMERIC} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysBatchLog">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TsysBatchLog">
+        /*[TsysBatchLog.xml][insert][TANINE]*/
+        INSERT INTO TSYS_BATCH_LOG
+		(
+			 LOG_SEQ
+		   , BATCH_SEQ
+		   , BATCH_RSLT_CD
+		   , BATCH_LOG_1_CTS
+		   , BATCH_LOG_2_CTS
+		   , BATCH_ST_DT
+		   , BATCH_ED_DT
+		   , BATCH_WRK_ST_DT
+		   , BATCH_WRK_ED_DT
+		   , SELECT_CNT
+		   , UPDATE_CNT
+		   , DELETE_CNT
+		   , INSERT_CNT
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{log_seq, jdbcType=NUMERIC}
+		   , #{batch_seq, jdbcType=NUMERIC}
+		   , #{batch_rslt_cd, jdbcType=VARCHAR}
+		   , #{batch_log_1_cts, jdbcType=LONGVARCHAR}
+		   , #{batch_log_2_cts, jdbcType=LONGVARCHAR}
+		   , #{batch_st_dt, jdbcType=TIMESTAMP}
+		   , #{batch_ed_dt, jdbcType=TIMESTAMP}
+		   , #{batch_wrk_st_dt, jdbcType=VARCHAR}
+		   , #{batch_wrk_ed_dt, jdbcType=VARCHAR}
+		   , #{select_cnt, jdbcType=NUMERIC}
+		   , #{update_cnt, jdbcType=NUMERIC}
+		   , #{delete_cnt, jdbcType=NUMERIC}
+		   , #{insert_cnt, jdbcType=NUMERIC}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tsysBatchLog">
+        /*[TsysBatchLog.xml][update][TANINE]*/
+		UPDATE TSYS_BATCH_LOG
+		   SET 
+		       UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		   	   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_batch_seq)">
+		     ,  BATCH_SEQ = #{batch_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(batch_rslt_cd)">
+		     , BATCH_RSLT_CD = #{batch_rslt_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(batch_log_1_cts)">
+		     , BATCH_LOG_1_CTS = #{batch_log_1_cts, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(batch_log_2_cts)">
+		     , BATCH_LOG_2_CTS = #{batch_log_2_cts, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(batch_st_dt)">
+		     , BATCH_ST_DT = #{batch_st_dt, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(batch_ed_dt)">
+		     , BATCH_ED_DT = #{batch_ed_dt, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(batch_wrk_st_dt)">
+		     , BATCH_WRK_ST_DT = #{batch_wrk_st_dt, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(batch_wrk_ed_dt)">
+		     , BATCH_WRK_ED_DT = #{batch_wrk_ed_dt, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_select_cnt)">
+		     , SELECT_CNT = #{select_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_update_cnt)">
+		     , UPDATE_CNT = #{update_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_delete_cnt)">
+		     , DELETE_CNT = #{delete_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_insert_cnt)">
+		     , INSERT_CNT = #{insert_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dttm)">
+		     , CRT_DTTM = #{crt_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE LOG_SEQ = #{log_seq, jdbcType=NUMERIC} 
+	</update>
+
+	<delete id="delete" parameterType="TsysBatchLog">
+        /*[TsysBatchLog.xml][delete][TANINE]*/
+		DELETE FROM TSYS_BATCH_LOG
+		 WHERE LOG_SEQ = #{log_seq, jdbcType=NUMERIC} 
+	</delete>
+
+	<!-- 배치 로그 그리드 리스트 조회  -->
+	<select id="selectTsysBatchGridList"  parameterType="ParameterMap" resultType="TsysBatchLog">
+	 /*[TsysBatchLog.xml][selectTsysBatchGridList][배치 로그 그리드 리스트 조회][TANINE]*/
+	     SELECT P.*
+          FROM (
+            SELECT Y.*
+                  ,CEIL(Y.ID / #{rows, jdbcType=NUMERIC})  PAGE
+                  ,@ROW_NUMBER TOTAL_COUNT
+                  ,CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})TOTAL_PAGE
+              FROM (
+                    SELECT V.*
+                         , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID
+                      FROM ( SELECT LOG_SEQ
+                                  , BATCH_SEQ
+                                  , BATCH_RSLT_CD
+                                  , BATCH_LOG_1_CTS
+                                  , BATCH_LOG_2_CTS
+                                  , BATCH_ST_DT
+                                  , BATCH_ED_DT
+                                  , BATCH_WRK_ST_DT
+                                  , BATCH_WRK_ED_DT
+                                  , SELECT_CNT
+                                  , UPDATE_CNT
+                                  , DELETE_CNT
+                                  , INSERT_CNT
+                                  , CRTR_ID
+                                  , CRT_DTTM
+                                  , UPDR_ID
+                                  , UPD_DTTM
+                                  , DATE_FORMAT(BATCH_WRK_ST_DT, '%Y-%m-%d')  AS F_BATCH_WRK_ST_DT
+                                  , DATE_FORMAT(BATCH_WRK_ED_DT, '%Y-%m-%d')  AS F_BATCH_WRK_ED_DT
+                                  , DATE_FORMAT(BATCH_ST_DT, '%Y-%m-%d %H:%i:%S')  AS F_BATCH_ST_DT
+                                  , DATE_FORMAT(BATCH_ED_DT, '%Y-%m-%d %H:%i:%S')  AS F_BATCH_ED_DT
+                               FROM TSYS_BATCH_LOG
+                              WHERE 1=1
+                              <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(batch_seq)">
+					       	 	AND BATCH_SEQ = #{batch_seq, jdbcType=NUMERIC}
+						      </if>
+                            ) V
+                           , (SELECT @ROW_NUMBER := 0) R
+                    ) Y
+               )P
+		WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+	</select>
+	
+	<!-- 배치 로그 상세 조회 -->
+	<select id="selectTsysBatchDetail" parameterType="ParameterMap" resultType="DataMap">
+		/*[TsysBatchLog.xml][selectTsysBatchDetail][배치 로그 상세 조회][TANINE]*/
+		SELECT LOG_SEQ
+             , BATCH_SEQ
+             , BATCH_RSLT_CD
+             , BATCH_LOG_1_CTS
+             , BATCH_LOG_2_CTS
+             , BATCH_WRK_ST_DT
+             , BATCH_WRK_ED_DT
+             , SELECT_CNT
+             , UPDATE_CNT
+             , DELETE_CNT
+             , INSERT_CNT
+             , CRTR_ID
+             , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d') AS CRT_DTTM
+             , UPDR_ID
+             , DATE_FORMAT(UPD_DTTM, '%Y-%m-%d') AS UPD_DTTM
+             , DATE_FORMAT(BATCH_WRK_ST_DT, '%Y-%m-%d')  AS F_BATCH_WRK_ST_DT
+             , DATE_FORMAT(BATCH_WRK_ED_DT, '%Y-%m-%d')  AS F_BATCH_WRK_ED_DT
+             , DATE_FORMAT(BATCH_ST_DT, '%Y-%m-%d %H:%i:%S')  AS F_BATCH_ST_DT
+             , DATE_FORMAT(BATCH_ED_DT, '%Y-%m-%d %H:%i:%S')  AS F_BATCH_ED_DT
+	     FROM TSYS_BATCH_LOG
+	   WHERE LOG_SEQ = #{log_seq, jdbcType=NUMERIC} 
+	</select>
+	
+</mapper>

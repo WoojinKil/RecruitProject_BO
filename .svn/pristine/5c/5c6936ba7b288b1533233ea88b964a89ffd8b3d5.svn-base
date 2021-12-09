@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrPtnrInfTrx">
+	
+	<!-- WORK 정보 등록 -->
+	<insert id="insertTmbrPtnrInf" parameterType="TmbrPtnrInf">
+        /*[TmbrPtnrInfTrx.xml][insertTmbrPtnrInf][WORK 정보 등록][TANINE]*/
+        INSERT INTO TMBR_PTNR_INF
+		(
+			 CORP_NM
+		   , PROJ_NM
+		   , ST_YM
+		   , ED_YM
+		   , PTNR_IMG_URL
+		   , PTNR_CTS
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{corp_nm, jdbcType=VARCHAR}
+		   , #{proj_nm, jdbcType=VARCHAR}
+		   , REPLACE(#{st_ym, jdbcType=VARCHAR}, '-', '')
+		   , REPLACE(#{ed_ym, jdbcType=VARCHAR}, '-', '')
+		   , #{ptnr_img_url, jdbcType=VARCHAR}
+		   , #{ptnr_cts, jdbcType=LONGVARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+    </insert>
+	
+	<!-- WORK 정보 갱신 -->
+    <update id="updateTmbrPtnrInf" parameterType="TmbrPtnrInf">
+        /*[TmbrPtnrInfTrx.xml][updateTmbrPtnrInf][WORK 정보 갱신][TANINE]*/
+        UPDATE TMBR_PTNR_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		     , CORP_NM = #{corp_nm, jdbcType=VARCHAR}
+		     , PROJ_NM = #{proj_nm, jdbcType=VARCHAR}
+		     , ST_YM = REPLACE(#{st_ym, jdbcType=VARCHAR}, '-', '')
+		     , ED_YM = REPLACE(#{ed_ym, jdbcType=VARCHAR}, '-', '')
+		     , PTNR_CTS = #{ptnr_cts, jdbcType=LONGVARCHAR}
+		     , PTNR_IMG_URL = #{ptnr_img_url, jdbcType=VARCHAR}
+		 WHERE PTNR_SEQ = #{ptnr_seq, jdbcType=NUMERIC}
+    </update>
+     
+    <!-- WORK 정보 삭제-->
+	<delete id="deleteTmbrPtnrInf" parameterType="TmbrPtnrInf">
+	    /*[TmbrPtnrInfTrx.xml][deleteTmbrPtnrInf][WORK 정보 갱신][TANINE]*/
+		DELETE FROM TMBR_PTNR_INF
+		 WHERE PTNR_SEQ = #{ptnr_seq, jdbcType=NUMERIC}
+	</delete>
+	
+</mapper>

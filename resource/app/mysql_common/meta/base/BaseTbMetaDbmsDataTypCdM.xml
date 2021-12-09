@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMetaDbmsDataTypCdM">
+	
+	<sql id="select-one-sql">
+		/*[TbMetaDbmsDataTypCdM.xml][select][TANINE]*/
+		SELECT CMPNY_CD
+             , DBMS_CD
+             , DBMS_VER_VAL
+             , DATA_TYP_CD
+             , DATA_TYP_NM
+             , DATA_MAX_WDH
+             , REGRT_EMPNO
+             , REG_DY
+             , US_YN
+             , CRT_DTM
+             , CRT_ID
+             , MDF_DTM
+             , MDF_ID
+          FROM TB_META_DBMS_DATA_TYP_CD_M
+		 WHERE DATA_TYP_CD = #{data_typ_cd, jdbcType=VARCHAR} 
+           AND DBMS_CD = #{dbms_cd, jdbcType=VARCHAR} 
+           AND CMPNY_CD = #{cmpny_cd, jdbcType=VARCHAR} 
+           AND DBMS_VER_VAL = #{dbms_ver_val, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbMetaDbmsDataTypCdM">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+</mapper>

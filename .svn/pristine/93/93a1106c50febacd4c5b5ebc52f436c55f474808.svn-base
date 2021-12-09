@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsCmtInfTrx">
+	
+	<insert id="insert" parameterType="TbbsCmtInf">
+        /*[BaseTbbsCmtInfTrx.xml][insert][TANINE]*/
+        INSERT INTO TBBS_CMT_INF
+		(
+		   , MODL_SEQ                      /* 게시판 번호 */
+		   , DOC_SEQ                       /* 문서 번호 */
+		   , PRNT_SEQ                      /* 상위 문서 번호 */
+		   , CTS                           /* 내용 */
+		   , BLMD_CNT                     
+		   , PWD                           /* 댓글 비밀 번호 */
+		   , SCRT_YN                       /* 비밀 여부 */
+		   , IP_ADDR                       /* 작성자IP */
+		   , TGT_USR_ID                    /* 타겟 사용자ID */
+		   , CRTR_ID                       /* 생성자ID */
+		   , CRT_DTTM                      /* 생성일시 */
+		   , UPDR_ID                       /* 수정자ID */
+		   , UPD_DTTM                      /* 수정일시 */ 
+		)
+		VALUES
+		(
+		   , #{modl_seq, jdbcType=NUMERIC}
+		   , #{doc_seq, jdbcType=NUMERIC}
+		   , #{prnt_seq, jdbcType=NUMERIC}
+		   , #{cts, jdbcType=LONGVARCHAR}
+		   , #{blmd_cnt, jdbcType=NUMERIC}
+		   , #{pwd, jdbcType=VARCHAR}
+		   , #{scrt_yn, jdbcType=VARCHAR}
+		   , #{ip_addr, jdbcType=VARCHAR}
+		   , #{tgt_usr_id, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TbbsCmtInf">
+        /*[BaseTbbsCmtInfTrx.xml][update][TANINE]*/
+		UPDATE TBBS_CMT_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_modl_seq)">
+		     , MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_doc_seq)">
+		     , DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_prnt_seq)">
+		     , PRNT_SEQ = #{prnt_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cts)">
+		     , CTS = #{cts, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_blmd_cnt)">
+		     , BLMD_CNT = #{blmd_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pwd)">
+		     , PWD = #{pwd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(scrt_yn)">
+		     , SCRT_YN = #{scrt_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ip_addr)">
+		     , IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(tgt_usr_id)">
+		     , TGT_USR_ID = #{tgt_usr_id, jdbcType=VARCHAR}
+		       </if>
+		WHERE CMT_SEQ = #{cmt_seq, jdbcType=NUMERIC} 
+	</update>
+
+	<delete id="delete" parameterType="TbbsCmtInf">
+        /*[BaseTbbsCmtInfTrx.xml][delete][TANINE]*/
+		DELETE FROM TBBS_CMT_INF
+		 WHERE CMT_SEQ = #{cmt_seq, jdbcType=NUMERIC} 
+	</delete>
+
+</mapper>

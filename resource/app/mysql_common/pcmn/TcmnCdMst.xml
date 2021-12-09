@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 마스터 코드 조회 XML -->
+<mapper namespace="TcmnCdMst">
+
+
+	<!-- 시스템 코드 마스터 조회 -->
+	<sql id="select-one-sql">
+		/*[BaseTcmnCdMstTrx.xml][select][시스템 코드 마스터 조회][TANINE]*/
+		SELECT MST_CD         /* 마스터코드 */
+             , MST_CD_NM      /* 마스터코드명 */
+             , MST_CD_DESC    /* 마스터코드설명 */
+             , SRT_SEQ        /* 정렬순서(전시순서) */
+             , US_YN          /* 사용여부 */
+             , CRTR_ID        /* 생성자ID */
+             , CRT_DTTM       /* 생성일시 */
+             , UPDR_ID        /* 수정자ID */
+             , UPD_DTTM       /* 수정일시 */
+          FROM TCMN_CD_MST
+		 WHERE MST_CD = #{mst_cd, jdbcType=VARCHAR} 
+	</sql>
+	
+	<!-- 시스템 코드 마스터 조회 resultType이 TcmnCdMst인 경우-->
+	<select id="select" parameterType="ParameterMap" resultType="TcmnCdMst">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    <!-- 시스템 코드 마스터 조회 resultType이 DataMap인 경우-->
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    	
+	<!-- 시스템 코드 마스터 등록 -->
+	<insert id="insert" parameterType="TcmnCdMst">
+        /*[BaseTcmnCdMstTrx.xml][insert][시스템 코드 등록][TANINE]*/
+        INSERT INTO TCMN_CD_MST
+		(
+			 MST_CD         /* 마스터코드 */
+		   , MST_CD_NM      /* 마스터코드명 */
+		   , MST_CD_DESC    /* 마스터코드설명 */
+		   , SRT_SEQ        /* 정렬순서(전시순서) */
+		   , US_YN          /* 사용여부 */
+		   , CRTR_ID        /* 생성자ID */
+		   , CRT_DTTM       /* 생성일시 */
+		   , UPDR_ID        /* 수정자ID */
+		   , UPD_DTTM       /* 수정일시 */
+		)
+		VALUES
+		(
+			 UPPER(#{mst_cd, jdbcType=VARCHAR})
+		   , #{mst_cd_nm,    jdbcType=VARCHAR}
+		   , #{mst_cd_desc,  jdbcType=LONGVARCHAR}
+		   , #{srt_seq,      jdbcType=NUMERIC}
+		   , #{us_yn,        jdbcType=VARCHAR}
+		   , #{crtr_id,      jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id,      jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<!-- 시스템 코드 마스터 수정 -->
+	<update id="update" parameterType="TcmnCdMst">
+        /*[BaseTcmnCdMstTrx.xml][update][시스템 코드 마스터 수정][TANINE]*/
+		UPDATE TCMN_CD_MST
+		   SET UPD_DTTM = SYSDATE() 
+			   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mst_cd_nm)">
+		     , MST_CD_NM = #{mst_cd_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mst_cd_desc)">
+		     , MST_CD_DESC = #{mst_cd_desc, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_srt_seq)">
+		     , SRT_SEQ = #{srt_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(updr_id)">
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       </if>
+		WHERE MST_CD = #{mst_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<!-- 시스템 코드 마스터 삭제 -->
+	<delete id="delete" parameterType="TcmnCdMst">
+        /*[BaseTcmnCdMst.xml][delete][시스템 코드 마스터 삭제][TANINE]*/
+		DELETE FROM TCMN_CD_MST
+		 WHERE MST_CD = #{mst_cd, jdbcType=VARCHAR} 
+	</delete>
+    
+
+    <!-- 마스터 코드 리스트 조회 -->
+    <select id="selectTcmnCdMstList" parameterType="ParameterMap" resultType="TcmnCdMst">
+        /* [TcmnCdMst.xml][selectTcmnCdMstList][마스터 코드 리스트 조회][TANINE] */
+        SELECT MST_CD           /* 마스터코드 */
+             , MST_CD_NM        /* 마스터코드명  */
+             , MST_CD_DESC      /* 마스터코드설명  */
+             , SRT_SEQ          /* 정렬순서(전시순서) */
+             , US_YN            /* 사용여부 */
+             , CRTR_ID          /* 생성자ID */
+             , CRT_DTTM         /* 생성일시  */
+             , UPDR_ID          /* 수정자ID */
+             , UPD_DTTM         /* 수정일시 */
+		  FROM TCMN_CD_MST 
+    </select>
+
+    <!-- 마스터 코드 그리드 리스트 조회  -->
+    <select id="selectTcmnCdMstGridList" parameterType="ParameterMap" resultType="TcmnCdMst">
+	/*[TcmnCdMst.xml][selectTcmnCdMstGridList][마스터 코드 그리드 리스트 조회][TANINE]*/
+		SELECT P.* 
+		  FROM (SELECT CEIL(V.ID / #{rows, jdbcType=NUMERIC})        AS PAGE        /* 페이지 번호 */
+                     , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS TOTAL_PAGE  /* 전체 페이지 */
+                     , @ROW_NUMBER                                   AS TOTAL_COUNT /* 전제 ROW수 */
+                     , V.*
+				  FROM (SELECT CM.MST_CD                             AS MST_CD      /* 마스터코드 */
+                             , CM.MST_CD_NM                          AS MST_CD_NM   /* 마스터코드명 */
+                             , CM.MST_CD_DESC                        AS MST_CD_DESC /* 마스터코드설명 */
+                             , CM.US_YN                              AS US_YN       /* 사용여부 */
+                             , CM.UPD_DTTM                           AS UPD_DTTM    /* 수정일시 */
+                             , DATE_FORMAT(CM.UPD_DTTM, '%Y-%m-%d %H:%i:%s')  AS F_UPD_DTTM  /* 수정일자 */
+                             ,( @row_number := @row_number + 1 )     AS ID          /* MYSQL ROWNUM */
+                          FROM TCMN_CD_MST               CM          /* 마스터코드 */
+                             , (SELECT @ROW_NUMBER := 0) RN          /* MYSQL ROWNUM */
+                         WHERE 1 = 1
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mst_cd)">
+						   AND CM.MST_CD = #{mst_cd, jdbcType=VARCHAR}
+                       </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mst_cd_nm)">
+						   AND CM.MST_CD_NM LIKE CONCAT('%',#{mst_cd_nm, jdbcType=VARCHAR}, '%')
+                       </if>
+                       ) V
+				<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">     
+                 ORDER BY V.MST_CD
+				</if> 
+               ) P
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE P.PAGE = #{page, jdbcType=NUMERIC}
+		</if>
+    </select>
+    
+    <!-- 마스터 코드 수 -->
+    <select id="selectTcmnCdMstCnt" parameterType="ParameterMap" resultType="Integer">
+		/*[TcmnCdMst.xml][selectTcmnCdMstCnt][마스터 코드 수][TANINE]*/
+		SELECT COUNT(1) 
+		  FROM TCMN_CD_MST
+		 WHERE MST_CD = UPPER(#{mst_cd, jdbcType=VARCHAR})
+    </select>  
+    
+    
+    <!-- 마스터 코드 / 상세 코드 삭제 -->
+    <delete id="deleteTcmnCdDtl" parameterType="TcmnCdMst">
+		/* [TcmnCdMstTrx.xml][deleteTcmnCdDtl][마스터 코드 / 상세 코드 삭제][TANINE] */
+		DELETE
+          FROM TCMN_CD_DTL
+         WHERE MST_CD = #{mst_cd, jdbcType=VARCHAR}
+    </delete>
+    
+</mapper>
+                            
+                            
+                            

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrPtnrInf">
+	
+	<!-- WORK 리스트 조회(Paging) -->
+	<select id="selectTmbrPtnrInfGridList" parameterType="ParameterMap" resultType="TmbrPtnrInf">
+		/*[TmbrPtnrInf.xml][selectTmbrPtnrInfGridList][WORK 리스트 조회(Paging)][TANINE]*/
+		SELECT TTT.*
+          FROM (
+		        SELECT TT.*
+				     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rows)">
+		             , CEIL(TT.ID / #{rows, jdbcType=NUMERIC}) PAGE
+		             , @ROW_NUMBER TOTAL_COUNT
+		             , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE
+		             </if>
+		          FROM (
+						SELECT T.*
+						     , (@ROW_NUMBER := @ROW_NUMBER + 1) ID 
+				          FROM (
+								SELECT PTNR_SEQ
+								     , CORP_NM
+								     , PROJ_NM
+								     , CONCAT(SUBSTRING(ST_YM, 1, 4), '-', SUBSTRING(ST_YM, 5, 2)) AS F_ST_YM
+								     , CONCAT(SUBSTRING(ED_YM, 1, 4), '-', SUBSTRING(ED_YM, 5, 2)) AS F_ED_YM
+								     , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS F_CRT_DTTM
+								     , PTNR_IMG_URL
+								     , PTNR_CTS
+								 FROM TMBR_PTNR_INF
+				               ) T
+				             , (SELECT @ROW_NUMBER := 0) RN
+		               ) TT
+		         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">
+		         ORDER BY TT.F_CRT_DTTM DESC
+		         </if>
+		       ) TTT
+         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+         WHERE TTT.PAGE = #{page ,jdbcType=NUMERIC}
+         </if>
+	</select>
+	
+	<!-- WORK 상세 조회 -->
+	<select id="selectTmbrPtnrInf" parameterType="ParameterMap" resultType="TmbrPtnrInf">
+		/*[TmbrPtnrInf.xml][selectTmbrPtnrInf][WORK 상세 조회][TANINE]*/
+		SELECT WM.PTNR_SEQ
+             , WM.CORP_NM
+        	 , WM.PROJ_NM
+        	 , CONCAT(SUBSTRING(WM.ST_YM, 1, 4), '-', SUBSTRING(WM.ST_YM, 5, 2)) AS F_ST_YM
+        	 , CONCAT(SUBSTRING(WM.ED_YM, 1, 4), '-', SUBSTRING(WM.ED_YM, 5, 2)) AS F_ED_YM
+        	 , WM.PTNR_CTS
+             , WM.PTNR_IMG_URL
+             , SF.FL_SEQ
+             , SF.ORI_FL_NM
+             , SF.UPL_FL_NM
+         FROM TMBR_PTNR_INF WM
+        	, TBBS_FL_INF SF
+        WHERE WM.PTNR_IMG_URL = SF.DOC_SEQ
+          AND WM.PTNR_SEQ = #{ptnr_seq, jdbcType=NUMERIC}
+	</select>
+	
+	<!-- WORK 목록 조회 -->
+    <select id="selectTmbrPtnrInfList" resultType="TmbrPtnrInf">
+        /*[TmbrPtnrInf.xml][selectTmbrPtnrInfList][WORK 목록 조회][TANINE]*/
+        SELECT WM.PTNR_SEQ
+             , WM.CORP_NM
+        	 , WM.PROJ_NM
+        	 , CONCAT(SUBSTRING(WM.ST_YM, 1, 4), '-', SUBSTRING(WM.ST_YM, 5, 2)) AS F_ST_YM
+        	 , CONCAT(SUBSTRING(WM.ED_YM, 1, 4), '-', SUBSTRING(WM.ED_YM, 5, 2)) AS F_ED_YM
+             , WM.PTNR_IMG_URL
+             , SF.FL_SEQ
+             , SF.ORI_FL_NM
+             , SF.UPL_FL_NM
+        	 , WM.PTNR_CTS
+         FROM TMBR_PTNR_INF WM
+        	, TBBS_FL_INF SF
+        WHERE WM.PTNR_IMG_URL = SF.DOC_SEQ
+        ORDER BY WM.ED_YM DESC, WM.ST_YM DESC
+    </select>
+    
+    <!-- WORK 년도 목록 조회 -->
+    <select id="selectTmbrPtnrInfYearList" resultType="TmbrPtnrInf">
+        /*[TmbrPtnrInf.xml][selectTmbrPtnrInfYearList][WORK 년도 목록 조회][TANINE]*/
+        SELECT SUBSTRING(ED_YM, 1, 4) AS F_END_YM
+		  FROM TMBR_PTNR_INF WM
+		 GROUP BY SUBSTRING(ED_YM, 1, 4)
+		 ORDER BY SUBSTRING(ED_YM, 1, 4) DESC
+    </select>
+    
+    <select id="selectTmbrPtnrInfMainList" resultType="TmbrPtnrInf">
+        /*[TmbrPtnrInf.xml][selectTmbrPtnrInfMainList][WORK 리스트 조회 (최근 9건)][TANINE]*/
+        SELECT WM.PTNR_SEQ
+             , WM.CORP_NM
+        	 , WM.PROJ_NM
+        	 , CONCAT(SUBSTRING(WM.ST_YM, 1, 4), '-', SUBSTRING(WM.ST_YM, 5, 2)) AS F_ST_YM
+        	 , CONCAT(SUBSTRING(WM.ED_YM, 1, 4), '-', SUBSTRING(WM.ED_YM, 5, 2)) AS F_ED_YM
+             , WM.PTNR_IMG_URL
+             , SF.FL_SEQ
+             , SF.ORI_FL_NM
+             , SF.UPL_FL_NM
+        	 , WM.PTNR_CTS
+         FROM TMBR_PTNR_INF WM
+        	, TBBS_FL_INF SF
+        WHERE WM.PTNR_IMG_URL = SF.DOC_SEQ
+        ORDER BY WM.ED_YM DESC, WM.ST_YM DESC
+		LIMIT 9
+    </select>
+	
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsQaCmtInf">
+    <!-- QA 답변 조회 -->
+    <select id="selectTbbsQaCmtInfGridList" parameterType="ParameterMap" resultType="TbbsQaCmtInf">
+        /*[TbbsQaCmtInf.xml][selectTbbsQaCmtInfGridList][TANINE]*/
+        SELECT allc.*
+          FROM (
+                SELECT basc.*
+                  FROM (
+                        SELECT  CEIL(ttt1.row_num / #{rows, jdbcType=NUMERIC}) AS page
+                              , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC}) AS total_page
+                              , @ROW_NUMBER AS total_count
+                              , ttt1.*
+                        FROM    (
+                                SELECT  (@ROW_NUMBER := @ROW_NUMBER + 1) AS row_num
+                                        , tt1.*
+                                FROM    (SELECT A.CMT_SEQ
+                                              , A.MODL_SEQ
+                                              , A.DOC_SEQ
+                                              , A.SCRT_YN
+                                              , A.CTS
+                                              , A.LGN_ID
+                                              , A.CRTR_ID
+                                              , DATE_FORMAT(A.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM
+                                              , A.UPDR_ID
+                                              , A.IP_ADDR
+                                              , DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') AS F_CRT_DTTM
+                                         FROM   TBBS_QA_CMT_INF A
+                                         WHERE  A.MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+                                         AND    A.DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+                                         ORDER BY A.CRT_DTTM DESC
+                                        ) tt1 , (SELECT @ROW_NUMBER := 0) tt2
+                                    ) ttt1
+                            ) basc
+                WHERE basc.page = #{page, jdbcType=NUMERIC}
+               ) allc
+    </select>
+
+    <!-- 게시판 답글 상세 조회 -->
+    <select id="selectTbbsQaCmtInfInfo" parameterType="ParameterMap" resultType="TbbsQaCmtInf">
+        /*[TbbsQaCmtInf.xml][selectSysQaCommentsInfo][TANINE]*/
+        SELECT CTS
+          FROM TBBS_QA_CMT_INF
+         WHERE 1=1
+           AND DOC_SEQ = #{doc_seq, jdbcType=NUMERIC}
+           AND MODL_SEQ = #{modl_seq, jdbcType=NUMERIC}
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cmt_seq)"> AND CMT_SEQ = #{cmt_seq, jdbcType=NUMERIC}</if>
+           ORDER BY CRTR_ID DESC LIMIT 1
+    </select>
+</mapper>

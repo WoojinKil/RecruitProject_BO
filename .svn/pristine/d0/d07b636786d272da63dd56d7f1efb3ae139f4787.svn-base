@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:aop="http://www.springframework.org/schema/aop"
+	        xmlns:tx="http://www.springframework.org/schema/tx"
+         xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        ">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+	<!-- com.emart.ssgpnt.**.controller   -->
+	<context:component-scan base-package="kr.co.ta9.pandora3"  />
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by  efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+    <mvc:interceptors>
+    	<mvc:interceptor>
+    		<mvc:mapping path="/**" />
+      		<mvc:exclude-mapping path="/resources/**"  />
+      		<mvc:exclude-mapping path="/**/forward.error.adm"/>
+      		<mvc:exclude-mapping path="/**/forward.login.adm"/>
+      		<mvc:exclude-mapping path="/**/pdsp/getPdsp1011ListSit"/>
+      		<mvc:exclude-mapping path="/**/psys/psys1017Vw"/>
+      		<mvc:exclude-mapping path="/**/psys/getPsys1009UsrInfVldYn"/>
+      		<mvc:exclude-mapping path="/**/psys/savePsys1017.do "/>
+      		<mvc:exclude-mapping path="/**/psys/selectVipRolList "/>
+      		<mvc:exclude-mapping path="/**/pdsp/getAccessSitList"/>
+      		<mvc:exclude-mapping path="/**/psys/selectExistTsysAdmFvrt"/>
+      		<mvc:exclude-mapping path="/**/psys/getTsysAdmMnuBreadCrumb"/>
+      		<mvc:exclude-mapping path="/**/psys/getTsysPgmInfBtnList"/>
+      		<mvc:exclude-mapping path="/**/landing/getWeather.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getMktData.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getStyData.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getDstrbzarvst.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getTbbsDocInfNoticeLandingList.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getTsttscuststy.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getDetailLngeutlprco.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getReport.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getTbbsDocInfNoticeLandingList.adm"/>
+      		<mvc:exclude-mapping path="/**/landing/getPopNotice.adm"/>
+      		<mvc:exclude-mapping path="/**/bpcm/getBpcm3003List"/>
+      		<mvc:exclude-mapping path="/**/pbbs/getPbbs1016ScdList.adm"/>
+      		<mvc:exclude-mapping path="/**/main/**"/>
+      		<mvc:exclude-mapping path="/**/api/**"/>
+      		<mvc:exclude-mapping path="/"/>
+
+
+      		<bean id="bOCheckInterceptor"    class="kr.co.ta9.pandora3.app.interceptor.BOCheckInterceptor"  />
+    	</mvc:interceptor>
+  </mvc:interceptors>
+
+    <bean id="forwardController" class="kr.co.ta9.pandora3.app.servlet.controller.ForwardController">
+    </bean>
+
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+       <property name="mappings">
+            <props>
+               <prop key="/**/forward.*.adm">forwardController</prop>
+               <prop key="/**/forward.*.do">forwardController</prop>
+            </props>
+        </property>
+    </bean>
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="multipartResolver" class="kr.co.ta9.pandora3.common.servlet.upload.SpringMultipartResolver">
+        <property name="maxUploadSize">
+            <value>-1</value><!-- setting max upload file size  50000000-->
+        </property>
+        <property name="encoding">
+            <value>UTF-8</value>
+        </property>
+    </bean>
+
+    <!-- 추가로 필요할경우 설정, 주영주임 요청으로 주석 처리 -->
+<!--
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+           <list>
+                <value>classpath:/${spring.config}</value>
+           </list>
+        </property>
+    </bean>
+-->
+
+
+    <aop:config>
+        <aop:pointcut id="txAdvisePointCut" expression="execution(* kr.co.ta9.pandora3..*Mgr.*(..)))"/>
+        <aop:advisor id="transactionAdvisor" pointcut-ref="txAdvisePointCut" advice-ref="txAdvice"/>
+    </aop:config>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="select*" read-only="true" />
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="regist*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="merge*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="check*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="execute*" propagation="REQUIRED" rollback-for="Exception"/> <!-- procedure call -->
+        </tx:attributes>
+    </tx:advice>
+
+</beans>

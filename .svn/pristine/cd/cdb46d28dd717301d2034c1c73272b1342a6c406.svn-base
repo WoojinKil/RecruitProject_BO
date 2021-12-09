@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- BO 프로그램관리 xml -->
+<mapper namespace="TsysPgmInf">
+
+	<!-- BO 사용자 조회 -->
+	<sql id="select-one-sql">
+		/*[BaseTsysPgmInf.xml][select][ BO 사용자 조회 ][TANINE]*/
+		SELECT PGM_ID                -- 프로그램아이디 
+             , PGM_NM                -- 프로그램명   
+             , SYS_CD                -- 시스템코드   
+             , PGM_DESC              -- 프로그램설명  
+             , TRG_URL               -- 프로그램url 
+             , US_YN                 -- 사용여부    
+             , CRTR_ID               -- 생성자ID     
+             , CRT_DTTM              -- 생성일시     
+             , UPDR_ID               -- 수정자ID     
+             , UPD_DTTM              -- 수정일시     
+          FROM TSYS_PGM_INF
+		 WHERE PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<!-- BO 사용자 조회 resultType이 SysAdmin인 경우 -->
+	<select id="select" parameterType="ParameterMap" resultType="TsysPgmInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+    <!-- BO 사용자 조회 resultType이 DataMap인 경우 -->
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+
+	<select id="getTsysPgmInfBtnList" parameterType="ParameterMap" resultType="TsysPgmInf">
+		/* [TsysPgmInf.xml][getTsysPgmInfBtnList][프로그램별 버튼권한조회][TANINE] */
+			SELECT  T1.PGM_BTN_CD             AS PGM_BTN_CD    -- 프로그램버튼ID
+			        , T1.PGM_ID               AS PGM_ID        -- 프로그램ID
+			        , T2.CD_NM                AS CD_NM         -- 코드명
+			        , T2.REF_1                AS REF_1         -- 참조1
+			  FROM (
+				    SELECT B.PGM_BTN_CD
+				           , B.PGM_ID
+				      FROM TSYS_ADM_MNU A
+	                  LEFT OUTER JOIN TSYS_PGM_BTN_INF B
+			            ON A.PGM_ID = B.PGM_ID 
+				     WHERE A.MNU_SEQ = #{mnu_seq ,jdbcType=NUMERIC} 
+			        ) T1
+			  INNER JOIN TCMN_CD_DTL T2
+			     ON T1.PGM_BTN_CD = T2.CD
+			  WHERE 1=1
+			    AND T2.MST_CD ='SYS001'
+			  ORDER BY T2.SRT_SEQ ASC		
+	</select>
+	<select id="getTsysPgmInfBtnUsrList" parameterType="ParameterMap" resultType="TsysPgmInf">
+		/* [TsysPgmInf.xml][getTsysPgmInfBtnList][사용자별버튼권한리스트조회][TANINE] */
+		   SELECT T1.PGM_BTN_CD             AS PGM_BTN_CD    -- 프로그램버튼ID
+			          , T1.PGM_ID               AS PGM_ID        -- 프로그램ID
+			          , T2.CD_NM                AS CD_NM         -- 코드명
+			          , T2.REF_1                AS REF_1         -- 참조1 
+		    FROM  TSYS_ADM_MNU_BTN_RTNN T1
+		              ,TCMN_CD_DTL T2
+		   WHERE  T1.PGM_BTN_CD = T2.CD
+		      AND T2.MST_CD ='SYS001'
+		      AND USR_ID =   #{user_id ,jdbcType=VARCHAR} 
+		      AND T1.MNU_SEQ =  #{mnu_seq ,jdbcType=NUMERIC} 
+		   ORDER BY T2.SRT_SEQ ASC			
+	</select>
+	<select id="getTsysPgmInfBtnOrgList" parameterType="ParameterMap" resultType="TsysPgmInf">
+		/* [TsysPgmInf.xml][getTsysPgmInfBtnList][조직별버튼권한조회][TANINE] */
+			 SELECT T1.PGM_BTN_CD             AS PGM_BTN_CD    -- 프로그램버튼ID
+			          , T1.PGM_ID               AS PGM_ID        -- 프로그램ID
+			          , T3.CD_NM                AS CD_NM         -- 코드명
+			          , T3.REF_1                AS REF_1         -- 참조1
+		   FROM TSYS_ORG_BTN_ROL_RTNN T1
+		        ,TSYS_ORG_ROL_RTNN T2
+		        ,TCMN_CD_DTL T3
+		    WHERE T1.ROL_ID = T2.ROL_ID
+		      AND T1.PGM_BTN_CD = T3.CD
+		      AND T3.MST_CD ='SYS001'
+		      AND T1.MNU_SEQ =  #{mnu_seq ,jdbcType=NUMERIC} 
+		      AND T2.ORG_CD =  #{org_cd ,jdbcType=VARCHAR} 
+		   ORDER BY T3.SRT_SEQ ASC			
+	</select>
+	
+	<!-- BO 프로그램 등록 -->
+	<insert id="insert" parameterType="TsysPgmInf">
+        /*[BaseTsysPgmInfTrx.xml][insert][BO 프로그램 등록][TANINE]*/
+        INSERT INTO TSYS_PGM_INF
+		(
+			 PGM_ID              -- 프로그램아이디  
+		   , PGM_NM              -- 프로그램명    
+		   , SYS_CD              -- 시스템코드    
+		   , PGM_DESC            -- 프로그램설명   
+		   , TRG_URL             -- 프로그램url  
+		   , US_YN               -- 사용여부     
+		   , CRTR_ID             -- 생성자ID      
+		   , CRT_DTTM            -- 생성일시      
+		   , UPDR_ID             -- 수정자ID      
+		   , UPD_DTTM            -- 수정일      
+		)
+		VALUES
+		(
+			 #{pgm_id, jdbcType=VARCHAR}
+		   , #{pgm_nm, jdbcType=VARCHAR}
+		   , #{sys_cd, jdbcType=VARCHAR}
+		   , #{pgm_desc, jdbcType=LONGVARCHAR}
+		   , #{trg_url, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+	
+	 <!-- BO 프로그램관리 수정 -->
+	<update id="update" parameterType="TsysPgmInf">
+        /*[BaseTsysPgmInfTrx.xml][update][BO 프로그램관리 수정][TANINE]*/
+		UPDATE TSYS_PGM_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE() 
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pgm_nm)">
+		     , PGM_NM = #{pgm_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+		     , SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pgm_desc)">
+		     , PGM_DESC = #{pgm_desc, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(trg_url)">
+		     , TRG_URL = #{trg_url, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		WHERE PGM_ID = #{pgm_id, jdbcType=VARCHAR} 
+	</update>
+	
+	<!-- BO 프로그램관리 삭제 -->
+	<delete id="delete" parameterType="TsysPgmInf">
+        UPDATE TSYS_PGM_INF
+		   SET US_YN = 'N'
+		 WHERE PGM_ID = #{pgm_id, jdbcType=VARCHAR}  
+	</delete>
+	
+	
+	<!-- BO 프로그램 목록-->
+	<select id="getTsysPgmInfList" parameterType="ParameterMap" resultType="TsysPgmInf">
+	/* [TsysPgmInf.xml][getTsysPgmInfList][BO 프로그램 목록 ][TANINE] */
+			SELECT P.*
+              FROM (
+                    SELECT Y.*
+                           , CEIL(Y.ID / #{rows, jdbcType=NUMERIC})  PAGE
+                           , @ROW_NUMBER TOTAL_COUNT
+                           , CEIL(@ROW_NUMBER / #{rows, jdbcType=NUMERIC})TOTAL_PAGE
+                      FROM (
+  				             SELECT	 V.*
+   				                     , (@ROW_NUMBER := @ROW_NUMBER + 1 ) ID 
+				               FROM 
+			                       (
+				                     SELECT  PI.PGM_ID                                AS PGM_ID          /* 프로그램ID */
+				 	                         , PI.PGM_NM                              AS PGM_NM          /* 프로그래명 */
+					                         , SI.SYS_CD                              AS SYS_CD          /* 시스템코드 */
+					                         , SI.SYS_NM                              AS SYS_NM          /* 시스템명  */
+					                         , PI.PGM_DESC                            AS PGM_DESC        /* 프로그램설명  */
+					                         , PI.TRG_URL                             AS TRG_URL         /* 화면URL */
+					                         , PI.US_YN                               AS US_YN           /* 사용여부  */
+					                         , PI.CRTR_ID                             AS CRTR_ID         /* 생성자ID */
+					                         , PI.CRT_DTTM                            AS CRT_DTTM        /* 생성일시 */
+					                         , PI.UPDR_ID                             AS UPDR_ID         /* 수정자ID */
+					                         , PI.UPD_DTTM                            AS UPD_DTTM        /* 수정일시 */
+					                         , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '10'	)         AS BTN_SCH         /* 조회버튼        */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '60'	)         AS  BTN_ADDROW     /*  행추가버튼       */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '70'	)         AS BTN_APV         /* 승인버튼        */      
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '20'	)         AS BTN_SV          /* 저장버튼        */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '30'	)         AS BTN_XLS         /* 엑셀다운로드버튼        */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '40'	)         AS BTN_DELROW       /* 행삭제버튼         */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '50'	)         AS BTN_PRN         /* 인쇄버튼        */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '80'	)         AS BTN_HCO         /* 도움말버튼        */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '100'	)         AS BTN_ADD      	/* 추가버튼        */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '110'	)         AS BTN_DEL      	 /*   삭제버튼     */
+                                             , ( SELECT COUNT(1)
+                                                  FROM TSYS_PGM_BTN_INF   PB                             /* 프로그램 공통버튼권한 정보 */
+                                                 WHERE PB.PGM_ID = PI.PGM_ID
+                                                   AND PB.US_YN = 'Y'
+                                                   AND PGM_BTN_CD = '120'	)         AS BTN_NEW         /* 신규버튼        */
+                                             , (select GROUP_CONCAT(PB.PGM_BTN_CD ) 
+					                              FROM TSYS_PGM_BTN_INF PB
+					                             WHERE PI.PGM_ID = PB.PGM_ID
+					                           )                                      AS BTN_INF
+				                      FROM TSYS_PGM_INF PI                                               /* 프로그램정보      */
+				                         , TDSP_SYS_INF SI
+			                         WHERE 1=1
+			                           AND PI.SYS_CD = SI.SYS_CD
+				                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(srch_sys_cd)">AND PI.SYS_CD = #{srch_sys_cd, jdbcType=VARCHAR}</if>
+				                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(srch_pgm_nm)">AND PI.PGM_NM LIKE CONCAT('%', #{srch_pgm_nm, jdbcType=VARCHAR}, '%') </if>
+			                        ) V 
+			                          ,(SELECT @ROW_NUMBER := 0) R
+                              <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">     
+                              ORDER BY V.PGM_ID
+                              </if>  
+		                 ) Y   
+		           ) P 
+		      WHERE P.PAGE = #{page ,jdbcType=NUMERIC}
+	</select>
+	
+    <!-- 프로그램ID 중복 체크 -->
+    <select id="selectTsysPgmInfCnt" parameterType="TsysPgmInf" resultType="Integer">
+    	/*[TsysPgmInf.xml][selectTsysPgmInfCnt][사용자 권한수][TANINE]*/
+        SELECT COUNT(1) 
+          FROM TSYS_PGM_INF
+         WHERE PGM_ID = #{pgm_id, jdbcType=VARCHAR}
+    </select>
+    
+</mapper>

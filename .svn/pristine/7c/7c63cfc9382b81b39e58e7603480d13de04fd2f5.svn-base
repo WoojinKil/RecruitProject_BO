@@ -1,0 +1,140 @@
+node {
+
+    def MVN_HOME
+    def DEV_CANONICAL_ID
+    def IAM_CANONICAL_ID
+    def PRD_CANONICAL_ID
+    def CICD_CANONICAL_ID
+    def SLTN_CANONICAL_ID
+
+    stage('init') {
+        echo "Current workspace : ${WORKSPACE}"
+
+        MVN_HOME = tool 'maven3'
+        
+        DEV_CANONICAL_ID = 'd9b82cdf7af68a5301edb3e5ffb23241df010a16bf8be722c60428c30751176f'
+        IAM_CANONICAL_ID = 'ab7c385ba4b4ce57ee6025b99756e4cbf29593b605d0678ea56ae53a28c86b44'
+        PRD_CANONICAL_ID = '0e1ad18ae936444efc088f8e1f611698e57c53390cd357de5849a8eeca48bd70'
+        CICD_CANONICAL_ID = '24ee5f913d19fe28b3c29df86032bd31a63b55e60abec9967f854b5999a9fc45'
+        SLTN_CANONICAL_ID = 'afa73486a53d66feb57c1486afb54db5904305babd56de865af1b1976a5f2836'
+    }
+
+    stage('project-clone'){
+        git (
+    	    branch: "${buildTag}",
+		    credentialsId: "${codeCommitCredentialsId}",
+		    url: "https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/ldps-bdp"
+	    )
+    }
+
+    stage('project-build'){
+        dir("${WORKSPACE}/pandora3"){
+            sh "'${MVN_HOME}/bin/mvn' clean install -DskipTests=true"
+        }
+    }
+
+    stage('deploy'){
+      dir("${WORKSPACE}/pandora3"){
+        fileOperations([
+          folderDeleteOperation('./target/deploy'),
+          folderCreateOperation('./target/deploy'),
+          fileCopyOperation(excludes: '', flattenFiles: true, includes: "**/pandora3-0.0.1-SNAPSHOT.war", targetLocation: './target/deploy'),
+          fileCopyOperation(excludes: '', flattenFiles: false, includes: '**/appspec.yml', targetLocation: './target/deploy'),
+          folderCopyOperation(destinationFolderPath: './target/deploy/scripts', sourceFolderPath: './scripts')
+        ])
+      }
+      
+      dir("${WORKSPACE}/pandora3/target/deploy"){
+          withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: "${awsCredentialsId}", secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+              step([$class: 'AWSCodeDeployPublisher',
+                    applicationName: 'ldps-dev-bdp',
+                    awsAccessKey: "${AWS_ACCESS_KEY_ID}",
+                    awsSecretKey: "${AWS_SECRET_ACCESS_KEY}",
+                    credentials: 'awsAccessKey',
+                    deploymentConfig: 'CodeDeployDefault.OneAtATime',
+                    deploymentGroupAppspec: false,
+                    deploymentGroupName: 'ldps-dev-bdp-group',
+                    excludes: '',
+                    iamRoleArn: '',
+                    includes: '**',
+                    proxyHost: '',
+                    proxyPort: 0,
+                    region: 'ap-northeast-2',
+                    s3bucket: 'ldps-cicd.mgmt',
+                    s3prefix: "artifact/dev/ldps-bdp",
+                    subdirectory: '',
+                    versionFileName: '',
+                    waitForCompletion: true,
+                    pollingTimeoutSec: 1800
+              ])
+          }
+      }
+  }
+  
+  stage('s3-upload'){
+    dir("${WORKSPACE}/pandora3"){
+      withAWS(region:'ap-northeast-2', credentials:"${awsCredentialsId}"){
+        
+        // s3 동기화
+        //sh "aws s3 sync WebContent/resources/pandora3/images/ s3://${bucket}/pandora3/images/"
+        //sh "aws s3 sync WebContent/resources/files/attach/ s3://${bucket}/files/attach/"
+        def imagesSyncResult = sh(
+        	script: """
+              aws s3 sync WebContent/resources/pandora3/images/ s3://${bucket}/pandora3/images/ \
+                --grants full=id=${IAM_CANONICAL_ID} \
+                read=uri=http://acs.amazonaws.com/groups/global/AllUsers \
+                --exclude \"jquery-ui-blue/*\" --exclude \"jquery-ui-gray/*\" --exclude \"jquery-ui-red/*\" --exclude \"zTree/*\"
+              """,
+              returnStdout: true
+        )
+        println imagesSyncResult
+
+        def attachSyncResult = sh(
+        	script: """
+              aws s3 sync WebContent/resources/files/attach/ s3://${bucket}/files/attach/ \
+                --grants full=id=${IAM_CANONICAL_ID} \
+                read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+              """,
+              returnStdout: true
+        )
+        println attachSyncResult    
+        
+        // s3 제외 파일 삭제
+        //sh "aws s3 rm s3://ldps-dev.static.bdp/pandora3/images/jquery-ui-blue/ --recursive"
+        //sh "aws s3 rm s3://ldps-dev.static.bdp/pandora3/images/jquery-ui-gray/ --recursive"
+        //sh "aws s3 rm s3://ldps-dev.static.bdp/pandora3/images/jquery-ui-red/ --recursive"
+        //sh "aws s3 rm s3://ldps-dev.static.bdp/pandora3/images/zTree/ --recursive"
+        
+        /*
+        // 파일 리스트 조회
+        def lsBucketResult = sh(
+          script: 'aws s3api list-objects --bucket ${bucket}',
+          returnStdout: true
+        )
+        println lsBucketResult
+        def lsBucketResultJson = readJSON text: lsBucketResult
+        
+        // s3 권한 설정
+        for (i = 0; i < lsBucketResultJson.Contents.size(); i++) {
+          def objectKey = lsBucketResultJson.Contents[i].Key
+          if (objectKey.startsWith('pandora3/images/') || objectKey.startsWith('files/attach/')) {
+            def putObjectAclResult = sh(
+              script: """
+              aws s3api put-object-acl --bucket ${bucket} --key \"${objectKey}\" \
+                --grant-full-control id=${DEV_CANONICAL_ID} \
+                --grant-read id=${IAM_CANONICAL_ID} \
+                --grant-read-acp id=${IAM_CANONICAL_ID} \
+                --grant-write-acp id=${IAM_CANONICAL_ID} \
+                --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers
+              """,
+              returnStdout: true
+            )
+            println putObjectAclResult
+          }
+        } // s3 권한 설정 End
+        */
+      }
+    }
+  }
+  
+}

@@ -1,0 +1,51 @@
+log4jdbc.dump.sql.maxlinelength=-1
+jdbc.datasource=jdbc/DataSource
+
+#log4jdbc
+jdbc.common.driverClass=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+jdbc.common.url=jdbc:log4jdbc:mysql://ldps-prd-bdp-mysql.ck49d4mp8h5l.ap-northeast-2.rds.amazonaws.com:3306/lpbdp?useLocalSessionState=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+jdbc.common.username=lpbdpmt
+#jdbc.common.password=Elwlxkfbdpmt!@34
+jdbc.common.password=AQICAHgs8yrK3kzbNkrfdln+s8NRBRkYYnRNnMWZz9NEu/F6NgHCE4zRR0J1yyXAvD4C6aFSAAAAbjBsBgkqhkiG9w0BBwagXzBdAgEAMFgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMAk+6bExN11+lxIcRAgEQgCuRTb2YoAL7j2VI86CXh0YkC6LQUn6jCKPGSE/CTjRspWLPkKMY+/MaWDHJ
+
+jdbc.lplog.driverClass=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+jdbc.lplog.url=jdbc:log4jdbc:mysql://ldps-prd-log-mysql.ck49d4mp8h5l.ap-northeast-2.rds.amazonaws.com:3306/lplogdp?useLocalSessionState=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+jdbc.lplog.username=lplogdpmt
+#jdbc.lplog.password=Elwlxkflogdpmt!@34
+jdbc.lplog.password=AQICAHgs8yrK3kzbNkrfdln+s8NRBRkYYnRNnMWZz9NEu/F6NgFqFt+zQ/KliA72VVhWmzCWAAAAcDBuBgkqhkiG9w0BBwagYTBfAgEAMFoGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMLSQhQ3Gvtv5TR9w1AgEQgC3qnMGeks2QlcjqyKJCNnKAywj7A4XWD55h9S58LXW4kG1D/Z1sKvqppHSI3jY=
+
+#VIP DB
+jdbc.remote.driverClass=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+jdbc.remote.url=jdbc:log4jdbc:mysql://ldps-prd-mis-mysql.ck49d4mp8h5l.ap-northeast-2.rds.amazonaws.com:3306/lpvip?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+jdbc.remote.username=lpmismt
+#jdbc.remote.password=Elwlxkfmismt!@34
+jdbc.remote.password=AQICAHgs8yrK3kzbNkrfdln+s8NRBRkYYnRNnMWZz9NEu/F6NgEmuMszQz4atdy0QaPDq4dmAAAAbjBsBgkqhkiG9w0BBwagXzBdAgEAMFgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMN04uJkHTIlS8359RAgEQgCu9YOKuerLoNS3XgQve8p2XvXg9kS4WT9p54Z9Qw628q5gYVe/fnGIoNUne
+# LOG DB
+jdbc.lpsis.driverClass=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+jdbc.lpsis.url=jdbc:log4jdbc:oracle:thin:@10.7.17.4:9500/LPSIS
+jdbc.lpsis.username=LPDPETL
+#jdbc.lpsis.password=lpdpetl12!@
+jdbc.lpsis.password=AQICAHgs8yrK3kzbNkrfdln+s8NRBRkYYnRNnMWZz9NEu/F6NgHKwrqSGu5mVy0mZut8BxbvAAAAaTBnBgkqhkiG9w0BBwagWjBYAgEAMFMGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMxSeQ4RQQyYlJIe5HAgEQgCZb8Ly36BRzVF/bFPR3vEO6RGCqT5WMRQcrDVRpdNiLvd30e78xcw==
+
+# REDSHIFT DB
+jdbc.dw.driverClass=com.amazon.redshift.jdbc42.Driver
+jdbc.dw.url=jdbc:redshift://ldps-prd-cid-redshift.cqiclz8cg6dy.ap-northeast-2.redshift.amazonaws.com:5439/lpcid?
+#jdbc.dw.username=lpbpnsl
+#jdbc.dw.password=Elwlxkfbpnsl!@34
+jdbc.dw.username=lpbdpsl
+#jdbc.dw.password=Elwlxkfbdpsl!@34
+jdbc.dw.password=AQICAHgs8yrK3kzbNkrfdln+s8NRBRkYYnRNnMWZz9NEu/F6NgGnOaLpjSkDwzS6TPWX3gFOAAAAbjBsBgkqhkiG9w0BBwagXzBdAgEAMFgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMwKIlLz2WZ8ibGbdDAgEQgCv10wWAySA55nUDw6LCgEPVspMYZtPBpmY0hV0itNGSX+MQl5XvfpKEw08L
+
+
+# CAMPAIGN DB
+jdbc.campaign.driverClass=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+jdbc.campaign.url=jdbc:log4jdbc:mysql://ldps-prd-cms-mysql.ck49d4mp8h5l.ap-northeast-2.rds.amazonaws.com:3306/LPCMSMETA?useUnicode=true&characterEncoding=utf8
+jdbc.campaign.username=lpcmssl
+#jdbc.campaign.password=Elwlxkfcmssl!@34
+jdbc.campaign.password=AQICAHgs8yrK3kzbNkrfdln+s8NRBRkYYnRNnMWZz9NEu/F6NgFd3fPx67++h7lOaicgq4dCAAAAbjBsBgkqhkiG9w0BBwagXzBdAgEAMFgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMkW0++EFuEr6E4csiAgEQgCvx0QClEAdHR+z9vNO1DIJAS9F9uvA+sGetD6qwCpjV4nkIfPcN5mzLW1Co
+
+jdbc.ans.driverClass=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+jdbc.ans.url=jdbc:log4jdbc:mysql://ldps-prd-cid-mstr-meta-mysql.ck49d4mp8h5l.ap-northeast-2.rds.amazonaws.com:3306/lpansmeta?useUnicode=true&characterEncoding=utf8
+jdbc.ans.username=lpanssl
+#jdbc.ans.password=elwlxkfsl!@34
+jdbc.ans.password=AQICAHgs8yrK3kzbNkrfdln+s8NRBRkYYnRNnMWZz9NEu/F6NgFI4R5nOR7RUZTjG8GIIAP4AAAAazBpBgkqhkiG9w0BBwagXDBaAgEAMFUGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMlXtC5WZ2g52sjB42AgEQgCinYkQtSsOjzubS1n4Dk7y3lbVeleQzAtUUz4OXydrofyfx+v0T+4Qu

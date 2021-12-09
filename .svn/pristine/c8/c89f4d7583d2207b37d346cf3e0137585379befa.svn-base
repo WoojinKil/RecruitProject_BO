@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TcmnCdDtl">
+
+	<sql id="select-one-sql">
+		/*[BaseTcmnCdDtl.xml][select][TANINE]*/
+		SELECT MST_CD
+             , CD
+             , CD_NM
+             , REF_1
+             , REF_2
+             , REF_3
+             , US_YN
+             , SRT_SEQ
+             , CD_DESC
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TCMN_CD_DTL
+		 WHERE CD = #{cd, jdbcType=VARCHAR} 
+           AND MST_CD = #{mst_cd, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TcmnCdDtl">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TcmnCdDtl">
+        /*[BaseTcmnCdDtl.xml][insert][TANINE]*/
+        INSERT INTO TCMN_CD_DTL
+		(
+			 MST_CD
+		   , CD
+		   , CD_NM
+		   , REF_1
+		   , REF_2
+		   , REF_3
+		   , US_YN
+		   , SRT_SEQ
+		   , CD_DESC
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{mst_cd, jdbcType=VARCHAR}
+		   , ( SELECT CD FROM (SELECT IFNULL(MAX(CAST(CD AS SIGNED INTEGER))+10,10) AS CD FROM TCMN_CD_DTL WHERE MST_CD = #{mst_cd,jdbcType=VARCHAR} ) A )
+		   , #{cd_nm, jdbcType=VARCHAR}
+		   , #{ref_1, jdbcType=VARCHAR}
+		   , #{ref_2, jdbcType=VARCHAR}
+		   , #{ref_3, jdbcType=VARCHAR}
+		   , #{us_yn, jdbcType=VARCHAR}
+		   , #{srt_seq, jdbcType=NUMERIC}
+		   , #{cd_desc, jdbcType=LONGVARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tcmnCdDtl">
+        /*[BaseTcmnCdDtl.xml][update][TANINE]*/
+		UPDATE TCMN_CD_DTL
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		     , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cd_nm)">
+		     , CD_NM = #{cd_nm, jdbcType=VARCHAR}
+		       </if>
+		     , REF_1 = #{ref_1, jdbcType=VARCHAR}
+		     , REF_2 = #{ref_2, jdbcType=VARCHAR}
+		     , REF_3 = #{ref_3, jdbcType=VARCHAR}
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">
+		     , US_YN = #{us_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_srt_seq)">
+		     , SRT_SEQ = #{srt_seq, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cd_desc)">
+		     , CD_DESC = #{cd_desc, jdbcType=LONGVARCHAR}
+		       </if>
+		WHERE CD = #{cd, jdbcType=VARCHAR} 
+           AND MST_CD = #{mst_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TcmnCdDtl">
+        /*[BaseTcmnCdDtl.xml][delete][TANINE]*/
+		DELETE FROM TCMN_CD_DTL
+		 WHERE CD = #{cd, jdbcType=VARCHAR} 
+           AND MST_CD = #{mst_cd, jdbcType=VARCHAR} 
+	</delete>
+	
+	
+
+
+
+    <!-- 금칙어 cd 값 조회 -->
+    <select id="getTcmnCdDtlCDCnt" resultType="int">
+        /* [TcmnCdDtl.xml][getSysCdDtlCDCnt][금칙어 cd 값 조회][TANINE] */
+        SELECT MAX(CD)+1 AS CD 
+          FROM TCMN_CD_DTL 
+         WHERE MST_CD='BTXT'
+    </select>
+    
+    <!-- 코드 상세 리스트 조회 -->
+    <select id="selectTcmnCdDtlList" parameterType="ParameterMap" resultType="TcmnCdDtl">
+        /* [TcmnCdDtl.xml][selectTcmnCdDtlList][코드 상세 리스트 조회 ][TANINE] */
+        SELECT CM.MST_CD            -- 마스터코드
+              ,CM.MST_CD_NM         -- 마스터코드명
+              ,CD.CD                -- 상세코드
+              ,CD.CD_NM             -- 상세코드명
+              ,CD.REF_1             -- 참조값1
+              ,CD.REF_2             -- 참조값2
+              ,CD.REF_3             -- 참조값3
+              ,CD.SRT_SEQ          -- 정렬순서
+              ,CD.CD_DESC         -- 비고
+          FROM TCMN_CD_DTL CD
+              ,TCMN_CD_MST CM
+         WHERE CD.MST_CD = CM.MST_CD
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mst_cd   )">AND CM.MST_CD            = #{mst_cd        ,jdbcType=VARCHAR}</if>
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cd       )">AND CD.CD                = #{cd            ,jdbcType=VARCHAR}</if>
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ref_1    )">AND CD.REF_1             = #{ref_1         ,jdbcType=VARCHAR}</if>
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ref_2    )">AND CD.REF_2             = #{ref_2         ,jdbcType=VARCHAR}</if>
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ref_3    )">AND CD.REF_3             = #{ref_3         ,jdbcType=VARCHAR}</if>
+           <if test="ref_1_tval != null and ref_1_tval != '' or ref_2_tval != null and ref_2_tval != '' or ref_3_tval != null and ref_3_tval != ''">
+           AND (
+               <if test="ref_1_tval != null and ref_1_tval != ''">
+               CD.REF_1             = #{ref_1_tval         ,jdbcType=VARCHAR}
+               </if>
+               <if test="ref_2_tval != null and ref_2_tval != ''">
+                  <if test="ref_1_tval != null and ref_1_tval != ''">
+                  OR
+                  </if>
+                  CD.REF_2             = #{ref_2_tval         ,jdbcType=VARCHAR}
+               </if>
+               <if test="ref_3_tval != null and ref_3_tval != ''">
+                  <if test="ref_1_tval != null and ref_1_tval != '' or ref_2_tval != null and ref_2_tval != ''">
+                  OR 
+                  </if>
+                 CD.REF_3             = #{ref_3_tval         ,jdbcType=VARCHAR}  
+               </if>
+               )
+           </if>
+           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn)">AND CD.US_YN            = #{us_yn        ,jdbcType=VARCHAR}</if>
+         ORDER BY CD.SRT_SEQ
+    </select>
+    
+    <!-- 코드 상세 리스트 조회(MST_CD 복수 조회) -->
+    <select id="selectTcmnCdDtlMultiList" parameterType="hashMap" resultType="TcmnCdDtl">
+        /* [TcmnCdDtl.xml][selectTcmnCdDtlMultiList][코드 상세 리스트 조회(MST_CD 복수 조회)][TANINE] */
+        SELECT CM.MST_CD
+             , CM.MST_CD_NM
+             , CD.CD
+             , CD.CD_NM
+             , CD.REF_1
+             , CD.REF_2
+             , CD.REF_3
+             , CD.SRT_SEQ
+             , CD.CD_DESC
+          FROM TCMN_CD_DTL CD
+             , TCMN_CD_MST CM 
+        WHERE CD.MST_CD = CM.MST_CD
+          AND CM.US_YN = 'Y'
+          AND CD.US_YN = 'Y'
+          AND CD.MST_CD IN <foreach collection="mst_cd_list" item="list" separator="," open="(" close=")">
+                           #{list.MST_CD}
+                           </foreach>
+        ORDER BY CD.MST_CD, CD.SRT_SEQ
+	</select>
+
+    <!-- 코드 상세 그리드 리스트 조회 -->
+    <select id="selectTcmnCdDtlGridList" parameterType="ParameterMap" resultType="TcmnCdDtl">
+    /*[SysCdDtl.xml][selectTcmnCdDtlGridList][코드 상세 그리드 리스트 조회][TANINE]*/
+        SELECT P.* 
+          FROM (SELECT Ceil(V.id / #{rows, jdbcType=NUMERIC})        PAGE 
+                     , Ceil(@row_number / #{rows, jdbcType=NUMERIC}) TOTAL_PAGE 
+                     , V.*
+                     , @row_number AS TOTAL_COUNT
+                  FROM (SELECT CDD.MST_CD                 -- 마스터코드
+                             , CDD.CD                     -- 상세코드
+                             , CDD.CD_NM                  -- 상세코드명
+                             , CDD.CD_DESC              -- 비고
+                             , CDD.REF_1                  -- 참조값1
+                             , CDD.REF_2                  -- 참조값2
+                             , CDD.REF_3                  -- 참조값3
+                             , CDD.US_YN                 -- 사용여부
+                             , CDD.SRT_SEQ               -- 정렬순서
+                             , CDD.CRTR_ID                 -- 등록자
+                             , CDD.CRT_DTTM               -- 등록일
+                             , CDD.UPDR_ID                 -- 수정자
+                             , CDD.UPD_DTTM               -- 수정일
+                             , DATE_FORMAT(CDD.UPD_DTTM, '%Y-%m-%d') AS F_UPD_DTTM
+                             , CDM.MST_CD AS UP_MST_CD    -- 상위 마스터 코드
+                             , IFNULL(SU.LGN_ID,'SYSTEM') AS REG_LGN_ID
+                             ,( @row_number := @row_number + 1 ) AS ID				-- mysql ROWNUM
+                         FROM TCMN_CD_DTL CDD
+                        INNER JOIN TCMN_CD_MST CDM 
+                           ON CDD.MST_CD = CDM.MST_CD
+                         LEFT OUTER JOIN TMBR_ADM_LGN_INF SU 
+                           ON SU.USR_ID = CDD.CRTR_ID
+                            , (SELECT @row_number := 0) RN 					-- mysql ROWNUM
+                        WHERE 1 = 1
+<!-- 		           <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cd_nm     )">AND CDD.CD_NM     LIKE CONCAT('%',#{cd_nm ,jdbcType=VARCHAR},'%')</if>
+        			   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cd_desc )">AND CDD.CD_DESC LIKE CONCAT('%',#{cd_desc ,jdbcType=VARCHAR},'%')</if>
+        			   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(us_yn    )">AND CDD.US_YN         = #{us_yn         ,jdbcType=VARCHAR} </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(srt_seq  )">AND CDD.SRT_SEQ       = #{srt_seq       ,jdbcType=NUMERIC} </if>  -->
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mst_cd    )">AND CDD.MST_CD        = #{mst_cd         ,jdbcType=VARCHAR} </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cd        )">AND CDD.CD            = #{cd             ,jdbcType=NUMERIC} </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ref_1     )">AND CDD.REF_1         = #{ref_1          ,jdbcType=VARCHAR} </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ref_2     )">AND CDD.REF_2         = #{ref_2          ,jdbcType=VARCHAR} </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ref_3     )">AND CDD.REF_3         = #{ref_3          ,jdbcType=VARCHAR} </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_cd_nm )">AND CDD.CD_NM     LIKE CONCAT('%',#{sch_cd_nm ,jdbcType=VARCHAR},'%')    </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_cd_desc )">AND CDD.CD_DESC LIKE CONCAT('%',#{sch_cd_desc ,jdbcType=VARCHAR},'%')</if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_us_yn    )">AND CDD.US_YN      = #{sch_us_yn      ,jdbcType=VARCHAR} </if>
+                       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_srt_seq  )">AND CDD.SRT_SEQ    = #{sch_srt_seq    ,jdbcType=NUMERIC} </if>
+                       
+                      ) V
+                     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isEmpty(sidx)">     
+                     ORDER BY V.MST_CD, V.SRT_SEQ
+                     </if> 
+               )P
+          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(page)">
+          WHERE  P.page = #{page ,jdbcType=NUMERIC}
+          </if>
+    </select>    
+
+    <!-- 상세코드 수 -->
+    <select id="selectTcmnCdDtlCnt" parameterType="ParameterMap" resultType="Integer">
+    /*[SysCdDtl.xml][selectTcmnCdDtlCnt][상세코드 수][TANINE]*/
+        SELECT COUNT(1) 
+          FROM TCMN_CD_DTL
+         WHERE MST_CD = upper(#{mst_cd ,jdbcType=VARCHAR})
+           AND CD =  upper(#{cd ,jdbcType=VARCHAR})
+    </select>
+    
+    <!-- 코드명 체크-->
+    <select id="selectTcmnCdDtlCdNm" parameterType="ParameterMap" resultType="Integer">
+    /*[SysCdDtl.xml][selectTcmnCdDtlCdNm][코드명 체크][TANINE]*/
+        SELECT COUNT(1) 
+          FROM TCMN_CD_DTL
+         WHERE MST_CD = #{mst_cd ,jdbcType=VARCHAR}
+           AND CD_NM =  #{cd_nm ,jdbcType=VARCHAR}
+           AND US_YN = 'Y'
+	</select>
+	
+	<select id="selectTcmnCdDtlSitLog" resultType="String">
+    /*[SysCdDtl.xml][selectTcmnCdDtlSitLog][시스템 로그인 적재 관련 사이트 목록 조회][TANINE]*/
+       SELECT C.REF_1
+         FROM TCMN_CD_MST B 
+            , TCMN_CD_DTL C
+        WHERE 1=1
+          AND B.US_YN = 'Y'
+          AND B.MST_CD = 'SIT_LGN_LOG'
+          AND B.MST_CD = C.MST_CD
+          AND C.US_YN = 'Y'
+	</select>
+</mapper>

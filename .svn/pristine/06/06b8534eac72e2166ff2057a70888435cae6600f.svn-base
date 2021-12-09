@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysPosInf">
+
+	<sql id="select-one-sql">
+		/*[TsysPosInf.xml][select][TANINE]*/
+		SELECT POS_CD
+             , POS_NM
+             , SRT_SEQ
+             , SYS_CD
+             , US_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TSYS_POS_INF
+		 WHERE POS_CD = #{pos_cd, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TsysPosInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TsysPosInf">
+        /*[TsysPosInf.xml][insert][TANINE]*/
+        INSERT INTO TSYS_POS_INF
+		(
+			   POS_CD
+             , POS_NM
+             , SRT_SEQ
+             , SYS_CD
+             , US_YN
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+		)
+		VALUES
+		(
+			   #{pos_cd}
+             , #{pos_nm}
+             , #{srt_seq}
+             , #{sys_cd}
+             , #{us_yn}
+             , #{crtr_id}
+             , SYSDATE()
+             , #{updr_id}
+             , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TsysPosInf">
+        /*[TsysPosInf.xml][update][TANINE]*/
+		UPDATE TSYS_POS_INF
+		   SET UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pos_nm)">
+		       POS_NM = #{pos_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(srt_seq)">
+		     , SRT_SEQ = #{srt_seq, jdbcType=VARCHAR}
+		       </if>
+		WHERE POS_CD = #{pos_cd, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TsysPosInf">
+        /*[TsysPosInf.xml][delete][TANINE]*/
+		DELETE FROM TSYS_POS_INF
+		 WHERE POS_CD = #{pos_cd, jdbcType=VARCHAR} 
+	</delete>
+
+    <select id="selectTsysPosInfGridList" parameterType="ParameterMap" resultType="TsysPosInf">
+    /*[TsysPosInf.xml][selectTsysPosInfGridList][직책 정보 조회][TANINE]*/
+    SELECT POS_CD
+         , POS_NM
+         , SRT_SEQ
+         , SYS_CD
+         , US_YN
+         , CRTR_ID
+         , CRT_DTTM
+         , UPDR_ID
+         , UPD_DTTM
+      FROM TSYS_POS_INF
+     WHERE 1=1
+     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(pos_nm)">
+       AND POS_NM LIKE CONCAT('%', #{pos_nm ,jdbcType=VARCHAR}, '%')
+     </if>
+  ORDER BY SRT_SEQ
+    </select>
+
+</mapper>

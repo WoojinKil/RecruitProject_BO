@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TsysAdmOrgGrpRolRtnnTrx">
+
+
+    <insert id="saveTsysAdmOrgGrpRolRtnn" parameterType="TsysAdmOrgGrpRolRtnn">
+        /*[TsysAdmOrgGrpRolRtnnTrx.xml][saveTsysAdmOrgGrpRolRtnn][조직 권한 그룹 추가][TANINE]*/
+        INSERT INTO TSYS_ADM_ORG_GRP_ROL_RTNN
+        (
+             ORG_CD
+           , GRP_ROL_ID
+           , CRTR_ID
+           , CRT_DTTM
+           , UPDR_ID
+           , UPD_DTTM
+        )
+        VALUES
+        (
+             #{org_cd, jdbcType=VARCHAR}
+           , #{grp_rol_id, jdbcType=VARCHAR}
+           , #{user_id, jdbcType=VARCHAR}
+           , SYSDATE()
+           , #{user_id, jdbcType=VARCHAR}
+           , SYSDATE()
+        )
+    </insert>
+
+    <delete id="deleteTsysAdmOrgGrpRolRtnn" parameterType="ParameterMap">
+        /*[TsysAdmOrgGrpRolRtnnTrx.xml][deleteTsysAdmOrgGrpRolRtnn][조직 권한 그룹 삭제][TANINE]*/
+        DELETE FROM TSYS_ADM_ORG_GRP_ROL_RTNN
+         WHERE ORG_CD = #{org_cd, jdbcType=VARCHAR} 
+    </delete>
+
+
+</mapper>

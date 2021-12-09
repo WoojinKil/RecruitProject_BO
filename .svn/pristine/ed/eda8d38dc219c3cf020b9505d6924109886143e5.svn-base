@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbbsScdInfTrx">
+	
+	<insert id="insert" parameterType="TbbsScdInf">
+        /*[BaseTbbsScdInfTrx.xml][insert][TANINE]*/
+        INSERT INTO TBBS_SCD_INF
+		(
+			 SCD_NM
+		   , SCD_CL_CD
+		   , CSTR_CD
+		   , ST_DTTM
+		   , ED_DTTM
+		   , LCT
+		   , CTS
+		   , ADY_YN
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{scd_nm, jdbcType=VARCHAR}
+		   , #{scd_cl_cd, jdbcType=VARCHAR}
+		   , #{cstr_cd, jdbcType=VARCHAR}
+		   , #{st_dttm, jdbcType=VARCHAR}
+		   , #{ed_dttm, jdbcType=VARCHAR}
+		   , #{lct, jdbcType=VARCHAR}
+		   , #{cts, jdbcType=LONGVARCHAR}
+		   , #{ady_yn, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="TbbsScdInf">
+        /*[BaseTbbsScdInfTrx.xml][update][TANINE]*/
+		UPDATE TBBS_SCD_INF
+		   SET UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+	         , UPD_DTTM = SYSDATE()
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(scd_nm)">
+		     , SCD_NM = #{scd_nm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(st_dttm)">
+		     , ST_DTTM = #{st_dttm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ed_dttm)">
+		     , ED_DTTM = #{ed_dttm, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lct)">
+		     , LCT = #{lct, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cts)">
+		     , CTS = #{cts, jdbcType=LONGVARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ady_yn)">
+		     , ADY_YN = #{ady_yn, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(scd_cl_cd)">
+		     , SCD_CL_CD = #{scd_cl_cd, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(cstr_cd)">
+		     , CSTR_CD = #{cstr_cd, jdbcType=VARCHAR}
+		       </if>
+		WHERE SCD_SEQ = #{scd_seq, jdbcType=NUMERIC} 
+	</update>
+
+	<delete id="delete" parameterType="TbbsScdInf">
+        /*[BaseTbbsScdInfTrx.xml][delete][TANINE]*/
+		DELETE FROM TBBS_SCD_INF
+		 WHERE SCD_SEQ = #{scd_seq, jdbcType=NUMERIC} 
+	</delete>
+
+</mapper>

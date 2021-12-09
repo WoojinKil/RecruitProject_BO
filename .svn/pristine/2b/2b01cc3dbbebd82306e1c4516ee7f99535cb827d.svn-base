@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbBcpcLoginTot">
+
+	<sql id="select-one-sql">
+		/*[TbBcpcLoginTot.xml][select][TANINE]*/
+		SELECT TOT_DT
+             , SYS_CD
+             , GRP_ROL_ID
+             , USR_ID
+             , LOGIN_MBR_ID_CNT
+             , VST_CUST_CNT
+             , CRTR_ID
+             , RGST_DTM
+             , UPDR_ID
+             , MDF_DTM
+          FROM TB_BCPC_LOGIN_TOT
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND TOT_DT = #{tot_dt, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TbBcpcLoginTot">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>
+
+	<insert id="insert" parameterType="TbBcpcLoginTot">
+        /*[TbBcpcLoginTot.xml][insert][TANINE]*/
+        INSERT INTO TB_BCPC_LOGIN_TOT
+		(
+			 TOT_DT
+		   , SYS_CD
+		   , GRP_ROL_ID
+		   , USR_ID
+		   , LOGIN_MBR_ID_CNT
+		   , VST_CUST_CNT
+		   , CRTR_ID
+		   , RGST_DTM
+		   , UPDR_ID
+		   , MDF_DTM
+		)
+		VALUES
+		(
+			 #{tot_dt, jdbcType=VARCHAR}
+		   , #{sys_cd, jdbcType=VARCHAR}
+		   , #{grp_rol_id, jdbcType=VARCHAR}
+		   , #{usr_id, jdbcType=VARCHAR}
+		   , #{login_mbr_id_cnt, jdbcType=NUMERIC}
+		   , #{vst_cust_cnt, jdbcType=NUMERIC}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , #{rgst_dtm, jdbcType=TIMESTAMP}
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , #{mdf_dtm, jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="update" parameterType="tbBcpcLoginTot">
+        /*[TbBcpcLoginTot.xml][update][TANINE]*/
+		UPDATE TB_BCPC_LOGIN_TOT
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_login_mbr_id_cnt)">
+		       LOGIN_MBR_ID_CNT = #{login_mbr_id_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(obj_vst_cust_cnt)">
+		     , VST_CUST_CNT = #{vst_cust_cnt, jdbcType=NUMERIC}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(rgst_dtm)">
+		     , RGST_DTM = #{rgst_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(updr_id)">
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(mdf_dtm)">
+		     , MDF_DTM = #{mdf_dtm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND TOT_DT = #{tot_dt, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TbBcpcLoginTot">
+        /*[TbBcpcLoginTot.xml][delete][TANINE]*/
+		DELETE FROM TB_BCPC_LOGIN_TOT
+		 WHERE GRP_ROL_ID = #{grp_rol_id, jdbcType=VARCHAR} 
+           AND SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND TOT_DT = #{tot_dt, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</delete>
+	
+
+
+    <select id="selectTbBcpcLoginTotList" parameterType="ParameterMap" resultType="TbBcpcLoginTot">
+     SELECT /*[TbBcpcLoginTot.xml][selectTbBcpcLoginTotList][시스템별 접속자수][TANINE]*/
+            SI.SYS_CD /* 시스템 번호 */
+          , SI.SYS_NM  /* 시스템 명 */
+          , IFNULL(UT.USR_CNT,0) AS USR_CNT /* 사용자 수  */
+          , IFNULL(PT.PRD_UV, 0) AS PRD_UV /* 기간별 접속자  수 1~3일 한명 집계  */
+          , IFNULL(DT.DAY_UV, 0) AS DAY_UV /* 일별 접속자  수 1일 한명 집계  */
+          , IFNULL(DT.VST_CUST_CNT, 0) AS VST_CUST_CNT /* 접속 회수 방문자 수 합계 */
+          , IFNULL(ROUND((PT.PRD_UV/UT.USR_CNT) * 100, 1), 0) AS PRD_UV_ACS /* 접속률(기간UV)  */
+          , IFNULL(ROUND((DT.DAY_UV/UT.USR_CNT) * 100, 1), 0) AS DAY_UV_ACS /* 접속률(일UV)  */
+          , IFNULL(ROUND(DT.VST_CUST_CNT/PT.PRD_UV, 1), 0) AS PRD_VST_CUST_CNT /* 인당접속횟수(기간UV)  */
+          , IFNULL(ROUND(DT.VST_CUST_CNT/DT.DAY_UV, 1), 0) AS DAY_VST_CUST_CNT /* 인당접속횟수(일UV)  */
+       FROM TDSP_SYS_INF SI
+          , ( SELECT AR.SYS_CD -- 권한 그룹에 따른 시스템별  권한 사용자 조회. (사용자 수) 기간 중 한명으로 집계
+                       , COUNT(US.USR_ID) AS USR_CNT
+                    FROM (
+                           SELECT USR_ID
+                                   , MAX(GRP_ROL_ID) AS GRP_ROL_ID  
+                                FROM TB_BCPC_USPRATHR_M 
+                               WHERE grp_rol_id != '21' 
+                           GROUP BY USR_ID ) US
+                       , TSYS_ADM_GRP_ROL GR
+                       , TSYS_ADM_GRP_ROL_RTNN GRR
+                       , TSYS_ADM_ROL AR
+                   WHERE US.GRP_ROL_ID = GR.GRP_ROL_ID
+                     AND GR.GRP_ROL_ID = GRR.GRP_ROL_ID
+                     AND GRR.ROL_ID = AR.ROL_ID
+                     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_id)">
+                     AND US.GRP_ROL_ID = #{grp_rol_id}
+                     </if>
+               GROUP BY AR.SYS_CD 
+            ) UT
+  LEFT JOIN
+           ( SELECT A.SYS_CD -- 시스템 기간 중 하나만 count 된다. (기간별 UV)
+                  , COUNT(A.USR_ID) AS PRD_UV 
+              FROM (
+                         SELECT DISTINCT 
+                                USR_ID
+                              , SYS_CD
+                           FROM TB_BCPC_LOGIN_TOT 
+                          WHERE 1=1
+                          <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_id)">
+                            AND GRP_ROL_ID =  #{grp_rol_id}
+                         </if>
+                         <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt) ">
+                            AND DATE_FORMAT(tot_dt,'%y-%m-%d') BETWEEN DATE_FORMAT(#{sch_st_dt ,jdbcType=VARCHAR},'%y-%m-%d') AND DATE_FORMAT(#{sch_ed_dt ,jdbcType=VARCHAR},'%y-%m-%d')
+                         </if>
+                            AND GRP_ROL_ID != '21'
+                           ) A
+               GROUP BY SYS_CD 
+            ) PT
+         ON UT.SYS_CD = PT.SYS_CD
+  LEFT JOIN
+            (SELECT A.SYS_CD
+                  , SUM(A.DAY_UV) AS DAY_UV
+                  , SUM(A.VST_CUST_CNT) AS VST_CUST_CNT
+              FROM (
+                    SELECT SYS_CD
+                         , USR_ID
+                         , COUNT(USR_ID) AS DAY_UV
+                         , SUM(VST_CUST_CNT) AS VST_CUST_CNT
+                     FROM TB_BCPC_LOGIN_TOT
+                    WHERE 1=1
+                    <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(grp_rol_id)">
+                      AND GRP_ROL_ID =  #{grp_rol_id}
+                    </if>
+                    <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt) ">
+                      AND DATE_FORMAT(tot_dt,'%y-%m-%d') BETWEEN DATE_FORMAT(#{sch_st_dt ,jdbcType=VARCHAR},'%y-%m-%d') AND DATE_FORMAT(#{sch_ed_dt ,jdbcType=VARCHAR},'%y-%m-%d')
+                    </if>
+                      AND GRP_ROL_ID != '21'
+                 GROUP BY SYS_CD,  USR_ID ) A
+          GROUP BY A.SYS_CD
+           ) DT
+         ON PT.SYS_CD = DT.SYS_CD
+     WHERE 1=1
+       AND SI.SYS_CD = UT.SYS_CD
+       AND SI.US_YN = 'Y'
+ ORDER BY SI.SRT_SEQ
+    </select>
+    
+    
+    <select id="selectTbBcpcLoginTotStrList" parameterType="ParameterMap" resultType="TbBcpcLoginTot">
+    SELECT /*[TbBcpcLoginTot.xml][selectTbBcpcLoginTotStrList][점별 접속자수][TANINE]*/
+            SI.SYS_CD /* 시스템 번호 */
+          , SI.SYS_NM  /* 시스템 명 */
+          , IFNULL(UT.USR_CNT,0) AS USR_CNT /* 사용자 수  */
+          , IFNULL(PT.PRD_UV, 0) AS PRD_UV /* 기간별 접속자  수 1~3일 한명 집계  */
+          , IFNULL(DT.DAY_UV, 0) AS DAY_UV /* 일별 접속자  수 1일 한명 집계  */
+          , IFNULL(DT.VST_CUST_CNT, 0) AS VST_CUST_CNT /* 접속 회수 방문자 수 합계 */
+          , IFNULL(ROUND((PT.PRD_UV/UT.USR_CNT) * 100, 1), 0) AS PRD_UV_ACS /* 접속률(기간UV)  */
+          , IFNULL(ROUND((DT.DAY_UV/UT.USR_CNT) * 100, 1), 0) AS DAY_UV_ACS /* 접속률(일UV)  */
+          , IFNULL(ROUND(DT.VST_CUST_CNT/PT.PRD_UV, 1), 0) AS PRD_VST_CUST_CNT /* 인당접속횟수(기간UV)  */
+          , IFNULL(ROUND(DT.VST_CUST_CNT/DT.DAY_UV, 1), 0) AS DAY_VST_CUST_CNT /* 인당접속횟수(일UV)  */
+          , SI.STR_CD AS MSTR_CD
+          , SI.STR_NM AS MSTR_NM
+       FROM (SELECT A.SYS_CD
+                  , B.STR_CD
+                  , B.STR_NM
+                  , A.SYS_NM
+                  , A.US_YN
+                  , A.SRT_SEQ
+               FROM TDSP_SYS_INF A 
+         CROSS JOIN (
+                      SELECT /* LDPS.VIP.EcstCommon.selectStrCodeList.관리점 조회 */
+                             SM.CSTR_CD    AS STR_CD   /* 자점코드 */
+                           , SM.CSTR_NM    AS STR_NM   /* 점명 */
+                           , SM.MSTR_CD    AS MSTR_CD   /* 모점코드 */
+                           , SM.US_YN    AS US_YN   /* 사용여부 */
+                           , SM.STAT_CL_CD   AS STAT_CL_CD  /* 상태구분코드 */
+                           , SM.RGN_CLSF_CD   AS RGN_CLSF_CD  /* 지역분류코드 */
+                           , SM.STR_CL_CD    AS STR_CL_CD  /* 점구분코드 */
+                           , CASE WHEN SM.CSTR_CD = SM.MSTR_CD THEN 'Y'
+                                  ELSE 'N'
+                              END      AS MSTR_YN   /* 모점여부 */
+                        FROM TB_BCPC_STR_M  SM /* 점마스터 */
+                       WHERE 1 = 1
+                         AND SM.CSTR_CD = SM.MSTR_CD       /* 모점만 조회 */
+                         AND SM.US_YN = 'Y'   /* 사용여부 */
+                         AND SM.STAT_CL_CD = '0' /* 상태코드 0 정상, 1 휴점, 2 폐점 */
+                         AND SM.STR_CL_CD = '0'
+                         AND SM.CSTR_CD NOT IN ('0018','0020','0009','0353', '0357' )) B) SI
+          LEFT JOIN (SELECT AR.SYS_CD -- 권한 그룹에 따른 시스템별  권한 사용자 조회. (사용자 수) 기간 중 한명으로 집계
+                       , COUNT(US.USR_ID) AS USR_CNT
+                       , US.MSTR_CD
+                    FROM (
+                           SELECT USR_ID
+                                , MAX(GRP_ROL_ID) AS GRP_ROL_ID
+                                , MAX(MSTR_CD) AS MSTR_CD
+                             FROM TB_BCPC_USPRATHR_M 
+                            WHERE GRP_ROL_ID IN (SELECT REF_1 FROM TCMN_CD_DTL WHERE MST_CD = 'STR_GRP_ROL' AND US_YN = 'Y')
+                              AND SUBSTRING(USR_ID,1,2) NOT IN ('22','32','42','52')
+                              AND RGN_LDR_YN = 'N'
+                         GROUP BY USR_ID ) US
+                       , TSYS_ADM_GRP_ROL GR
+                       , TSYS_ADM_GRP_ROL_RTNN GRR
+                       , TSYS_ADM_ROL AR
+                   WHERE US.GRP_ROL_ID = GR.GRP_ROL_ID
+                     AND GR.GRP_ROL_ID = GRR.GRP_ROL_ID
+                     AND GRR.ROL_ID = AR.ROL_ID
+               GROUP BY AR.SYS_CD , US.MSTR_CD
+            ) UT
+            ON SI.SYS_CD = UT.SYS_CD
+            AND SI.STR_CD = UT.MSTR_CD
+  LEFT JOIN
+           ( SELECT A.SYS_CD -- 시스템 기간 중 하나만 count 된다. (기간별 UV)
+                  , COUNT(A.USR_ID) AS PRD_UV
+                  , A.MSTR_CD
+              FROM (SELECT DISTINCT 
+                          LT.USR_ID
+                         , LT.SYS_CD
+                         , UM.MSTR_CD
+                     FROM TB_BCPC_LOGIN_TOT LT
+                LEFT JOIN (SELECT DISTINCT 
+                                  USR_ID
+                                , MSTR_CD
+                                , RGN_LDR_YN
+                             FROM TB_BCPC_USPRATHR_M 
+                            WHERE RGN_LDR_YN = 'N' 
+                              AND SUBSTRING(USR_ID,1,2) NOT IN ('22','32','42','52')
+                           ) UM
+                       ON LT.USR_ID = UM.USR_ID
+                    WHERE 1=1
+                      AND UM.RGN_LDR_YN = 'N'
+                      AND LT.GRP_ROL_ID IN (SELECT REF_1 FROM TCMN_CD_DTL WHERE MST_CD = 'STR_GRP_ROL' AND US_YN = 'Y')
+                      <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt) ">
+                      AND DATE_FORMAT(LT.TOT_DT,'%y-%m-%d') BETWEEN DATE_FORMAT(#{sch_st_dt ,jdbcType=VARCHAR},'%y-%m-%d') AND DATE_FORMAT(#{sch_ed_dt ,jdbcType=VARCHAR},'%y-%m-%d')
+                      </if>
+                      AND SUBSTRING(LT.USR_ID,1,2) NOT IN ('22','32','42','52')
+                    ) A
+           GROUP BY SYS_CD , A.MSTR_CD
+            ) PT
+         ON UT.SYS_CD = PT.SYS_CD
+        AND UT.MSTR_CD = PT.MSTR_CD
+  LEFT JOIN
+            (SELECT A.SYS_CD
+                  , SUM(A.DAY_UV) AS DAY_UV
+                  , SUM(A.VST_CUST_CNT) AS VST_CUST_CNT
+                  , A.MSTR_CD
+              FROM (
+                    SELECT LT.SYS_CD
+                         , LT.USR_ID
+                         , COUNT(LT.USR_ID) AS DAY_UV
+                         , SUM(LT.VST_CUST_CNT) AS VST_CUST_CNT
+                         , MAX(UM.MSTR_CD) AS MSTR_CD
+                     FROM TB_BCPC_LOGIN_TOT LT
+                LEFT JOIN (SELECT DISTINCT
+                                  USR_ID
+                                , MSTR_CD
+                                , RGN_LDR_YN 
+                             FROM TB_BCPC_USPRATHR_M 
+                            WHERE RGN_LDR_YN = 'N' 
+                           ) UM
+                       ON LT.USR_ID = UM.USR_ID
+                    WHERE 1=1
+                      AND UM.RGN_LDR_YN = 'N'
+                      AND SUBSTRING(LT.USR_ID,1,2) NOT IN ('22','32','42','52')
+                      AND LT.GRP_ROL_ID IN (SELECT REF_1 
+                                              FROM TCMN_CD_DTL 
+                                             WHERE MST_CD = 'STR_GRP_ROL' 
+                                               AND US_YN = 'Y')
+                     <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_st_dt) and @kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sch_ed_dt) ">
+                      AND DATE_FORMAT(LT.TOT_DT,'%y-%m-%d') BETWEEN DATE_FORMAT(#{sch_st_dt ,jdbcType=VARCHAR},'%y-%m-%d') AND DATE_FORMAT(#{sch_ed_dt ,jdbcType=VARCHAR},'%y-%m-%d')
+                      </if>
+                 GROUP BY SYS_CD,  USR_ID, UM.MSTR_CD 
+                     ) A
+   GROUP BY A.SYS_CD, A.MSTR_CD
+           ) DT
+         ON PT.SYS_CD = DT.SYS_CD
+        AND PT.MSTR_CD = DT.MSTR_CD
+     WHERE 1=1
+       AND SI.US_YN = 'Y'
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(str_cd)">
+       AND SI.STR_CD = #{str_cd}
+       </if>
+       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(sys_cd)">
+       AND SI.SYS_CD = #{sys_cd}
+       </if>
+       
+  ORDER BY SI.SRT_SEQ, SI.STR_CD
+    </select>
+
+   <select id="selectStrList" resultType="TbBcpcStrM">
+    SELECT /* LDPS.VIP.EcstCommon.selectStrCodeList.관리점 조회 */
+           SM.CSTR_CD    AS STR_CD   /* 자점코드 */
+         , SM.CSTR_NM    AS STR_NM   /* 점명 */
+         , SM.MSTR_CD    AS MSTR_CD   /* 모점코드 */
+         , SM.US_YN    AS US_YN   /* 사용여부 */
+         , SM.STAT_CL_CD   AS STAT_CL_CD  /* 상태구분코드 */
+         , SM.RGN_CLSF_CD   AS RGN_CLSF_CD  /* 지역분류코드 */
+         , SM.STR_CL_CD    AS STR_CL_CD  /* 점구분코드 */
+         , CASE WHEN SM.CSTR_CD = SM.MSTR_CD THEN 'Y'
+                ELSE 'N'
+            END      AS MSTR_YN   /* 모점여부 */
+      FROM TB_BCPC_STR_M  SM /* 점마스터 */
+     WHERE 1 = 1
+       AND SM.CSTR_CD = SM.MSTR_CD       /* 모점만 조회 */
+       AND SM.US_YN = 'Y'   /* 사용여부 */
+       AND SM.STAT_CL_CD = '0' /* 상태코드 0 정상, 1 휴점, 2 폐점 */
+       AND SM.STR_CL_CD = '0'
+       AND SM.CSTR_CD NOT IN ('0018','0020','0009','0353', '0357' )
+     </select>
+
+</mapper>

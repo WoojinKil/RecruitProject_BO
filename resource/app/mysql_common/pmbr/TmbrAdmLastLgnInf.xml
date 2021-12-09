@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TmbrAdmLastLgnInf">
+
+	<sql id="select-one-sql">
+		/*[TmbrAdmLastLgnInf.xml][select][TANINE]*/
+		SELECT SYS_CD
+             , USR_ID
+             , LGN_DTTM
+             , IP_ADDR
+             , CRTR_ID
+             , CRT_DTTM
+             , UPDR_ID
+             , UPD_DTTM
+          FROM TMBR_ADM_LAST_LGN_INF
+		 WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</sql>
+	
+	<select id="select" parameterType="ParameterMap" resultType="TmbrAdmLastLgnInf">
+        <include refid="select-one-sql"></include>
+    </select>
+    
+	<select id="selectMap" parameterType="ParameterMap" resultType="DataMap">
+        <include refid="select-one-sql"></include>
+    </select>	
+	
+	<insert id="insert" parameterType="TmbrAdmLastLgnInf">
+        /*[TmbrAdmLastLgnInf.xml][insert][TANINE]*/
+        INSERT INTO TMBR_ADM_LAST_LGN_INF
+		(
+			 SYS_CD
+		   , USR_ID
+		   , LGN_DTTM
+		   , IP_ADDR
+		   , CRTR_ID
+		   , CRT_DTTM
+		   , UPDR_ID
+		   , UPD_DTTM
+		)
+		VALUES
+		(
+			 #{sys_cd, jdbcType=VARCHAR}
+		   , #{usr_id, jdbcType=VARCHAR}
+		   , #{lgn_dttm, jdbcType=TIMESTAMP}
+		   , #{ip_addr, jdbcType=VARCHAR}
+		   , #{crtr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		   , #{updr_id, jdbcType=VARCHAR}
+		   , SYSDATE()
+		)
+	</insert>
+
+	<update id="update" parameterType="tmbrAdmLastLgnInf">
+        /*[TmbrAdmLastLgnInf.xml][update][TANINE]*/
+		UPDATE TMBR_ADM_LAST_LGN_INF
+		   SET <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(lgn_dttm)">
+		       LGN_DTTM = #{lgn_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(ip_addr)">
+		     , IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crtr_id)">
+		     , CRTR_ID = #{crtr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(crt_dttm)">
+		     , CRT_DTTM = #{crt_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(updr_id)">
+		     , UPDR_ID = #{updr_id, jdbcType=VARCHAR}
+		       </if>
+		       <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(upd_dttm)">
+		     , UPD_DTTM = #{upd_dttm, jdbcType=TIMESTAMP}
+		       </if>
+		WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</update>
+
+	<delete id="delete" parameterType="TmbrAdmLastLgnInf">
+        /*[TmbrAdmLastLgnInf.xml][delete][TANINE]*/
+		DELETE FROM TMBR_ADM_LAST_LGN_INF
+		 WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+	</delete>
+
+
+    <select id="selectAdmLastLgnInfCount" parameterType="TmbrAdmLastLgnInf" resultType="int">
+    /*[TmbrAdmLastLgnInf.xml][selectAdmLastLgnInfCount][현재 사이트 및 아이피에 대한 마지막 로그인 정보 유무 체크][TANINE]*/
+    SELECT COUNT(1)
+      FROM TMBR_ADM_LAST_LGN_INF
+     WHERE 1=1
+       AND SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+       AND USR_ID = #{usr_id, jdbcType=VARCHAR}
+    </select>
+    
+    <select id="selectLastLgnInTime" parameterType="Map" resultType="String">
+    /*[TmbrAdmLastLgnInf.xml][selectAdmLastLgnInfCount][현재 사이트 및 아이피에 대한 마지막 로그인 정보 유무 체크][TANINE]*/
+    SELECT DATE_FORMAT(LGN_DTTM,'%y-%m-%d %H:%i')
+      FROM TMBR_ADM_LAST_LGN_INF
+     WHERE 1=1
+       AND SYS_CD = #{sys_cd, jdbcType=VARCHAR}
+       AND USR_ID = #{usr_id, jdbcType=VARCHAR}
+    </select>
+    
+    <insert id="insertTmbrAdmLastLgnInf" parameterType="TmbrAdmLastLgnInf">
+        /*[TmbrAdmLastLgnInf.xml][insertTmbrAdmLastLgnInf][마지막 로그인 정보 insert][TANINE]*/
+        INSERT INTO TMBR_ADM_LAST_LGN_INF
+        (
+             SYS_CD
+           , USR_ID
+           , LGN_DTTM
+           , IP_ADDR
+           , CRTR_ID
+           , CRT_DTTM
+           , UPDR_ID
+           , UPD_DTTM
+        )
+        VALUES
+        (
+             #{sys_cd, jdbcType=VARCHAR}
+           , #{usr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+           , #{ip_addr, jdbcType=VARCHAR}
+           , #{usr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+           , #{usr_id, jdbcType=VARCHAR}
+           , SYSDATE()
+        )
+    </insert>
+
+    <update id="updateTmbrAdmLastLgnInf" parameterType="tmbrAdmLastLgnInf">
+        /*[TmbrAdmLastLgnInf.xml][updateTmbrAdmLastLgnInf][마지막 로그인 정보 update][TANINE]*/
+        UPDATE TMBR_ADM_LAST_LGN_INF
+           SET LGN_DTTM = SYSDATE()
+             , IP_ADDR = #{ip_addr, jdbcType=VARCHAR}
+        WHERE SYS_CD = #{sys_cd, jdbcType=VARCHAR} 
+           AND USR_ID = #{usr_id, jdbcType=VARCHAR} 
+    </update>
+
+</mapper>
