@@ -26,6 +26,83 @@
 	
 	
 	</select>
+	
+	
+	
+	<insert id = "insert" parameterType="BaseApplicantDto">
+		insert into ta_applicant
+		(
+			  RECRUITNO
+			, APPLICANTNO
+			, APPLICANTID
+			, FINALAPPLYCHECKED
+			, APPLYNO
+			, APPLICANTMILLITARY
+			, APPLICANTVETERAN
+			, APPLICANTDISABILITY
+			, APPLICANTJOBPROTECT
+			, APPLYDATE
+		
+		
+		)
+		values
+		(
+			  #{RECRUITNO}
+			, #{APPLICANTNO}
+			, #{APPLICANTID}
+			, #{FINALAPPLYCHECKED}
+			, #{APPLYNO}
+			, #{APPLICANTMILLITARY}
+			, #{APPLICANTVETERAN}
+			, #{APPLICANTDISABILITY}
+			, #{APPLICANTJOBPROTECT}
+			, SYSDATE()
+		
+		
+		)
+		
+	
+	
+	</insert>
+	
+	
+	<update id="update" parameterType="BaseApplicantDto">
+		update ta_recruit_applicant
+		set   UPDATEDATE = SYSDATE();
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(FINALAPPLYCHECKED)">
+			, FINALAPPLYCHECKED = #{FINALAPPLYCHECKED, jdbcType=NUMERIC}
+			</if>
+			
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLYNO)">
+			, APPLYNO = #{APPLYNO, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLICANTMILLITARY)">
+			, APPLICANTMILLITARY = #{APPLICANTMILLITARY, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLICANTVETERAN)">
+			, APPLICANTVETERAN = #{APPLICANTVETERAN, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLICANTDISABILITY)">
+			, APPLICANTDISABILITY = #{APPLICANTDISABILITY, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLICANTJOBPROTECT)">
+			, APPLICANTJOBPROTECT = #{APPLICANTJOBPROTECT, jdbcType=VARCHAR}
+			</if>
+		WHERE APPLICANTNO = #{APPLICANTNO, JDBCTYPE= NUMERIC}
+			  AND RECRUITNO = #{APPLICANTNO, JDBCTYPE= NUMERIC}
+	
+	</update>
+	
+
+	<delete id="delete" parameterType = "BaseApplicantDto">
+	
+		DELETE FROM TA_RECRUIT_APPLICANT
+		WHERE APPLICANTNO = #{APPLICANTNO, JDBCTYPE= NUMERIC}
+	      AND RECRUITNO = #{APPLICANTNO, JDBCTYPE= NUMERIC}
+	</delete>
+
+
+
 
 
 </mapper>

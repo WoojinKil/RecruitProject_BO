@@ -2,8 +2,8 @@ package kr.co.ta9.pandora3.linkruit.dto;
 
 import kr.co.ta9.pandora3.app.bean.CommonBean;
 
-public class BaseRecuitNoticeDto extends CommonBean {
-	private int recruitNo; //채용공고 번호
+public class BaseRecruitNoticeDto extends CommonBean {
+	private Integer recruitNo; //채용공고 번호
 	private String typeNo; //채용 유형 (수시, 공채, 혹은null)
 	private String recruitObject; //채용 대상( 신입, 경력 혹은 null)
 	private String recruitName; //채용공고 이름
@@ -13,10 +13,10 @@ public class BaseRecuitNoticeDto extends CommonBean {
 	private int recruitHit; //공고 조회수
 	private String recruitContent; //공고 내용
 	private String recruitWriteDate; //
-	public int getRecruitNo() {
+	public Integer getRecruitNo() {
 		return recruitNo;
 	}
-	public void setRecruitNo(int recruitNo) {
+	public void setRecruitNo(Integer recruitNo) {
 		this.recruitNo = recruitNo;
 	}
 	public String getTypeNo() {
@@ -72,6 +72,14 @@ public class BaseRecuitNoticeDto extends CommonBean {
 	}
 	public void setRecruitWriteDate(String recruitWriteDate) {
 		this.recruitWriteDate = recruitWriteDate;
+	}
+	@Override
+	public String toString() {
+		return "BaseRecruitNoticeDto [recruitNo=" + recruitNo + ", typeNo=" + typeNo + ", recruitObject="
+				+ recruitObject + ", recruitName=" + recruitName + ", recruitScale=" + recruitScale
+				+ ", recruitStartDateTime=" + recruitStartDateTime + ", recruitEndDateTime=" + recruitEndDateTime
+				+ ", recruitHit=" + recruitHit + ", recruitContent=" + recruitContent + ", recruitWriteDate="
+				+ recruitWriteDate + "]";
 	}
 
 	

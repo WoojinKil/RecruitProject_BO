@@ -26,6 +26,16 @@ public class BaseApplicantDto extends CommonBean{
 	private int finalApplyChecked;
 	private String applyDate;
 	
+	private String updateDate;
+	
+	
+	
+	public String getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
 	public int getApplicantNo() {
 		return applicantNo;
 	}

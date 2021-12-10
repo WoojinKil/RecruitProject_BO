@@ -1,11 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace = "RecuitNotice">
-	<select id = "selectRecruitNoticeList" resultType="BaseRecuitNoticeDto">
+<mapper namespace = "RecruitNotice">
+	
+	
+	<!-- 채용공고 등록 -->
+	<insert id= "insert" parameterType="BaseRecruitNoticeDto">
+		INSERT INTO TA_RECRUIT_NOTICE
+		(
+		
+			  RECRUITNO
+			, RECRUITNAME
+			, TYPENO
+			, RECRUITSCALE
+			, RECRUITENDDATETIME
+
+		
+		)
+		VALUES
+		(
+			  #{recruitNo}
+			, #{recruitName}
+			, #{typeNo}
+			, #{recruitScale}
+			, #{recruitEndDateTime}
+		
+		)
+		
+		
+		
+		
+		
+	
+	
+	</insert>
+	
+	
+	
+	
+	<update id="update" parameterType="BaseRecruitNoticeDto">
+		update ta_recruit_notice
+			set recruitWriteDate = SYSDATE()
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITNAME)">
+			,RECRUITNAME = #{recruitName, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(TYPENO)">
+			,TYPENO = #{typeNo, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITSCALE)">
+			,RECRUITSCALE = #{recruitScale, jdbcType=VARCHAR}
+			</if>
+	
+	
+		where RECRUITNO = #{RECRUITNO}
+	</update>
+	
+	<!-- 채용공고 삭제 -->
+	<delete id="delete" parameterType="BaseRecruitNoticeDto">
+		delete from ta_recruit_notice
+		where recruitNo = #{RECRUITNO}
+	
+	</delete>
+	
+	
+	<!-- 채용공고 리스트 조회 -->
+	<select id = "selectRecruitNoticeList" resultType="BaseRecruitNoticeDto">
 	
 	
 	select * from ta_recruit_notice;
 	
 	
 	</select>
-</mapper>
+	
+	
+	
+	<!-- 채용공고/지원자 삭제 -->
+	<delete id="deleteApplicant" parameterType="BaseApplicantDto">
+		delete
+			from ta_recruit_applicant
+			where RECRUITNO = #{recruitNo, jdbcType=INTEGER}
+			
+		
+	
+	</delete>
+	
+	<!-- 채용공고 수 -->
+	<select id ="selectRecruitNoticeCnt" parameterType="ParameterMap" resultType="Integer">
+	
+		select count(1)
+			from ta_recruit_notice
+	 		where recruitNo = upper(#{recruitNo, jdbcType=INTEGER})
+	
+	
+	</select></mapper>

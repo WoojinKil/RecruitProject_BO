@@ -117,6 +117,8 @@ public class Psys1005Mgr {
 		List<TcmnCdMst> deleteList = new ArrayList<TcmnCdMst>();
 		parameterMap.populates(TcmnCdMst.class, insertList, updateList, deleteList,"masterdata");
 
+		System.out.println("saveTcmnAlll에서의 parameter값"+ parameterMap);
+		
 		//Map<String,String> resultMap = new HashMap<String,String>();
 		//resultMap = parameterMap.parseFormData("formdata");
 
@@ -136,6 +138,8 @@ public class Psys1005Mgr {
 		TcmnCdMst[] update = updateList.toArray(new TcmnCdMst[0]);
 		TcmnCdMst[] delete = deleteList.toArray(new TcmnCdMst[0]);
 
+		System.out.println("insert 값은"+insert);
+		
 		tcmnCdMstDao.insertMany("TcmnCdMst.insert", insert);
 		tcmnCdMstDao.updateMany("TcmnCdMst.update", update);
 		tcmnCdMstDao.deleteMany("TcmnCdMst.delete", delete);

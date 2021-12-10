@@ -42,10 +42,10 @@ $(document).ready(function(){
 		                     });
 		                 }
 		             }},
-                     {name:'RECRUITNAME', label:'공고 이름', editable:true, edittype:'text', width:200, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate }},   // 저장 필수값은 required:true를 준다             
+                     {name:'RECRUITNAME', label:'공고 이름', editable:true, edittype:'text', width:300, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate }},   // 저장 필수값은 required:true를 준다             
                      {name:'TYPENO', label:'채용 형태', align:'center', editable:true, edittype:'select', formatter:'select', editoptions:{value:'T1:공채; T2:수시', dataInit:fn_changeGridDate}, width:60, required:true},
                      {name:'RECRUITSCALE', label:'채용규모', editable:true, width:100 , editoptions:{maxlength:100, dataInit: fn_changeGridDate}},
-                     {name:'RECRUITENDDATETIME',label:'채용마감시간', align:'center', width:100}
+                     {name:'RECRUITENDDATETIME',label:'채용마감시간',editable:true, align:'center', width:100}
                     ],          
         initval        : {typeNo:'T1', SRT_SEQ:999, recruitNo:'A00'},    // 컬럼 add 시 초기값
         editmode       : true,                                 	    // 그리드 editable 여부
@@ -56,13 +56,14 @@ $(document).ready(function(){
         height         : 200,                                       // 그리드 높이
         //shrinkToFit  : true,                              	    // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
         selecturl      : '/linkruit/getRecruitNoticeList',  		    // 그리드 조회 URL
-        saveurl        : '/psys/savePsys10051',        		    // 그리드 입력/수정/삭제 URL
+        saveurl        : '/linkruit/saveRecruitNotice1',        		    // 그리드 입력/수정/삭제 URL
         events         : {
         					  ondblClickRow: function(event, rowid) {
 	                              var row = recruit_notice_grid.getRowData(rowid);
 	                              if (isNotEmpty(row.RECRUITNO)) {
 	                              	 target_row = row;
 	                             	 applicant_grid.retreive({data:{RECRUITNO:row.RECRUITNO}});
+	                             	 
 	                             	
 	                              }
 	                          },
@@ -116,7 +117,7 @@ $(document).ready(function(){
             height      : 200,                                // 그리드 높이
             shrinkToFit : true,                               // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
             selecturl   : '/linkruit/getApplicantList',       // 그리드 조회 URL
-            saveurl     : '/psys/savePsys10052',          // 그리드 입력/수정/삭제 URL
+            saveurl     : '/linkruit/saveApplicant2',          // 그리드 입력/수정/삭제 URL
         };
     
     recruit_notice_grid = new UxGrid(up_config);
@@ -292,16 +293,17 @@ function fn_Search(){
 
 function fn_Save(){
 	//jqgrid grid 데이터 json 형태로 생성
-	var masterdata = getSaveData("recruit_notice_grid"); //grid_id
-    var dtldata  = getSaveData("applicant_grid"); //grid_id
-    if(isEmpty(masterdata)) {
+	var recruitNoticeData = getSaveData("recruit_notice_grid"); //grid_id
+    var applicantData  = getSaveData("applicant_grid"); //grid_id
+    if(isEmpty(recruitNoticeData)) {
     	return false;
     }
     //입력폼데이터 파라미터형태로 변경
     var formdata  = $("form[name=search]").serialize();
-    var data ="masterdata="+masterdata+"&dtldata="+dtldata+"&_pre_url="+parent.preUrl.getPreUrl() +"&" + formdata; 
+    var data ="recruitNoticeData="+recruitNoticeData+"&applicantData="+applicantData+"&_pre_url="+parent.preUrl.getPreUrl() +"&" + formdata;
+    console.log(data);
 	ajax({
-   		url: '/psys/savePsys1005',
+   		url: '/linkruit/saveRecruitNotice',
    		data : data ,
    		async : false,
    		success: function(data) {
