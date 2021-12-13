@@ -16,7 +16,7 @@ public class RecruitNoticeDao extends BaseDao {
 	//기본키 값 체크
 	public boolean isPrimaryKeyValid(BaseRecruitNoticeDto baseRecruitNoticeDto) {
 		boolean result = true;
-		if(baseRecruitNoticeDto != null && baseRecruitNoticeDto.getRecruitNo() != null) {
+		if(baseRecruitNoticeDto != null && baseRecruitNoticeDto.getRecruitno() != null) {
 			result = true;
 		}else {
 			result = false;

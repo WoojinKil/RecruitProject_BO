@@ -3,39 +3,36 @@ package kr.co.ta9.pandora3.linkruit.dto;
 import kr.co.ta9.pandora3.app.bean.CommonBean;
 
 public class BaseRecruitNoticeDto extends CommonBean {
-	private Integer recruitNo; //채용공고 번호
-	private String typeNo; //채용 유형 (수시, 공채, 혹은null)
-	private String recruitObject; //채용 대상( 신입, 경력 혹은 null)
-	private String recruitName; //채용공고 이름
+	private Integer recruitno; //채용공고 번호
+	private String typeno; //채용 유형 (수시, 공채, 혹은null)
+	private String recruitname; //채용공고 이름
 	private String recruitScale; //채용 규모 (000명, 혹은 null)
-	private String recruitStartDateTime; //채용 시작일
-	private String recruitEndDateTime; //채용 마감일
-	private int recruitHit; //공고 조회수
-	private String recruitContent; //공고 내용
-	private String recruitWriteDate; //
-	public Integer getRecruitNo() {
-		return recruitNo;
+	private String recruitstartdatetime; //채용 시작일
+	private String recruitenddatetime; //채용 마감일
+	private int recruithit; //공고 조회수
+	private String recruitcontent; //공고 내용
+	private String recruitwritedate; //작성일자
+	private String recruitupdate;
+	
+	
+	public Integer getRecruitno() {
+		return recruitno;
 	}
-	public void setRecruitNo(Integer recruitNo) {
-		this.recruitNo = recruitNo;
+	public void setRecruitno(Integer recruitno) {
+		this.recruitno = recruitno;
 	}
-	public String getTypeNo() {
-		return typeNo;
+	public String getTypeno() {
+		return typeno;
 	}
-	public void setTypeNo(String typeNo) {
-		this.typeNo = typeNo;
+	public void setTypeno(String typeno) {
+		this.typeno = typeno;
 	}
-	public String getRecruitObject() {
-		return recruitObject;
+
+	public String getRecruitname() {
+		return recruitname;
 	}
-	public void setRecruitObject(String recruitObject) {
-		this.recruitObject = recruitObject;
-	}
-	public String getRecruitName() {
-		return recruitName;
-	}
-	public void setRecruitName(String recruitName) {
-		this.recruitName = recruitName;
+	public void setRecruitname(String recruitname) {
+		this.recruitname = recruitname;
 	}
 	public String getRecruitScale() {
 		return recruitScale;
@@ -43,43 +40,50 @@ public class BaseRecruitNoticeDto extends CommonBean {
 	public void setRecruitScale(String recruitScale) {
 		this.recruitScale = recruitScale;
 	}
-	public String getRecruitStartDateTime() {
-		return recruitStartDateTime;
+	public String getRecruitstartdatetime() {
+		return recruitstartdatetime;
 	}
-	public void setRecruitStartDateTime(String recruitStartDateTime) {
-		this.recruitStartDateTime = recruitStartDateTime;
+	public void setRecruitstartdatetime(String recruitstartdatetime) {
+		this.recruitstartdatetime = recruitstartdatetime;
 	}
-	public String getRecruitEndDateTime() {
-		return recruitEndDateTime;
+	public String getRecruitenddatetime() {
+		return recruitenddatetime;
 	}
-	public void setRecruitEndDateTime(String recruitEndDateTime) {
-		this.recruitEndDateTime = recruitEndDateTime;
+	public void setRecruitenddatetime(String recruitenddatetime) {
+		this.recruitenddatetime = recruitenddatetime;
 	}
-	public int getRecruitHit() {
-		return recruitHit;
+	public int getRecruithit() {
+		return recruithit;
 	}
-	public void setRecruitHit(int recruitHit) {
-		this.recruitHit = recruitHit;
+	public void setRecruithit(int recruithit) {
+		this.recruithit = recruithit;
 	}
-	public String getRecruitContent() {
-		return recruitContent;
+	public String getRecruitcontent() {
+		return recruitcontent;
 	}
-	public void setRecruitContent(String recruitContent) {
-		this.recruitContent = recruitContent;
+	public void setRecruitcontent(String recruitcontent) {
+		this.recruitcontent = recruitcontent;
 	}
-	public String getRecruitWriteDate() {
-		return recruitWriteDate;
+	public String getRecruitwritedate() {
+		return recruitwritedate;
 	}
-	public void setRecruitWriteDate(String recruitWriteDate) {
-		this.recruitWriteDate = recruitWriteDate;
+	public void setRecruitwritedate(String recruitwritedate) {
+		this.recruitwritedate = recruitwritedate;
+	}
+	
+	
+	public String getRecruitupdate() {
+		return recruitupdate;
+	}
+	public void setRecruitupdate(String recruitupdate) {
+		this.recruitupdate = recruitupdate;
 	}
 	@Override
 	public String toString() {
-		return "BaseRecruitNoticeDto [recruitNo=" + recruitNo + ", typeNo=" + typeNo + ", recruitObject="
-				+ recruitObject + ", recruitName=" + recruitName + ", recruitScale=" + recruitScale
-				+ ", recruitStartDateTime=" + recruitStartDateTime + ", recruitEndDateTime=" + recruitEndDateTime
-				+ ", recruitHit=" + recruitHit + ", recruitContent=" + recruitContent + ", recruitWriteDate="
-				+ recruitWriteDate + "]";
+		return "BaseRecruitNoticeDto [recruitno=" + recruitno + ", typeno=" + typeno + ", recruitname=" + recruitname
+				+ ", recruitscale=" + recruitScale + ", recruitstartdatetime=" + recruitstartdatetime
+				+ ", recruitenddatetime=" + recruitenddatetime + ", recruithit=" + recruithit + ", recruitcontent="
+				+ recruitcontent + ", recruitwritedate=" + recruitwritedate + ", recruitupdate=" + recruitupdate + "]";
 	}
 
 	

@@ -4,139 +4,168 @@ import kr.co.ta9.pandora3.app.bean.CommonBean;
 
 public class BaseApplicantDto extends CommonBean{
 
-	private int applicantNo;
-	private String applicantId;
-	private int recruitNo;
-	private int applyNo;
-	private String applicantMillitary;
-	private String applicantVeteran;
-	private String applicantDisability;
-	private String applicantJobProtect;
+	private int applicantno;
+	private String applicantid;
+	private int recruitno;
+	private int applyno;
+	private String applicantmillitary;
+	private String applicantveteran;
+	private String applicantdisability;
+	private String applicantjobprotect;
 	
-	private String applicantHighSchoolName;
- 	private int applicantHighSchoolGraduateYear; 
- 	private String applicantHighSchoolGraduateState;
-	
-	
-	
-	private String applicantAssay1;
-	private String applicantAssay2;
-	private String applicantAssay3;
-	
-	private int finalApplyChecked;
-	private String applyDate;
-	
-	private String updateDate;
+	private String applicanthighschoolname;
+ 	private int applicanthighschoolgraduateyear; 
+ 	private String applicanthighschoolgraduatestate;
 	
 	
 	
-	public String getUpdateDate() {
-		return updateDate;
+	private String applicantassay1;
+	private String applicantassay2;
+	private String applicantassay3;
+	
+	private int finalapplychecked;
+	private String applydate;
+	
+	private String updatedate;
+
+	public int getApplicantno() {
+		return applicantno;
 	}
-	public void setUpdateDate(String updateDate) {
-		this.updateDate = updateDate;
+
+	public void setApplicantno(int applicantno) {
+		this.applicantno = applicantno;
 	}
-	public int getApplicantNo() {
-		return applicantNo;
+
+	public String getApplicantid() {
+		return applicantid;
 	}
-	public void setApplicantNo(int applicantNo) {
-		this.applicantNo = applicantNo;
+
+	public void setApplicantid(String applicantid) {
+		this.applicantid = applicantid;
 	}
-	public String getApplicantId() {
-		return applicantId;
+
+	public int getRecruitno() {
+		return recruitno;
 	}
-	public void setApplicantId(String applicantId) {
-		this.applicantId = applicantId;
+
+	public void setRecruitno(int recruitno) {
+		this.recruitno = recruitno;
 	}
-	public int getRecruitNo() {
-		return recruitNo;
+
+	public int getApplyno() {
+		return applyno;
 	}
-	public void setRecruitNo(int recruitNo) {
-		this.recruitNo = recruitNo;
+
+	public void setApplyno(int applyno) {
+		this.applyno = applyno;
 	}
-	public int getApplyNo() {
-		return applyNo;
+
+	public String getApplicantmillitary() {
+		return applicantmillitary;
 	}
-	public void setApplyNo(int applyNo) {
-		this.applyNo = applyNo;
+
+	public void setApplicantmillitary(String applicantmillitary) {
+		this.applicantmillitary = applicantmillitary;
 	}
+
+	public String getApplicantveteran() {
+		return applicantveteran;
+	}
+
+	public void setApplicantveteran(String applicantveteran) {
+		this.applicantveteran = applicantveteran;
+	}
+
+	public String getApplicantdisability() {
+		return applicantdisability;
+	}
+
+	public void setApplicantdisability(String applicantdisability) {
+		this.applicantdisability = applicantdisability;
+	}
+
+	public String getApplicantjobprotect() {
+		return applicantjobprotect;
+	}
+
+	public void setApplicantjobprotect(String applicantjobprotect) {
+		this.applicantjobprotect = applicantjobprotect;
+	}
+
+	public String getApplicanthighschoolname() {
+		return applicanthighschoolname;
+	}
+
+	public void setApplicanthighschoolname(String applicanthighschoolname) {
+		this.applicanthighschoolname = applicanthighschoolname;
+	}
+
+	public int getApplicanthighschoolgraduateyear() {
+		return applicanthighschoolgraduateyear;
+	}
+
+	public void setApplicanthighschoolgraduateyear(int applicanthighschoolgraduateyear) {
+		this.applicanthighschoolgraduateyear = applicanthighschoolgraduateyear;
+	}
+
+	public String getApplicanthighschoolgraduatestate() {
+		return applicanthighschoolgraduatestate;
+	}
+
+	public void setApplicanthighschoolgraduatestate(String applicanthighschoolgraduatestate) {
+		this.applicanthighschoolgraduatestate = applicanthighschoolgraduatestate;
+	}
+
+	public String getApplicantassay1() {
+		return applicantassay1;
+	}
+
+	public void setApplicantassay1(String applicantassay1) {
+		this.applicantassay1 = applicantassay1;
+	}
+
+	public String getApplicantassay2() {
+		return applicantassay2;
+	}
+
+	public void setApplicantassay2(String applicantassay2) {
+		this.applicantassay2 = applicantassay2;
+	}
+
+	public String getApplicantassay3() {
+		return applicantassay3;
+	}
+
+	public void setApplicantassay3(String applicantassay3) {
+		this.applicantassay3 = applicantassay3;
+	}
+
+	public int getFinalapplychecked() {
+		return finalapplychecked;
+	}
+
+	public void setFinalapplychecked(int finalapplychecked) {
+		this.finalapplychecked = finalapplychecked;
+	}
+
+	public String getApplydate() {
+		return applydate;
+	}
+
+	public void setApplydate(String applydate) {
+		this.applydate = applydate;
+	}
+
+	public String getUpdatedate() {
+		return updatedate;
+	}
+
+	public void setUpdatedate(String updatedate) {
+		this.updatedate = updatedate;
+	}
+	
+	
+	
 	
 
-	public int getFinalApplyChecked() {
-		return finalApplyChecked;
-	}
-	public void setFinalApplyChecked(int finalApplyChecked) {
-		this.finalApplyChecked = finalApplyChecked;
-	}
-	public String getApplyDate() {
-		return applyDate;
-	}
-	public void setApplyDate(String applyDate) {
-		this.applyDate = applyDate;
-	}
-	public String getApplicantMillitary() {
-		return applicantMillitary;
-	}
-	public void setApplicantMillitary(String applicantMillitary) {
-		this.applicantMillitary = applicantMillitary;
-	}
-	public String getApplicantVeteran() {
-		return applicantVeteran;
-	}
-	public void setApplicantVeteran(String applicantVeteran) {
-		this.applicantVeteran = applicantVeteran;
-	}
-	public String getApplicantDisability() {
-		return applicantDisability;
-	}
-	public void setApplicantDisability(String applicantDisability) {
-		this.applicantDisability = applicantDisability;
-	}
-	public String getApplicantJobProtect() {
-		return applicantJobProtect;
-	}
-	public void setApplicantJobProtect(String applicantJobProtect) {
-		this.applicantJobProtect = applicantJobProtect;
-	}
-	
-	
-	
-	
-	
-	public String getApplicantHighSchoolName() {
-		return applicantHighSchoolName;
-	}
-	public void setApplicantHighSchoolName(String applicantHighSchoolName) {
-		this.applicantHighSchoolName = applicantHighSchoolName;
-	}
-	public int getApplicantHighSchoolGraduateYear() {
-		return applicantHighSchoolGraduateYear;
-	}
-	public void setApplicantHighSchoolGraduateYear(int applicantHighSchoolGraduateYear) {
-		this.applicantHighSchoolGraduateYear = applicantHighSchoolGraduateYear;
-	}
-	public String getApplicantHighSchoolGraduateState() {
-		return applicantHighSchoolGraduateState;
-	}
-	public void setApplicantHighSchoolGraduateState(String applicantHighSchoolGraduateState) {
-		this.applicantHighSchoolGraduateState = applicantHighSchoolGraduateState;
-	}
-	public String getApplicantAssay1() {
-		return applicantAssay1;
-	}
-	public void setApplicantAssay1(String applicantAssay1) {
-		this.applicantAssay1 = applicantAssay1;
-	}
-	public String getApplicantAssay2() {
-		return applicantAssay2;
-	}
-	public void setApplicantAssay2(String applicantAssay2) {
-		this.applicantAssay2 = applicantAssay2;
-	}
-	public String getApplicantAssay3() {
-		return applicantAssay3;
-	}
-	public void setApplicantAssay3(String applicantAssay3) {
-		this.applicantAssay3 = applicantAssay3;
-	}
 }

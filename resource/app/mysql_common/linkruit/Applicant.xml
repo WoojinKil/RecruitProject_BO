@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Applicant">
-	<select id="selectApplicantList" parameterType="ParameterMap" resultType="BaseApplicantDto">
+	<select id="selectApplicantList" parameterType="ParameterMap" resultType="ApplicantDto">
 		select AP.applicantNo
+			  ,M.memberName
+			  ,M.memberBirth
 			  ,AP.applicantId
 			  ,AP.applyNo
 			  ,AP.applicantMillitary
@@ -11,15 +13,17 @@
 			  ,AP.applicantJobProtect
 			  ,AP.applyDate
 			  ,AP.finalApplyChecked
+			  
 			
 		
 		
 		from ta_recruit_applicant AP
 			 ,ta_recruit_notice N
+			 ,ta_recruit_member M
 		where 1=1
 		and AP.recruitNo=N.recruitNO
 		and AP.recruitNo=#{RECRUITNO}
-		
+		and AP.applicantId = M.memberId
 		
 		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITNO)">AND AP.RECRUITNO        = #{RECRUITNO         ,jdbcType=NUMERIC} </if>
 	
@@ -30,7 +34,7 @@
 	
 	
 	<insert id = "insert" parameterType="BaseApplicantDto">
-		insert into ta_applicant
+		insert into ta_recruit_applicant
 		(
 			  RECRUITNO
 			, APPLICANTNO
@@ -47,15 +51,15 @@
 		)
 		values
 		(
-			  #{RECRUITNO}
-			, #{APPLICANTNO}
-			, #{APPLICANTID}
-			, #{FINALAPPLYCHECKED}
-			, #{APPLYNO}
-			, #{APPLICANTMILLITARY}
-			, #{APPLICANTVETERAN}
-			, #{APPLICANTDISABILITY}
-			, #{APPLICANTJOBPROTECT}
+			  #{recruitno}
+			, #{applicantno}
+			, #{applicantid}
+			, #{finalapplychecked}
+			, #{applyno}
+			, #{applicantmillitary}
+			, #{applicantveteran}
+			, #{applicantdisability}
+			, #{applicantjobprotect}
 			, SYSDATE()
 		
 		
@@ -68,28 +72,25 @@
 	
 	<update id="update" parameterType="BaseApplicantDto">
 		update ta_recruit_applicant
-		set   UPDATEDATE = SYSDATE();
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(FINALAPPLYCHECKED)">
-			, FINALAPPLYCHECKED = #{FINALAPPLYCHECKED, jdbcType=NUMERIC}
+		set   UPDATEDATE = SYSDATE()
+
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(applyno)">
+			, APPLYNO = #{applyno, jdbcType=VARCHAR}
 			</if>
-			
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLYNO)">
-			, APPLYNO = #{APPLYNO, jdbcType=VARCHAR}
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitno)">
+			, RECRUITNO = #{recruitno, jdbcType=VARCHAR}
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLICANTMILLITARY)">
-			, APPLICANTMILLITARY = #{APPLICANTMILLITARY, jdbcType=VARCHAR}
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(partno)">
+			, APPLICANTVETERAN = #{applicantveteran, jdbcType=VARCHAR}
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLICANTVETERAN)">
-			, APPLICANTVETERAN = #{APPLICANTVETERAN, jdbcType=VARCHAR}
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(applicantdisability)">
+			, APPLICANTDISABILITY = #{applicantdisability, jdbcType=VARCHAR}
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLICANTDISABILITY)">
-			, APPLICANTDISABILITY = #{APPLICANTDISABILITY, jdbcType=VARCHAR}
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(applicantjobprotect)">
+			, APPLICANTJOBPROTECT = #{applicantjobprotect, jdbcType=VARCHAR}
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(APPLICANTJOBPROTECT)">
-			, APPLICANTJOBPROTECT = #{APPLICANTJOBPROTECT, jdbcType=VARCHAR}
-			</if>
-		WHERE APPLICANTNO = #{APPLICANTNO, JDBCTYPE= NUMERIC}
-			  AND RECRUITNO = #{APPLICANTNO, JDBCTYPE= NUMERIC}
+		WHERE APPLICANTNO = #{applicantno}
+			  
 	
 	</update>
 	

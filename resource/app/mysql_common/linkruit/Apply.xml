@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Apply">
+	<select id="selectApplyList" parameterType="ParameterMap" resultType="ApplyDto">
+		select   AP.applyno
+				, N.recruitno
+				, P.partname
+				, O.objectname
+				, W.workname
+				, AP.applyContent
+		
+			  
+			
+		
+		
+		from ta_recruit_apply AP
+			 ,ta_recruit_notice N
+			 ,ta_recruit_part P
+			 ,ta_recruit_object O
+			 ,ta_recruit_work W
+		where 1=1
+		and AP.recruitNo=N.recruitNO
+		and AP.recruitNo=#{RECRUITNO}
+		and AP.objectNo = O.objectNo
+		and AP.partNo = P.partNo
+		and AP.workNo = W.workNo
+		
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITNO)">AND AP.RECRUITNO        = #{RECRUITNO         ,jdbcType=NUMERIC} </if>
+	
+	
+	
+	</select>
+	
+	<insert id="insert" parameterType="ApplyDto">
+		insert into ta_recruit_apply
+		(
+			  APPLYNO
+			, RECRUITNO
+			, PARTNO
+			, OBJECTNO
+			, WORKNO
+			, APPLYCONTENT
+			
+		)
+		values
+		(
+			  #{applyno}
+			, #{recruitno}
+			, #{partno}
+			, #{objectno}
+			, #{workno}
+			, #{applycontent}
+			
+		
+		
+		)
+	
+	</insert>
+
+	<update id="update" parameterType="ApplyDto">
+		update ta_recruit_apply
+		set   APPLYUPDATEDATE = SYSDATE()
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(partname)">
+			, PARTNO = (select PARTNO from ta_recruit_part where partName = #{partname, jdbcType=VARCHAR})
+			</if>
+			
+
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(workname)">
+			, WORKNO = (select WORKNO from ta_recruit_work where WORKNAME = #{workname, jdbcType=VARCHAR})
+			</if>
+
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(objectname)">
+			, OBJECTNO = (select OBJECTNO from ta_recruit_object where OBJECTNAME = #{objectname, jdbcType=VARCHAR})
+			
+			</if>
+
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(applycontent)">
+			, APPLYCONTENT = #{applycontent, jdbcType=VARCHAR}
+			</if>
+			
+		WHERE ApplyNo = #{applyno}
+			  
+	</update>
+	
+	
+	<delete id="delete" parameterType="ApplyDto">
+		DELETE FROM TA_RECRUIT_APPLY
+		WHERE RECRUITNO = #{recruitno, jdbcType=NUMERIC}
+		
+	
+	
+	</delete>
+
+</mapper>

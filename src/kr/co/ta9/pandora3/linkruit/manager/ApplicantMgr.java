@@ -22,7 +22,7 @@ public class ApplicantMgr {
 		return applicantDao.selectApplicantGridList(parameterMap);
 	}
 	
-	
+	//지원자 공고 저장
 	public void saveApplicant2(ParameterMap parameterMap) throws Exception{
 		List<BaseApplicantDto> insertList = new ArrayList<BaseApplicantDto>();
 		List<BaseApplicantDto> updateList = new ArrayList<BaseApplicantDto>();

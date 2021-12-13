@@ -43,7 +43,7 @@ public class RecruitNoticeMgr {
 		
 		if(!insertList.isEmpty()) {
 			for(BaseRecruitNoticeDto baseRecruitNoticeDto : insertList) {
-				parameterMap.put("RECRUITNO",baseRecruitNoticeDto.getRecruitNo());
+				parameterMap.put("RECRUITNO",baseRecruitNoticeDto.getRecruitno());
 				cnt= recruitNoticeDao.selectRecruitNoticeCnt(parameterMap);
 				
 			}
@@ -75,9 +75,14 @@ public class RecruitNoticeMgr {
 		parameterMap.populates(BaseRecruitNoticeDto.class, insertList, updateList, deleteList,"recruitNoticeData");
 		System.out.println("saveRecruitNotice MGR에서 parameterMap"+ parameterMap);
 		
-		BaseRecruitNoticeDto[] insert= insertList.toArray(new BaseRecruitNoticeDto[0]);
-		BaseRecruitNoticeDto[] update= updateList.toArray(new BaseRecruitNoticeDto[0]);
-		BaseRecruitNoticeDto[] delete= deleteList.toArray(new BaseRecruitNoticeDto[0]);
+		System.out.println("insertList " + insertList.toString());
+		System.out.println("updateList " + updateList.toString());
+		System.out.println("deleteList " + deleteList.toString());
+		
+		
+		BaseRecruitNoticeDto[] insert = insertList.toArray(new BaseRecruitNoticeDto[0]);
+		BaseRecruitNoticeDto[] update = updateList.toArray(new BaseRecruitNoticeDto[0]);
+		BaseRecruitNoticeDto[] delete = deleteList.toArray(new BaseRecruitNoticeDto[0]);
 		for(int i=0;i<insert.length; i++) {
 
 			System.out.println("insert 값은="+insert[i].toString());

@@ -135,7 +135,7 @@ $(document).ready(function(){
     $("#btn_code_master_save").click(function() {
     	var rowid = code_master_grid.getSelectRowIDs();
         var row = code_master_grid.getRowData(rowid);
-        
+        console.log(row.MST_CD);	
     	if(row.MST_CD == "A00") { 
             alert("코드ID를 입력해주세요.");
             

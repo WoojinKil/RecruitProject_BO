@@ -138,8 +138,11 @@ public class Psys1005Mgr {
 		TcmnCdMst[] update = updateList.toArray(new TcmnCdMst[0]);
 		TcmnCdMst[] delete = deleteList.toArray(new TcmnCdMst[0]);
 
-		System.out.println("insert 값은"+insert);
-		
+		for(int i=0; i< insert.length; i++) {
+
+			System.out.println("insert 값은"+insert[i].toString());
+				
+		}
 		tcmnCdMstDao.insertMany("TcmnCdMst.insert", insert);
 		tcmnCdMstDao.updateMany("TcmnCdMst.update", update);
 		tcmnCdMstDao.deleteMany("TcmnCdMst.delete", delete);

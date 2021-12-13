@@ -12,17 +12,24 @@
 			, RECRUITNAME
 			, TYPENO
 			, RECRUITSCALE
+			, RECRUITSTARTDATETIME
 			, RECRUITENDDATETIME
-
+			, RECRUITCONTENT
+			, RECRUITWRITEDATE
+			, RECRUITHIT
 		
 		)
 		VALUES
 		(
-			  #{recruitNo}
-			, #{recruitName}
-			, #{typeNo}
-			, #{recruitScale}
-			, #{recruitEndDateTime}
+			  #{recruitno}
+			, #{recruitname}
+			, #{typeno}
+			, #{recruitscale}
+			, #{recruitstartdatetime}
+			, #{recruitenddatetime}
+			, #{recruitcontent}
+			, SYSDATE()
+			, 0
 		
 		)
 		
@@ -39,25 +46,34 @@
 	
 	<update id="update" parameterType="BaseRecruitNoticeDto">
 		update ta_recruit_notice
-			set recruitWriteDate = SYSDATE()
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITNAME)">
-			,RECRUITNAME = #{recruitName, jdbcType=VARCHAR}
+			set recruitUpdateDate = SYSDATE()
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitname)">
+			,RECRUITNAME = #{recruitname, jdbcType=VARCHAR}
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(TYPENO)">
-			,TYPENO = #{typeNo, jdbcType=VARCHAR}
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(typeno)">
+			,TYPENO = #{typeno, jdbcType=VARCHAR}
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITSCALE)">
-			,RECRUITSCALE = #{recruitScale, jdbcType=VARCHAR}
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitscale)">
+			,RECRUITSCALE = #{recruitscale, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitstartdatetime)">
+			,RECRUITSTARTDATETIME = #{recruitstartdatetime, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitenddatetime)">
+			,RECRUITENDDATETIME = #{recruitenddatetime, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitcontent)">
+			,RECRUITCONTENT = #{recruitcontent, jdbcType=VARCHAR}
 			</if>
 	
 	
-		where RECRUITNO = #{RECRUITNO}
+		where recruitno = #{recruitno}
 	</update>
 	
 	<!-- 채용공고 삭제 -->
 	<delete id="delete" parameterType="BaseRecruitNoticeDto">
 		delete from ta_recruit_notice
-		where recruitNo = #{RECRUITNO}
+		where recruitno = #{recruitno}
 	
 	</delete>
 	
@@ -77,7 +93,7 @@
 	<delete id="deleteApplicant" parameterType="BaseApplicantDto">
 		delete
 			from ta_recruit_applicant
-			where RECRUITNO = #{recruitNo, jdbcType=INTEGER}
+			where RECRUITNO = #{recruitno, jdbcType=INTEGER}
 			
 		
 	
@@ -88,7 +104,7 @@
 	
 		select count(1)
 			from ta_recruit_notice
-	 		where recruitNo = upper(#{recruitNo, jdbcType=INTEGER})
+	 		where recruitNo = upper(#{recruitno, jdbcType=INTEGER})
 	
 	
 	</select></mapper>
