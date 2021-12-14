@@ -1,44 +1,61 @@
 <%-- 
-   1. 파일명 : psys1007
-   2. 파일설명 : 시스템사용자관리
-   3. 작성일 : 2018-03-28
-   4. 작성자 : TANINE
+   1. 파일명   : MemberList
+   2. 파일설명 : 회원관리
+   3. 작성일   : 2018-03-27
+   4. 작성자   : TANINE
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!-- 헤더파일 include -->
 <%@ include file="/WEB-INF/views/pandora3/common/include/header.jsp"%>
-
 <script type="text/javascript">
-var admin_grid;
+var member_grid;
 
+var target_row = null;
+
+
+function fn_changeGridDate(element, row) {
+	var gridId = $(element).closest("table").attr("id");
+	$(element).on("propertychange change keyup paste input", function () {
+		var chk = $("input:checkbox[id='jqg_" + gridId +"_"+ row.rowId +"']").is(":checked");
+			if(chk != true) {
+        		$("#"+gridId).jqGrid("setSelection", row.rowId, true);
+			}
+    	 
+     });
+}
 
 $(document).ready(function(){
-    // 공통코드 복수 설정
-    $("#mst_cd_arr").val(new Array('MSTS'));
-    
-    ajax({
-        url     : '/psys/getPsysCommon',
-        data    : $("form[name=frm_sysCdDtl]").serialize(),
-        success : function(data) {
-            for(i=0; i<data.selectData.length; i++)
-                $("#usr_stat_cd").append("<option value='" + data.selectData[i].CD+ "'>" + data.selectData[i].CD_NM + "</option> ");
-        }
-    });
-    
-    var grid_config = { 
-        gridid    : 'member_grid',
-        pagerid   : 'member_grid_pager',
-        gridBtnYn : 'Y',                        // 상단 그리드 버튼 여부 ( 그리드 1개 일때 필수 'Y', 상/하단 그리드 일 경우 상단 그리드만 필수'Y' )
+    var up_config = { 
+        gridid    : 'member_grid',	    	// 그리드 id
+        pagerid   : 'member_grid_pager',	// 그리드 페이지 id
+        gridBtnYn : 'Y',						// 상단 그리드 버튼 여부 ( 그리드 1개 일때 필수 'Y', 상/하단 그리드 일 경우 상단 그리드만 필수'Y' )
+        // column info
         columns   : [
-            {name : 'MEMBERID', label : '아이디', sortable:false, editable : false, hidden : true},
-            {name : 'MEMBERID', label :'아이디', hidden : false},
-            {name : 'MEMBERNAME', label :'이름', hidden : false},
-            /* {name : 'USR_EML_ADDR', label : '이메일', sortable : false, editable : false}, */
-            {name : 'MEMBERBIRTH', label : '생년월일', align : 'center', editable : false},
-            {name : 'MEMBERPW', label : '비밀번호', sortable:false, editable : false},
-            {name : 'MEMBERPWCONFIRM', label : '비밀번호확인', align : 'center', editable : false},
-            {name : 'MEMBERROOT', label : '검색경로',   align : 'center', editable : false},
-            {name : 'MEMBERREGDATE', label : '가입일자',   align : 'center', editable : false}
+            {name : 'MEMBERID', label : '아이디', sortable:false, editable : true, hidden : true},
+            {name : 'MEMBERID', label :'아이디' },
+            {name : 'MEMBERNAME', label :'이름'},
+           
+            {name : 'MEMBERBIRTH', label : '생년월일', align : 'center', editable : true},
+            {name : 'MEMBERPW', label : '비밀번호', sortable:false, editable : true},
+            {name : 'MEMBERPWCONFIRM', label : '비밀번호확인', align : 'center', editable : true},
+            {name : 'MEMBERROOT', label : '검색경로',   align : 'center', editable : true, edittype:'select', formatter:'select',
+           	 editoptions:{maxlength:25, dataInit: fn_changeGridDate,
+       		  value :   '회사 홈페이지 방문:회사 홈페이지 방문;'
+       		  		   +'인터넷 검색:인터넷 검색;'
+       		  		   +'구인 사이트:구인 사이트;'
+       		  		   +'지인:지인;'
+       		  		   +'기타:기타'
+       	 
+       	 
+         } 
+            
+            },
+            {name : 'MEMBERPHONENUMBER1', label : '휴대폰 번호-1',   align : 'center', editable : true},
+            {name : 'MEMBERPHONENUMBER2', label : '휴대폰 번호-2',   align : 'center', editable : true},
+            {name : 'MEMBERPHONENUMBER3', label : '휴대폰 번호-3',   align : 'center', editable : true},
+            {name : 'MEMBERREGDATE', label : '가입일자',   align : 'center', editable : true},
+            {name : 'MEMBERUPDATEDATE', label : '갱신일자',   align : 'center', editable : false}
         ],          
 //      initval     : {US_YN : 'Y', SORT_ORD : 999, MST_CD : 'A00'}, // 컬럼 add 시 초기값
         editmode    : true,                                 // 그리드 editable 여부
@@ -48,258 +65,214 @@ $(document).ready(function(){
         height      : '300',                                // 그리드 높이
         shrinkToFit : true,                                 // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
         selecturl   : '/linkruit/getMemberList',          // 그리드 조회 URL
-        saveurl     : '/psys/savePsys1007',             // 그리드 입력/수정/삭제 URL
-        events      : {
-            onSelectRow : function(event, rowid){
-                var row = admin_grid.getRowData(rowid);
-            },
-            onCellSelect : function(event, rowid, icol){    // 해당 셀 선택시
-                var row = admin_grid.getRowData(rowid);
-            },
-            gridComplete : function(data){  
-            	
-            	
+        saveurl     : '/linkruit/saveMember',             // 그리드 입력/수정/삭제 URL
+        events         : {
 
-               // 페이지 셋팅
-               // initPage("admin_grid", "test_paginate", true, 10 );
-            }
-        }
+	                          onCellSelect: function(event, rowid, icol) {        // 해당 셀 선택시
+	                              var row = member_grid.getRowData(rowid);
+	                          
+	                              // 표기형식을 나타내주고 입력할땐 셀을 비워준다.
+	                              if (member_grid.getColName(icol) == 'MEMBERID') {
+	                                 if(row.MEMBERID == "") { 
+	                                	 member_grid.setCell(rowid, 'MEMBERID', '', '', {}, true); 
+	                                 }
+	                              }
+	                              
+	                              if(row.JQGRIDCRUD === "C") {
+ 	                            	  $("#member_grid").jqGrid('setColProp', 'MEMBERID', { editable: true });
+	                              } else {
+	                            	  $("#member_grid").jqGrid('setColProp', 'MEMBERID', { editable: false });
+	                              }
+	                              
+	                          },
+	                          onSelectRow: function (event, rowid, status, e) {
+	                        	  var row = member_grid.getRowData(rowid);
+	                        	  
+	                          }
+                          }
     };
- 
-    member_grid = new UxGrid(grid_config);
+    
+
+    member_grid = new UxGrid(up_config);
     member_grid.init();
+
     member_grid.setGridWidth($('.tblType1').width());
     
-    // 시스템사용자정보 등록 후의 목록 조회
-    if(isNotEmpty(_param) && "CHG" == _param)
-        $("#btn_retreive").trigger("click");
     
+    $("#cb_member_grid").css("display","none");
     
-   var obj = {
-            
-            autoUpdateInput : false,
-            showDropdowns: true,
-            linkedCalendars: false,
-            /* 날짜/일시 선택 start */
-            timePicker: true,
-            timePicker24Hour: true,
-            //viewModel : 'month',
-            locale: {
-                format: 'YYYY-MM-DD'
-            }
-    }
-    
-    $("#sch_st_dt").daterangepicker(obj, function(start, end) {
+    // 마스터 저장 버튼 클릭 시 
+    $("#btn_member_save").click(function() {
+    	var rowid = member_grid.getSelectRowIDs();
         
-        $("#sch_st_dt").val(start);
-        $("#sch_ed_dt").val(end);
-        
-    }); 
-   
-   $("#sch_ed_dt").on('click', function () {
-       $("#sch_st_dt").trigger('click');
-   });
-    
-});
+        var row = member_grid.getRowData(rowid);
+        var name = row.MEMBERNAME;
 
-// grid resizing
-$(window).resize(function(){
-    admin_grid.setGridWidth($('.tblType1').width());
-});
-
-// jqgrid 내 버튼 생성 이벤트
-function setFailDateResetBtn(value, options, rowJson)
-{      
-    return "<button id='pwResetBtn_" + options.rowId + "' onclick='fn_FailDateReset(" + options.rowId + ")' class='btn_common btn_default' style='float:center;'>초기화</button>";﻿﻿﻿﻿﻿
-}
-
-// formatter 버튼 이벤트
-function fn_FailDateReset(rowId)
-{
-    var usr_id      = $("#admin_grid").jqGrid('getCell', rowId, 'USR_ID');
-    var usr_nm      = $("#admin_grid").jqGrid('getCell', rowId, 'USR_NM');
-    
-    ajax({
-        url     : '/psys/updatePsys1007.adm',
-        data    : {usr_id : usr_id, usr_nm : usr_nm},
-        async   : false,
-        success : function(data){
-            if(data.RESULT == "S") {
-                alert('초기화가 완료되었습니다.');
-                member_grid.retreive();
-            } else {
-                if(isNotEmpty(data.MSG)) {
-                    alert("일시적 오류입니다.\n잠시후 다시 시도하세요.")
-                } else {
-                    alert(data.MSG);
-                }
-            }
-        },
+       
+        if(name == ""){
+        	alert("이름을 입력해주세요.");
+        	return false;
+        	
+        	
+        }else {
+	        // 코드id 수정못하도록 set false
+	       // member_grid.save( {success:function(){$("#member_grid").jqGrid('setColProp', 'MEMBERID', { editable: false });}});
+	        
+	        //console.log(data);
+        	fn_Save();
+        }
     });
+    
+    // 마스터 행추가 버튼 클릭 시
+    $("#btn_member_add").click(function() {
+    	// default 값 세팅
+       
+        $("#member_grid").jqGrid('setColProp', 'MEMBERID', { editable: true });
+
+    });
+    
+ 	// 마스터 행삭제 버튼 클릭 시
+    $("#btn_member_del").click(function() {
+    	var rowid = member_grid.getSelectRowIDs();
+    	var flag = false;
+    	
+    	if(rowid.length > 0) {
+    		
+	    	$.each(rowid, function (index, item) {
+	    		if(member_grid.getRowData(item).US_YN === 'Y') {
+	    			flag = true;
+	    		} 
+	    	});
+    	}
+    	if (flag) {
+	    	 alert("사용중인 코드가 있으므로 삭제할 수 없습니다.");
+    	} else {
+    		 member_grid.remove( );
+    	}
+    });
+ 	
+ 	// 마스터 엑셀다운로드 버튼 클릭 시
+    $("#btn_member_excel").click(function() {
+	    var grid_id = "member_grid";
+	    var rows    = $('#member_grid').jqGrid('getGridParam', 'rowNum');
+	    var page    = $('#member_grid').jqGrid('getGridParam', 'page');
+	    var total   = $('#member_grid').jqGrid('getGridParam', 'total');
+	    var title   = $('#member_grid').jqGrid('getGridParam', 'gridtitle');
+	    var url     = "/psys/getPsys1005XlsxDwld1";  //페이징 존재
+	    var param          = {};
+	        param.page     = page;
+	        param.rows     = rows;
+	        param.filename = "코드마스터 목록";
+	    AdvencedExcelDownload(grid_id, url, param);
+    });
+    
+
+
+    // 
+    $("#btn_bttn_menu_add").click(function() {
+        // 현재 상위 그리드에서 선택된 값 확인
+
+        // default 값 세팅
+        bttn_menu_grid.add({MEMBERID:sels[0].MEMBERID});
+    });
+    
+    $("#btn_bttn_menu_del").click(function() {
+        bttn_menu_grid.remove();
+    });
+});
+
+//grid resizing
+$(window).resize(function() {
+	member_grid.setGridWidth($('.tblType1').width());
+	
+});
+
+//조회: 내부 로직 사용자 정의
+function fn_Search(){
+	member_grid.retreive(); //{success:function(){alert('retreive success');}}
+    
+ 	// 코드id 수정못하도록 set false
+    $("#member_grid").jqGrid('setColProp', 'MEMBERID', { editable: false });
+    
 }
 
-/**************************************************
- * 공통 버튼 
- **************************************************/
-
-// 조회 : 내부 로직 사용자 정의
-function fn_Search()
-{
-    var start_dt = $("#sch_st_dt").val().replace(/-/g, "");
-    var end_dt   = $("#sch_ed_dt").val().replace(/-/g, "");
+function fn_Save(){
+	//jqgrid grid 데이터 json 형태로 생성
+	var memberData = getSaveData("member_grid"); //grid_id
     
-    
-    if(parseInt(start_dt, 10) > parseInt(end_dt, 10))
-    {
-        alert("검색 시작일은 검색 종료일 이전이어야합니다.");
-        return;
+    if(isEmpty(memberData)) {
+    	return false;
     }
     
-    member_grid.retreive();
+    //입력폼데이터 파라미터형태로 변경
+    var formdata  = $("form[name=search]").serialize();
+    var data ="memberData="+memberData+"&_pre_url="+parent.preUrl.getPreUrl() +"&" + formdata;
+    console.log(data);
+	ajax({
+   		url: '/linkruit/saveMember',
+   		data : data ,
+   		async : false,
+   		success: function(data) {
+   			if(data.RESULT == "S") {
+   				alert('저장되었습니다');	
+   				fn_Search();
+   				return;
+   			}else {
+   				alert("일시적 오류입니다\n잠시후 다시 시도하세요.")
+   				e.preventDefault();
+   				return;
+   			}
+   		}
+   	});
 }
-
-// 추가 : 내부 로직 사용자 정의
-function fn_AddRow()
-{
-    // default 값 세팅
-    addTabInFrame("/psys/forward.psys1009.adm");
-}
-
-// 저장 : 내부 로직 사용자 정의 
-function fn_Save()
-{
-    var rowid = admin_grid.getSelectRowIDs();
-    var row   = admin_grid.getRowData(rowid);
-    member_grid.save();  
-}
-
-// 삭제 : 내부 로직 사용자 정의
-function fn_DelRow()
-{
-    var rowid = admin_grid.getSelectRowIDs();
-    var row   = admin_grid.getRowData(rowid);
-    member_grid.remove();
-}
-
-// 프린트 : 내부 로직 사용자 정의
-function fn_Print()
-{
-//  var data      = makePrintXmlData();
-    var param     = makePrintJsonData();    
-    var file_name = "/resources/pandora3/ireport/pgm_info_report_xml.jasper";
-    var url       = "/pandora3/print/print_json.jsp";
-    var form      = document.getElementById("printForm");
-    
-    document.getElementById("data").value = param;
-    document.getElementById("fileName").value = file_name;
-    
-    window.open('', 'printviewer', 'width=1024px,height=768px');
-    
-    form.action = url;
-    form.target = "printviewer";
-    form.method = "post";
-    form.submit();
-}
-
-// 엑셀다운로드 : 내부 로직 사용자 정의
-function fn_ExcelDownload()
-{
-    var grid_id = "member_grid";
-    var rows    = $('#member_grid').jqGrid('getGridParam', 'rowNum');
-    var page    = $('#member_grid').jqGrid('getGridParam', 'page');
-    var total   = $('#member_grid').jqGrid('getGridParam', 'total');
-    var title   = $('#member_grid').jqGrid('getGridParam', 'gridtitle');
-    var url     = "/psys/getPsys1007XlsxDwld";  // 페이징 존재
-    var param          = {};
-        param.page     = page;
-        param.rows     = rows;
-        param.fileName = "시스템 사용자 목록";
-    AdvencedExcelDownload(grid_id, url, param);
-}
-
-function makePrintJsonData()
-{
-    var rowIds = member_grid.getDataIDs();
-    var printList = []; // 삽입, 갱신할 열 배열
-    
-    for(var i = 0; i < rowIds.length; i++) {
-        var row = member_grid.getRowData(rowIds[i]);
-        printList.push(row);
-    }
-    return  JSON.stringify(printList);
-}
-
 
 </script>
 </head>
 <body>
-    <div class="frameWrap">
-        <div class="subCon">
-            <%@ include file="/WEB-INF/views/pandora3/common/include/btnList.jsp"%>
-            <!-- search -->
-            <div class="frameTopTable">
-                <form name="search" id="search" onsubmit="return false">
-                    <input type="hidden" value="" name="sys_cd" id="sys_cd" />
-                    <table class="tblType1 typeCal">
-                        <colgroup>
-                            <col style="width: 117px;" />
-                            <col style="" />
-                            <col style="width: 117px;" />
-                            <col style="" />
-                            <col style="width: 117px;" />
-                            <col style="" />
-                        </colgroup>
-                        <tr>
-                            <th>가입일자</th>
-                            <td class="typeCal">
-                                <div class="cals_div">
-                                    <span class="txt_pw"><input class="cals w100" type="text" value="" name="sch_st_dt" id="sch_st_dt" autocomplete="off" /></span>
-                                    <span class="w10 space">~</span>
-                                    <span class="txt_pw"><input class="cals w100" type="text" value="" name="sch_ed_dt" id="sch_ed_dt" autocomplete="off" /></span>
-                                </div>
-                            </td>
-                            <th>성명</th>
-                            <td><span class="txt_pw"><input type="text" name="usr_nm" id="usr_nm" class="typeShort" /></span></td>
-                            <th>계정활성화</th>
-                            <td>
-                                <span class="txt_pw">
-                                    <select class="select" name="actv_yn" id="actv_yn">
-                                        <option value="">전체</option>
-                                        <option value="Y">활성화</option>
-                                        <option value="N">비활성화</option>
-                                    </select>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>아이디</th>
-                            <td><span class="txt_pw"><input type="text" name="lgn_id" id="lgn_id" class="typeShort" /></span></td>
-                            <th>상태</th>
-                            <td>
-                                <select id="usr_stat_cd" name="usr_stat_cd" class="select">
-                                    <option value="">전체</option>
-                                </select>
-                            </td>
-                            
-                        </tr>
-                    </table>
-                </form>
-            </div>
-			<div class="bgBorder"></div> 
-            <!-- search // -->
-            <!-- Grid -->
-            <table id="member_grid"></table>
-            <div id="member_grid_pager"></div>
-            <br/>
-            <div id="test_paginate"></div>
-            <!-- Grid // -->
-        </div>
-        <form name="frm_sysCdDtl" id="frm_sysCdDtl" onsubmit="return false;">
-            <input type="hidden" name="mst_cd_arr" id="mst_cd_arr" />
-        </form>
-        <form id="printForm">
-            <input type="hidden" id="data" name="data" /> <input type="hidden" id="fileName" name="fileName" />
-        </form>
-    </div>
+	<div class="frameWrap">
+		<div class="subCon">
+		<%@ include file="/WEB-INF/views/pandora3/common/include/btnList.jsp" %>
+			<!-- search -->
+			<div class="frameTopTable">          
+				<form id="search" name="search" onsubmit="return false">
+		            <table class="tblType1 typeShort">   
+		            	<colgroup>
+							<col style="width: 117px;" />
+							<col style="" />
+							<col style="width: 117px;" />
+							<col style="" />
+						</colgroup>   
+						<tbody>
+							<tr>
+								<th>아이디</th>
+								<td><span class="txt_pw"><input type="text" name="memberid" id="memberid" class="text" /></span></td>
+								<th>성명</th>
+								<td><span class="txt_pw"><input type="text" name="membername" id="membername" class="text" /></span></td>
+							</tr>
+						</tbody>
+		            </table>
+		       </form>
+			</div>
+			<div class="bgBorder"></div>
+			<!-- search // -->
+			<div class="grid_right_btn">
+				<div class="grid_right_btn_in">
+					<button id="btn_member_save" class="btn_common btn_default">저장</button>
+					<button id="btn_member_add" class="btn_common btn_default">행추가</button>
+					<button id="btn_member_del" class="btn_common btn_default">행삭제</button>
+					<button id="btn_member_excel" class="btn_common btn_default">
+                        <img src="<c:out value='${pageContext.request.contextPath}' />/resources/pandora3/images/common_new/img_download.png" alt="엑셀 다운로드" />
+                    </button>
+				</div>
+			</div>
+			<table id="member_grid"></table>
+			<div class="bgBorder"></div>
+			<div id="member_grid_pager"></div>
+			<!-- Master Grid // -->
+			
+
+			<br />
+		</div>
+	</div>
 </body>
 <%@ include file="/WEB-INF/views/pandora3/common/include/footer.jsp"%>

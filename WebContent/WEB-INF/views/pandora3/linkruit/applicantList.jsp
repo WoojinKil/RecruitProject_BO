@@ -105,11 +105,11 @@ $(document).ready(function(){
     };
     
     var down_config = { 
-            gridid    : 'apply_grid',	    	// 그리드 id
-            pagerid   : 'apply_grid_pager',	// 그리드 페이지 id
+            gridid    : 'applicant_grid',	    	// 그리드 id
+            pagerid   : 'applicant_grid_pager',	// 그리드 페이지 id
             // column info
             columns   :[
-            		     {name:'APPLYNO', label:'지원번호', align:'center', editable:false, width:20},
+            		     {name:'APPLICANTNO', label:'수험번호', align:'center', editable:false, width:20},
             		     
                          {name:'APPLICANTID', label:'수험자 아이디', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  

@@ -74,13 +74,15 @@
 		update ta_recruit_applicant
 		set   UPDATEDATE = SYSDATE()
 
+
+			
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(applicantmillitary)">
+			, APPLICANTMILLITARY = #{applicantmillitary, jdbcType=VARCHAR}
+			</if>
 			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(applyno)">
 			, APPLYNO = #{applyno, jdbcType=VARCHAR}
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitno)">
-			, RECRUITNO = #{recruitno, jdbcType=VARCHAR}
-			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(partno)">
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(applicantveteran)">
 			, APPLICANTVETERAN = #{applicantveteran, jdbcType=VARCHAR}
 			</if>
 			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(applicantdisability)">

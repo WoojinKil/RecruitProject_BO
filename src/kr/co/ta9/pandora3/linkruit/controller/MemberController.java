@@ -34,7 +34,7 @@ public class MemberController extends CommonActionController {
 		JSONObject json = new JSONObject();
 
 		try {
-			System.out.println("여기까지 진입");
+			
 			// 시스템 사용자 목록 그리드 조회
 			json = memberMgr.selectMemberList(parameterMap);
 		} catch (Exception e) {
@@ -42,16 +42,38 @@ public class MemberController extends CommonActionController {
 			result = Const.BOOLEAN_FAIL;
 			e.printStackTrace();
 		}
-		System.out.println("처리완료");
+		
 		json.put("RESULT", result);
-		System.out.println("처리완료2");
+		
 		
 		ResponseUtil.write(response, json.toJSONString());
-		System.out.println("처리완료3");
+		
 		System.out.println(json.toString());
 		
 	}
 	
+	@RequestMapping(value="/linkruit/saveMember", method = RequestMethod.POST)
+	public void saveMember(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		// parameterMap 선언
+		ParameterMap parameterMap = getParameterMap(request, response);
+		// result 선언
+		String result = Const.BOOLEAN_SUCCESS;
+		// json 선언
+		JSONObject json = new JSONObject();
+		System.out.println("saveMember Controller");
+		try {
+			// 하위 메뉴 저장
+			memberMgr.saveMember(parameterMap);
+		} catch (Exception e) {
+			// Exception일 경우
+			result = Const.BOOLEAN_FAIL;
+			// json에 MSG 담기
+			json.put("MSG", parameterMap.getValue("MSG"));
+		}
+		// json에 결과 담기
+		json.put("RESULT", result);
+		ResponseUtil.write(response, json.toJSONString());
+	}
 
 	
 }

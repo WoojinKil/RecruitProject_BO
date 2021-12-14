@@ -14,12 +14,15 @@ import kr.co.ta9.pandora3.app.servlet.controller.CommonActionController;
 import kr.co.ta9.pandora3.common.conf.Const;
 import kr.co.ta9.pandora3.common.util.ResponseUtil;
 import kr.co.ta9.pandora3.linkruit.manager.ApplyMgr;
+import kr.co.ta9.pandora3.linkruit.manager.PartMgr;
 
 @Controller
 public class ApplyController extends CommonActionController{
 
 	@Autowired
 	ApplyMgr applyMgr;
+	@Autowired
+	private PartMgr partMgr;
 	
 	@RequestMapping(value="/linkruit/getApplyList", method = RequestMethod.POST)
 	public void getApplyList(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -30,12 +33,17 @@ public class ApplyController extends CommonActionController{
 		
 		try {
 			json = applyMgr.selectApplicatnGridList(parameterMap);
+			
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			result = Const.BOOLEAN_FAIL;
 			
 		}
+		System.out.println(json.toString());
+		
 		json.put("RESULT", result);
 		ResponseUtil.write(response, json.toJSONString());
 		

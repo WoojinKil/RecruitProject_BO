@@ -25,17 +25,18 @@ public class ApplyMgr {
 	}
 	
 	public void saveApply2(ParameterMap parameterMap) throws Exception {
+		System.out.println("saveApply2 처리");
 		List<ApplyDto> insertList = new ArrayList<ApplyDto>();
 		List<ApplyDto> updateList = new ArrayList<ApplyDto>();
 		List<ApplyDto> deleteList = new ArrayList<ApplyDto>();
 		parameterMap.populates(ApplyDto.class, insertList, updateList, deleteList);
-		
+		System.out.println(parameterMap);
 		ApplyDto[] insert = insertList.toArray(new ApplyDto[0]);
 		ApplyDto[] update = updateList.toArray(new ApplyDto[0]);
 		ApplyDto[] delete = deleteList.toArray(new ApplyDto[0]);
 		
 		
-		applyDao.insertMany(ApplyDto.class,insert);
+		applyDao.insertMany("Apply.insert",insert);
 		applyDao.updateMany("Apply.update",update);
 		applyDao.deleteMany("Apply.delete",delete);
 		

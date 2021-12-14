@@ -15,6 +15,16 @@ public class BaseMemberDto extends CommonBean{
 	private String memberphonenumber2;
 	private String memberphonenumber3;
 	private String memberregdate;
+	private String memberupdatedate;
+	
+	
+	
+	public String getMemberupdatedate() {
+		return memberupdatedate;
+	}
+	public void setMemberupdatedate(String memberupdatedate) {
+		this.memberupdatedate = memberupdatedate;
+	}
 	public String getMembername() {
 		return membername;
 	}

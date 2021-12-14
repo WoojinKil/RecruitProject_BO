@@ -4,8 +4,117 @@
 	<select id = "selectMemberList" resultType="BaseMemberDto">
 	
 	
-	select * from ta_recruit_member;
+	select * 
+			from ta_recruit_member
+			
+			where 1 = 1
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberid)">
+			AND MEMBERID LIKE CONCAT('%',#{memberid, jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(membername)">
+			AND MEMBERNAME LIKE CONCAT('%',#{membername, jdbcType=VARCHAR}, '%')
+			</if>
+		
+		
+	
+	
+	
 	
 	
 	</select>
+<!-- 	
+	<insert id="insert" parameterMap="parameterMap">
+		INSERT TA_RECRUIT_MEMBER
+		(
+		
+			  MEMBERID
+			, MEMBERNAME
+			, MEMBERBIRTH
+			, MEMBERPW
+			, MEMBERPWCONFIRM
+			, MEMBERROOT
+			, MEMBERPHONENUMBER1
+			, MEMBERPHONENUMBER2
+			, MEMBERPHONENUMBER3
+			, MEMBERREGDATE
+			, MEMBERISADMIN
+			, MEMBERUPDATEDATE
+			
+		
+		
+		)
+		VALUES
+		(
+			  #{memberid}
+			, #{membername}
+			, #{memberbirth}
+			, #{memberpw}
+			, #{memberpwconfirm}
+			, #{memberroot}
+			, #{memberphonenumber1}
+			, #{memberphonenumber2}
+			, #{memberphonenumber3}
+			
+			, SYSDATE()
+			, 0
+			, SYSDATE()
+		
+		
+		
+		)
+		
+	
+	
+	</insert>	
+	
+	 -->
+	
+	
+	<update id="update" parameterType="BaseMemberDto">
+		UPDATE TA_RECRUIT_MEMBER
+			SET MEMBERUPDATEDATE = SYSDATE()
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberid)">
+			, MEMBERID = #{memberid, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(membername)">
+			, MEMBERNAME = #{membername, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberbirth)">
+			, MEMBERBIRTH = #{memberbirth, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberpw)">
+			,MEMBERPW = #{memberpw, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberpwconfirm)">
+			,MEMBERPWCONFIRM = #{memberpwconfirm, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberroot)">
+			,MEMBERROOT = #{memberroot, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberphonenumber1)">
+			,MEMBERPHONENUMBER1 = #{memberphonenumber1, jdbcType=VARCHAR}
+			</if>
+	
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberphonenumber2)">
+			,MEMBERPHONENUMBER2 = #{memberphonenumber2, jdbcType=VARCHAR}
+			</if>			
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberphonenumber3)">
+			,MEMBERPHONENUMBER3 = #{memberphonenumber3, jdbcType=VARCHAR}
+			</if>		
+	
+	
+	
+		where MEMBERID = #{memberid}
+	</update>
+	
+	
+	<delete id="delete" parameterType="BaseMemberDto">
+		DELETE FROM TA_RECRUIT_MEMBER
+		WHERE MEMBERID = #{memberid}
+	
+	</delete>
+	
+	
+	
+	
 </mapper>
