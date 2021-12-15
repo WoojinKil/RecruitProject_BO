@@ -38,6 +38,19 @@ public class ApplicantDto extends BaseApplicantDto {
 	public void setMemberphonenumber3(String memberphonenumber3) {
 		this.memberphonenumber3 = memberphonenumber3;
 	}
+	public ApplicantDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public ApplicantDto(String membername, String memberbirth, String memberphonenumber1, String memberphonenumber2,
+			String memberphonenumber3) {
+		super();
+		this.membername = membername;
+		this.memberbirth = memberbirth;
+		this.memberphonenumber1 = memberphonenumber1;
+		this.memberphonenumber2 = memberphonenumber2;
+		this.memberphonenumber3 = memberphonenumber3;
+	}
 	
 	
 }

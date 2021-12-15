@@ -51,16 +51,16 @@ $(document).ready(function(){
 		                     });
 		                 }
 		             }},
-                     {name:'RECRUITNAME', label:'공고 이름', align:'left', editable:true, edittype:'text', width:100, required:true, editoptions:{maxlength:100, dataInit: fn_changeGridDate }},   // 저장 필수값은 required:true를 준다             
-                     {name:'TYPENO', label:'채용형태', align:'center', editable:true, edittype:'select', formatter:'select', editoptions:{value:'T1:공채;T2:수시', dataInit:fn_changeGridDate}, width:25, required:true},
-                     {name:'RECRUITSCALE', label:'채용규모', editable:true, width:25 , editoptions:{maxlength:10, dataInit: fn_changeGridDate}},
-                     {name:'RECRUITSTARTDATETIME',label:'채용시작시간',editable:true, align:'center', width:40, formatter: "date", formatoptions: { dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
+                     {name:'RECRUITNAME', label:'공고 이름', align:'left', editable:false, edittype:'text', width:100, required:true, editoptions:{maxlength:100, dataInit: fn_changeGridDate }},   // 저장 필수값은 required:true를 준다             
+                     {name:'TYPENO', label:'채용형태', align:'center', editable:false, edittype:'select', formatter:'select', editoptions:{value:'T1:공채;T2:수시', dataInit:fn_changeGridDate}, width:25, required:true},
+                     {name:'RECRUITSCALE', label:'채용규모', editable:false, width:25 , editoptions:{maxlength:10, dataInit: fn_changeGridDate}},
+                     {name:'RECRUITSTARTDATETIME',label:'채용시작시간',editable:false, align:'center', width:40, formatter: "date", formatoptions: {srcformat: "ISO8601Long", dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
                      
                      
 
-                     {name:'RECRUITENDDATETIME',label:'채용마감시간',editable:true, align:'center', width:40, formatter: "date", formatoptions: { dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
-                     {name:'RECRUITWRITEDATE',label:'작성일자',editable:true, align:'center', width:40, formatter: "date", formatoptions: { dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
-                     {name:'RECRUITCONTENT',label:'공고내용',editable:true, align:'left', width:150},
+                     {name:'RECRUITENDDATETIME',label:'채용마감시간',editable:false, align:'center', width:40, formatter: "date", formatoptions: {srcformat: "ISO8601Long", dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
+                     {name:'RECRUITWRITEDATE',label:'작성일자',editable:false, align:'center', width:40, formatter: "date", formatoptions: {srcformat: "ISO8601Long", dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
+                     {name:'RECRUITCONTENT',label:'공고내용',editable:false, align:'left', width:150},
                      
                      
                      
@@ -119,6 +119,7 @@ $(document).ready(function(){
             // column info
             columns   :[
             		     {name:'APPLYNO', label:'지원번호', align:'center', editable:true, width:10},
+            		     {name:'APPLYUPDATEDATE', label:'갱신날짜', align:'center',formatter: "date", editable:false, width:10,formatoptions: {srcformat: "ISO8601Long", dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
             		     
                          {name:'RECRUITNO', label:'공고번호', editable: true, edittype:'text', width:10, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          {name:'PARTNO', label:'사업부 이름', editable: true, edittype: 'select', formatter:'select', width:15, required:true, 

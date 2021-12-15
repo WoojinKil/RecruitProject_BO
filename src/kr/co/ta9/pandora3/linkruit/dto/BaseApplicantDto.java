@@ -163,6 +163,36 @@ public class BaseApplicantDto extends CommonBean{
 	public void setUpdatedate(String updatedate) {
 		this.updatedate = updatedate;
 	}
+
+	public BaseApplicantDto(int applicantno, String applicantid, int recruitno, int applyno, String applicantmillitary,
+			String applicantveteran, String applicantdisability, String applicantjobprotect,
+			String applicanthighschoolname, int applicanthighschoolgraduateyear,
+			String applicanthighschoolgraduatestate, String applicantassay1, String applicantassay2,
+			String applicantassay3, int finalapplychecked, String applydate, String updatedate) {
+		super();
+		this.applicantno = applicantno;
+		this.applicantid = applicantid;
+		this.recruitno = recruitno;
+		this.applyno = applyno;
+		this.applicantmillitary = applicantmillitary;
+		this.applicantveteran = applicantveteran;
+		this.applicantdisability = applicantdisability;
+		this.applicantjobprotect = applicantjobprotect;
+		this.applicanthighschoolname = applicanthighschoolname;
+		this.applicanthighschoolgraduateyear = applicanthighschoolgraduateyear;
+		this.applicanthighschoolgraduatestate = applicanthighschoolgraduatestate;
+		this.applicantassay1 = applicantassay1;
+		this.applicantassay2 = applicantassay2;
+		this.applicantassay3 = applicantassay3;
+		this.finalapplychecked = finalapplychecked;
+		this.applydate = applydate;
+		this.updatedate = updatedate;
+	}
+
+	public BaseApplicantDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	
 	
 	

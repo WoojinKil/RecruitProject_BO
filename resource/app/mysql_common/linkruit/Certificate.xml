@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Certificate">
+	<select id="selectCertificateList" parameterType="ParameterMap" resultType="CertificateDto">
+		SELECT C.CERTIFICATEREGISTERNO
+			 , AP.APPLICANTNO
+			 , AP.APPLICANTID
+			 , M.MEMBERNAME
+			 , C.CERTIFICATENAME
+			 , C.CERTIFICATESCORE
+			 , C.CERTIFICATEDATE
+			 , C.CERTIFICATECODE
+			 , C.CERTIFICATEUPDATE
+			 
+		FROM  TA_RECRUIT_MEMBER M
+			, TA_RECRUIT_CERTIFICATE C
+			, TA_RECRUIT_APPLICANT AP
+		WHERE 1=1
+			  AND M.MEMBERID = AP.APPLICANTID
+			  AND AP.APPLICANTNO = C.APPLICANTNO
+			  AND AP.APPLICANTNO = #{APPLICANTNO};
+
+
+	</select>
+
+	<update id="update" parameterType="ParameterMap">
+		UPDATE TA_RECRUIT_CERTIFICATE
+		SET CERTIFICATEUPDATE = SYSDATE()
+			
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(certificatename)">
+			, CERTIFICATENAME = #{certificatename, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(certificatescore)">
+			, CERTIFICATESCORE = #{certificatescore, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(certificatedate)">
+			, CERTIFICATEDATE = #{certificatedate, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(certificatecode)">
+			, CERTIFICATECODE = #{certificatecode, jdbcType=VARCHAR}
+			</if>
+			
+			where CERTIFICATEREGISTERNO = #{certificateregisterno}
+		
+	</update>
+	
+	<delete id="delete" parameterType="ParameterMap">
+		DELETE 
+		FROM TA_RECRUIT_CERTIFICATE
+			WHERE CERTIFICATEREGISTERNO = #{certificateregisterno}
+	
+	
+	</delete>
+	
+	
+</mapper>

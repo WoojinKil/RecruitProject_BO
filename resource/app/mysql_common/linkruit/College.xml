@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="College">
+	<select id="selectCollegeList" parameterType= "ParameterMap" resultType="CollegeDto">
+	
+		SELECT    AP.APPLICANTID
+				, M.MEMBERNAME
+				, AP.APPLICANTNO
+				, CO.COLLEGENAME
+				, CO.COLLEGELOCATION
+				, CO.COLLEGEENTER
+				, CO.COLLEGEDEGREE
+				, CO.COLLEGEMAJOR1
+				, CO.COLLEGEMAJOR2
+				, CO.COLLEGEDOUBLEMAJORKIND
+				, CO.COLLEGESCORE
+				, CO.COLLEGESCOREMAX
+				, CO.COLLEGESTARTDATE
+				, CO.COLLEGEENDDATE
+				, CO.COLLEGEGRADUATE
+			
+		FROM 
+			    TA_RECRUIT_APPLICANT AP
+			  , TA_RECRUIT_COLLEGE CO
+			  , TA_RECRUIT_MEMBER M
+		WHERE 1=1
+			  AND AP.APPLICANTID = M.MEMBERID
+			  AND AP.APPLICANTNO = CO.APPLICANTNO
+			  AND AP.APPLICANTNO = #{APPLICANTNO}
+			  
+			
+		
+	
+	
+	
+	</select>
+</mapper>

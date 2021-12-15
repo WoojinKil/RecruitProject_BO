@@ -6,7 +6,7 @@ public class BaseRecruitNoticeDto extends CommonBean {
 	private Integer recruitno; //채용공고 번호
 	private String typeno; //채용 유형 (수시, 공채, 혹은null)
 	private String recruitname; //채용공고 이름
-	private String recruitScale; //채용 규모 (000명, 혹은 null)
+	private String recruitscale; //채용 규모 (000명, 혹은 null)
 	private String recruitstartdatetime; //채용 시작일
 	private String recruitenddatetime; //채용 마감일
 	private int recruithit; //공고 조회수
@@ -34,11 +34,11 @@ public class BaseRecruitNoticeDto extends CommonBean {
 	public void setRecruitname(String recruitname) {
 		this.recruitname = recruitname;
 	}
-	public String getRecruitScale() {
-		return recruitScale;
+	public String getRecruitscale() {
+		return recruitscale;
 	}
-	public void setRecruitScale(String recruitScale) {
-		this.recruitScale = recruitScale;
+	public void setRecruitscale(String recruitscale) {
+		this.recruitscale = recruitscale;
 	}
 	public String getRecruitstartdatetime() {
 		return recruitstartdatetime;
@@ -81,7 +81,7 @@ public class BaseRecruitNoticeDto extends CommonBean {
 	@Override
 	public String toString() {
 		return "BaseRecruitNoticeDto [recruitno=" + recruitno + ", typeno=" + typeno + ", recruitname=" + recruitname
-				+ ", recruitscale=" + recruitScale + ", recruitstartdatetime=" + recruitstartdatetime
+				+ ", recruitscale=" + recruitscale + ", recruitstartdatetime=" + recruitstartdatetime
 				+ ", recruitenddatetime=" + recruitenddatetime + ", recruithit=" + recruithit + ", recruitcontent="
 				+ recruitcontent + ", recruitwritedate=" + recruitwritedate + ", recruitupdate=" + recruitupdate + "]";
 	}

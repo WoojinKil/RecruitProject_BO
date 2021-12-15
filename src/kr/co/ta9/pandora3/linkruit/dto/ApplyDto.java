@@ -30,6 +30,17 @@ public class ApplyDto extends BaseApplyDto {
 	public void setPartname(String partname) {
 		this.partname = partname;
 	}
+	public ApplyDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public ApplyDto(String recruitname, String objectname, String workname, String partname) {
+		super();
+		this.recruitname = recruitname;
+		this.objectname = objectname;
+		this.workname = workname;
+		this.partname = partname;
+	}
 	
 	
 	

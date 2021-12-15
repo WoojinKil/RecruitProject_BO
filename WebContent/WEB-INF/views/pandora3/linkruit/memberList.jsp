@@ -247,7 +247,7 @@ function fn_Save(){
 								<th>아이디</th>
 								<td><span class="txt_pw"><input type="text" name="memberid" id="memberid" class="text" /></span></td>
 								<th>성명</th>
-								<td><span class="txt_pw"><input type="text" name="membername" id="membername" class="text" /></span></td>
+								<td><span class="txt_pw"><input type="text" name="membername" id="memberidname" class="text" /></span></td>
 							</tr>
 						</tbody>
 		            </table>

@@ -11,6 +11,7 @@
 				, W.workname
 				, AP.workno
 				, AP.applyContent
+				, AP.applyUpdateDate
 		
 			  
 			

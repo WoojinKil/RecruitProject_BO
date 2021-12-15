@@ -2,9 +2,10 @@ package kr.co.ta9.pandora3.linkruit.dto;
 
 import java.sql.Timestamp;
 
+import kr.co.ta9.pandora3.app.bean.CommonBean;
 import kr.co.ta9.pandora3batch.app.util.DateTime;
 
-public class BaseApplyDto {
+public class BaseApplyDto extends CommonBean {
 
 	private String applyno;
 	private String recruitno;
@@ -12,14 +13,14 @@ public class BaseApplyDto {
 	private String objectno;
 	private String workno;
 	private String applycontent;
-	private Timestamp applyupdatedate;
+	private String applyupdatedate;
 	
 	
 	
-	public Timestamp getApplyupdatedate() {
+	public String getApplyupdatedate() {
 		return applyupdatedate;
 	}
-	public void setApplyupdatedate(Timestamp applyupdatedate) {
+	public void setApplyupdatedate(String applyupdatedate) {
 		this.applyupdatedate = applyupdatedate;
 	}
 	public String getApplyno() {
