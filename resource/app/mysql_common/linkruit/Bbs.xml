@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Bbs">
+	<select id = "selectBbsList" resultType="BaseBbsDto">
+		SELECT * 
+		FROM TA_RECRUIT_BBS
+		WHERE 1=1
+
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(search_bbsTitle)">
+		AND BBSTITLE LIKE CONCAT('%',#{bbstitle, jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(search_bbsContent)">
+		AND BBSCONTENT LIKE CONCAT('%',#{bbscontent, jdbcType=VARCHAR}, '%')
+		</if>
+
+
+	
+	</select>
+	
+	<insert id = "insert" parameterType="BaseBbsDto">
+		INSERT INTO TA_RECRUIT_BBS
+		(
+			  BBSNO
+			, BBSTITLE
+			, BBSCONTENT
+			, BBSWRITEDATE
+			, BBSHIT
+		
+		
+		)
+		values
+		(
+			  (SELECT IFNULL(MAX(BBSNO),1) FROM TA_RECRUIT_BBS A)+1
+			, #{bbstitle}
+			, #{bbscontent}
+			, SYSDATE()
+			, 0
+			
+		
+		)
+		
+	</insert>	
+	
+	<update id = "update" parameterType="BaseBbsDto">
+		UPDATE TA_RECRUIT_BBS
+		SET BBSUPDATEDATE = SYSDATE()
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(bbstitle)">
+			, BBSTITLE =  #{bbstitle, jdbcType=VARCHAR}
+			</if>
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(bbscontent)">
+			, BBSCONTENT =  #{bbscontent, jdbcType=VARCHAR}
+			</if>
+		WHERE BBSNO = #{bbsno};
+		
+	
+	
+	</update>
+	
+	<delete id="delete" parameterType="BaseBbsDto">
+	
+		DELETE
+			 FROM TA_RECRUIT_BBS
+		WHERE BBSNO = #{bbsno}
+	
+	</delete>
+	
+	
+	
+</mapper>
