@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import kr.co.ta9.pandora3.app.servlet.ParameterMap;
 import kr.co.ta9.pandora3.linkruit.dao.ApplicantDao;
+import kr.co.ta9.pandora3.linkruit.dao.ApplyDao;
 import kr.co.ta9.pandora3.linkruit.dao.RecruitNoticeDao;
 import kr.co.ta9.pandora3.linkruit.dto.BaseApplicantDto;
+import kr.co.ta9.pandora3.linkruit.dto.BaseApplyDto;
 import kr.co.ta9.pandora3.linkruit.dto.BaseRecruitNoticeDto;
 
 @Service
@@ -19,7 +21,7 @@ public class RecruitNoticeMgr {
 	@Autowired
 	private RecruitNoticeDao recruitNoticeDao;
 	@Autowired
-	private ApplicantDao applicantDao;
+	private ApplyDao applyDao;
 	
 	
 	public JSONObject selectRecruitNoticeGridList(ParameterMap parameterMap) throws Exception{
@@ -100,19 +102,19 @@ public class RecruitNoticeMgr {
 		recruitNoticeDao.deleteApplicant(delete);
 		
 	
-		List<BaseApplicantDto> insertApplicantList = new ArrayList<BaseApplicantDto>();
-		List<BaseApplicantDto> updateApplicantList = new ArrayList<BaseApplicantDto>();
-		List<BaseApplicantDto> deleteApplicantList = new ArrayList<BaseApplicantDto>();
+		List<BaseApplyDto> insertApplyList = new ArrayList<BaseApplyDto>();
+		List<BaseApplyDto> updateApplyList = new ArrayList<BaseApplyDto>();
+		List<BaseApplyDto> deleteApplyList = new ArrayList<BaseApplyDto>();
 		
-		parameterMap.populates(BaseApplicantDto.class, insertList, updateList, deleteList, "applicantData");
+		parameterMap.populates(BaseApplicantDto.class, insertList, updateList, deleteList, "applyData");
 		
-		BaseApplicantDto[] insertApplicant = insertApplicantList.toArray(new BaseApplicantDto[0]);
-		BaseApplicantDto[] updateApplicant = updateApplicantList.toArray(new BaseApplicantDto[0]);
-		BaseApplicantDto[] deleteApplicant = deleteApplicantList.toArray(new BaseApplicantDto[0]);
+		BaseApplyDto[] Applyinsert = insertApplyList.toArray(new BaseApplyDto[0]);
+		BaseApplyDto[] Applyupdate = updateApplyList.toArray(new BaseApplyDto[0]);
+		BaseApplyDto[] Applydelete = deleteApplyList.toArray(new BaseApplyDto[0]);
 	
-		applicantDao.insertMany("Applicant.insert",insertApplicant);
-		applicantDao.insertMany("Applicant.update",updateApplicant);
-		applicantDao.insertMany("Applicant.delete",deleteApplicant);
+		applyDao.insertMany("Apply.insert",Applyinsert);
+		applyDao.insertMany("Apply.update",Applyupdate);
+		applyDao.insertMany("Apply.delete",Applydelete);
 		
 		
 		

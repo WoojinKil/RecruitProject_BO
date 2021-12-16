@@ -2,28 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Applicant">
 	<select id="selectApplicantList" parameterType="ParameterMap" resultType="ApplicantDto">
-		select AP.applicantNo
-			  ,M.memberName
-			  ,M.memberBirth
-			  ,AP.applicantId
-			  ,AP.applyNo
-			  ,AP.applicantMillitary
-			  ,AP.applicantVeteran
-			  ,AP.applicantDisability
-			  ,AP.applicantJobProtect
-			  ,AP.applyDate
-			  ,AP.finalApplyChecked
+		SELECT  AP.APPLICANTNO
+			  , M.MEMBERNAME
+			  , M.MEMBERBIRTH
+			  , AP.APPLICANTID
+			  , AP.APPLYNO
+			  , AP.APPLICANTMILLITARY
+			  , AP.APPLICANTVETERAN
+			  , AP.APPLICANTDISABILITY
+			  , AP.APPLICANTJOBPROTECT
+			  , AP.APPLYDATE
+			  , AP.FINALAPPLYCHECKED
+			  , AP.APPLICANTASSAY1
+			  , AP.APPLICANTASSAY2
+			  , AP.APPLICANTASSAY3
+			  , AP.APPLICANTHIGHSCHOOLNAME
+			  , AP.APPLICANTHIGHSCHOOLGRADUATEYEAR
+			  , AP.APPLICANTHIGHSCHOOLGRADUATESTATE
 			  
 			
 		
 		
-		from ta_recruit_applicant AP
-			 ,ta_recruit_notice N
-			 ,ta_recruit_member M
-		where 1=1
-		and AP.recruitNo=N.recruitNO
+		FROM TA_RECRUIT_APPLICANT AP
+			 ,TA_RECRUIT_NOTICE N
+			 ,TA_RECRUIT_MEMBER M
+		WHERE 1=1
+		AND AP.RECRUITNO=N.RECRUITNO
 		and AP.recruitNo=#{RECRUITNO}
-		and AP.applicantId = M.memberId
+		AND AP.APPLICANTID = M.memberId
 		
 		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITNO)">AND AP.RECRUITNO        = #{RECRUITNO         ,jdbcType=NUMERIC} </if>
 	
@@ -34,7 +40,7 @@
 	
 	
 	<insert id = "insert" parameterType="BaseApplicantDto">
-		insert into ta_recruit_applicant
+		INSERT INTO TA_RECRUIT_APPLICANT
 		(
 			  RECRUITNO
 			, APPLICANTNO
@@ -49,7 +55,7 @@
 		
 		
 		)
-		values
+		VALUES
 		(
 			  #{recruitno}
 			, #{applicantno}
@@ -71,8 +77,8 @@
 	
 	
 	<update id="update" parameterType="BaseApplicantDto">
-		update ta_recruit_applicant
-		set   UPDATEDATE = SYSDATE()
+		UPDATE TA_RECRUIT_APPLICANT
+		SET   UPDATEDATE = SYSDATE()
 
 
 			

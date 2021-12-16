@@ -1,6 +1,6 @@
 <%-- 
    1. 파일명   : apply
-   2. 파일설명 : 지원분야(공고별 사업부 직무 대상)관리
+   2. 파일설명 : 공고별 사업부, 직무, 채용 대상 모집
    3. 작성일   : 2018-03-27
    4. 작성자   : TANINE
 --%>
@@ -358,10 +358,10 @@ function fn_Save(){
 						</colgroup>   
 						<tbody>
 							<tr>
-								<th>코드 ID</th>
-								<td><span class="txt_pw"><input type="text" name="RECRUITNO" id="RECRUITNO" class="text" /></span></td>
-								<th>마스터코드명</th>
-								<td><span class="txt_pw"><input type="text" name="RECRUITNO_nm" id="RECRUITNO_nm" class="text" /></span></td>
+								<th>공고번호</th>
+								<td><span class="txt_pw"><input type="text" name="recruitno" id="recruitno" class="text" /></span></td>
+								<th>공고 이름</th>
+								<td><span class="txt_pw"><input type="text" name="recruitname" id="recruitname" class="text" /></span></td>
 							</tr>
 						</tbody>
 		            </table>

@@ -4,15 +4,15 @@
 	<select id = "selectMemberList" resultType="BaseMemberDto">
 	
 	
-	select * 
-			from ta_recruit_member
+	SELECT * 
+			FROM TA_RECRUIT_MEMBER
 			
-			where 1 = 1
+			WHERE 1 = 1
 			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberid)">
 			AND MEMBERID LIKE CONCAT('%',#{memberid, jdbcType=VARCHAR}, '%')
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(membername)">
-			AND MEMBERNAME LIKE CONCAT('%',#{membername, jdbcType=VARCHAR}, '%')
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(memberid)">
+			AND MEMBERID LIKE CONCAT('%',#{memberid, jdbcType=VARCHAR}, '%')
 			</if>
 		
 		

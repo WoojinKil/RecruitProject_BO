@@ -1,6 +1,6 @@
 <%-- 
-   1. 파일명   : applicantList
-   2. 파일설명 : 지원자관리
+   1. 파일명   : recruitNotice
+   2. 파일설명 : 채용공고작성, 지원분야 작성
    3. 작성일   : 2018-03-27
    4. 작성자   : TANINE
 --%>
@@ -10,7 +10,7 @@
 <%@ include file="/WEB-INF/views/pandora3/common/include/header.jsp"%>
 <script type="text/javascript">
 var recruit_notice_grid;
-var applicant_grid;
+var apply_grid;
 var target_row = null;
 
 
@@ -75,7 +75,7 @@ $(document).ready(function(){
 	                              
 	                              if (isNotEmpty(row.RECRUITNO)) {
 	                              	 target_row = row;
-	                             	 applicant_grid.retreive({data:{RECRUITNO:row.RECRUITNO}});
+	                             	 apply_grid.retreive({data:{RECRUITNO:row.RECRUITNO}});
 	                             	 
 	                             	
 	                              }
@@ -105,43 +105,67 @@ $(document).ready(function(){
     };
     
     var down_config = { 
-            gridid    : 'applicant_grid',	    	// 그리드 id
-            pagerid   : 'applicant_grid_pager',	// 그리드 페이지 id
+            gridid    : 'apply_grid',	    	// 그리드 id
+            pagerid   : 'apply_grid_pager',	// 그리드 페이지 id
             // column info
             columns   :[
-            		     {name:'APPLICANTNO', label:'수험번호', align:'center', editable:false, width:20},
+            		     {name:'APPLYNO', label:'지원번호', align:'center', editable:true, width:10},
+            		     {name:'APPLYUPDATEDATE', label:'갱신날짜', align:'center',formatter: "date", editable:false, width:10,formatoptions: {srcformat: "ISO8601Long", dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
             		     
-                         {name:'APPLICANTID', label:'수험자 아이디', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'MEMBERBIRTH', label:'수험자 생년월일', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'RECRUITNO', label:'공고번호', editable: true, edittype:'text', width:10, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'PARTNO', label:'사업부 이름', editable: true, edittype: 'select', formatter:'select', width:15, required:true, 
+                        	 editoptions:{dataInit: fn_changeGridDate,
+                        		 value :  'P001:기술 연구소;'
+                        		 		 +'P002:디자인 연구소;'
+                        		 		 +'P003:품질 연구소;'
+                        		 		 +'P004:경영관리'
+                        	 
                          
-                         {name:'FINALAPPLYCHECKED', label:'제출여부', align:'center', editable:true, edittype:'select', formatter:'select', editoptions:{value:'1:제출;0:미제출', dataInit: fn_changeGridDate}, width:20, required:true},
-                         {name:'APPLYNO', label:'지원번호', align:'center', editable:true, width:25, editoptions:{maxlength:50, dataInit: fn_changeGridDate}},
-                         {name:'APPLICANTMILLITARY', label:'병역여부', align:'center', editable:true, width:50, edittype:'select', formatter:'select', editoptions:{maxlength:70, dataInit: fn_changeGridDate,value:'만기제대:만기제대(소집해제);복무중:복무중;면제:면제;해당사항 없음:해당사항 없음', dataInit: fn_changeGridDate}},
-                         {name:'APPLICANTVETERAN', label:'보훈여부', align:'center', editable:true, width:30, edittype:'select', formatter:'select', editoptions:{value:'대상:대상;비대상:비대상', maxlength:50, dataInit: fn_changeGridDate}},
-                         {name:'APPLICANTDISABILITY', label:'장애여부', editable:true, width:40, edittype:'select', formatter:'select', editoptions:{ value:'해당없음:해당없음;1급:1급;2급:2급;3급:3급',maxlength:100, dataInit: fn_changeGridDate}},
-                         {name:'APPLICANTJOBPROTECT',label:'취업보호 대상자 여부', editable:true, align:'center', width:30, edittype:'select', formatter:'select', editoptions:{ value:'대상:대상;비대상:비대상'}},
-                         {name:'APPLYDATE', label:'지원날짜', align:'center', editable:true, width:60, editoptions:{maxlength:50, dataInit: fn_changeGridDate}},
-                         // insert 시 초기값이 필요한 hidden columns
-                         {name:'RECRUITNO',  hidden:true}
+                         }},   // 저장 필수값은 required:true를 준다  
+                         
+
+                         
+                         {name:'OBJECTNO', label:'채용대상', editable: true, edittype:'select', width:10, required:true, formatter:'select',
+                        	 editoptions:{maxlength:25, dataInit: fn_changeGridDate,
+                        		  value :   'O001:신입;'
+                        		  		   +'O002:경력;'
+                        		  		   +'O003:계약직;'
+                        		  		   +'O004:채용전환형 인턴;'
+                        		  		   +'O005:체험형 인턴'
+                        	 
+                        	 
+                          }},   // 저장 필수값은 required:true를 준다  
+                         
+                         {name:'WORKNO', label:'직무명', align:'center', editable:true, width:5, required:true,  edittype:'select', formatter:'select',
+                        	  editoptions:{dataInit: fn_changeGridDate, maxlength:25, dataInit: fn_changeGridDate,
+                        		  value :   'W001:개발;'
+                        		  		   +'W002:경영;'
+                        		  		   +'W003:영업;'
+                        		  		   +'W004:인사;'
+                        		  		   +'W005:관리'	  
+                         
+                         
+                         }},
+                         {name:'APPLYCONTENT', label:'내용', align:'left', edittype:'textarea',editable:true, height:100, width:25, editoptions:{maxlength:300}}
+                         
                         ],
             editmode    : true,                               // 그리드 editable 여부
-            gridtitle   : '지원자 목록',                        // 그리드명
+            gridtitle   : '사업부-직무-채용대상 목록',                        // 그리드명
             multiselect : true,                               // checkbox 여부
             height      : 200,                                // 그리드 높이
             shrinkToFit : true,                               // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
-            selecturl   : '/linkruit/getApplicantList',       // 그리드 조회 URL
-            saveurl     : '/linkruit/saveApplicant2',          // 그리드 입력/수정/삭제 URL
+            selecturl   : '/linkruit/getApplyList',       // 그리드 조회 URL
+            saveurl     : '/linkruit/saveApply2',          // 그리드 입력/수정/삭제 URL
         };
     
     recruit_notice_grid = new UxGrid(up_config);
     recruit_notice_grid.init();
     
-    applicant_grid = new UxGrid(down_config);
-    applicant_grid.init();
+    apply_grid = new UxGrid(down_config);
+    apply_grid.init();
     
     recruit_notice_grid.setGridWidth($('.tblType1').width());
-    applicant_grid.setGridWidth($('.tblType1').width());
+    apply_grid.setGridWidth($('.tblType1').width());
     
     $("#cb_recruit_notice_grid").css("display","none");
     
@@ -175,7 +199,7 @@ $(document).ready(function(){
     // 마스터 행추가 버튼 클릭 시
     $("#btn_recruit_notice_add").click(function() {
     	// default 값 세팅
-        recruit_notice_grid.add({success:function(){applicant_grid.init();}});
+        recruit_notice_grid.add({success:function(){apply_grid.init();}});
         $("#recruit_notice_grid").jqGrid('setColProp', 'RECRUITNO', { editable: true });
 
     });
@@ -196,7 +220,7 @@ $(document).ready(function(){
     	if (flag) {
 	    	 alert("사용중인 코드가 있으므로 삭제할 수 없습니다.");
     	} else {
-    		 recruit_notice_grid.remove( {success:function(){applicant_grid.init();}});
+    		 recruit_notice_grid.remove( {success:function(){apply_grid.init();}});
     	}
     });
  	
@@ -216,15 +240,15 @@ $(document).ready(function(){
     });
     
  	// 상세 저장 버튼 클릭 시
-    $("#btn_applicant_save").click(function() {
-    	var rowid = applicant_grid.getSelectRowIDs();
-        var row = applicant_grid.getRowData(rowid);
+    $("#btn_apply_save").click(function() {
+    	var rowid = apply_grid.getSelectRowIDs();
+        var row = apply_grid.getRowData(rowid);
         
-        applicant_grid.save();
+        apply_grid.save();
     });
     
  	// 상세 행추가 버튼 클릭 시
-    $("#btn_applicant_add").click(function() {
+    $("#btn_apply_add").click(function() {
         // 현재 상위 그리드에서 선택된 값 확인
         var sels = recruit_notice_grid.getSelectRows();
         
@@ -237,30 +261,30 @@ $(document).ready(function(){
         }
         
         // default 값 세팅
-        applicant_grid.add({RECRUITNO:target_row.RECRUITNO});       
+        apply_grid.add({RECRUITNO:target_row.RECRUITNO});       
   
     });
     
  	// 상세 행삭제 버튼 클릭 시 
-    $("#btn_applicant_del").click(function() {
-    	var rowid = applicant_grid.getSelectRowIDs();
-        var row = applicant_grid.getRowData(rowid);
+    $("#btn_apply_del").click(function() {
+    	var rowid = apply_grid.getSelectRowIDs();
+        var row = apply_grid.getRowData(rowid);
         if(row.US_YN == 'Y') { // 만약 사용중인 코드라면 삭제할 수 없다.
            alert("사용중인 코드 이므로 삭제할 수 없습니다.");
            return;
         }
         else {
-           applicant_grid.remove();
+           apply_grid.remove();
         }
     });
     
  	// 상세 엑셀다운로드 버튼 클륵 시 
-    $("#btn_applicant_excel").click(function() {
-    	var grid_id = "applicant_grid";
-    	var rows    = $('#applicant_grid').jqGrid('getGridParam', 'rowNum');
-    	var page    = $('#applicant_grid').jqGrid('getGridParam', 'page');
-    	var total   = $('#applicant_grid').jqGrid('getGridParam', 'total');
-    	var title   = $('#applicant_grid').jqGrid('getGridParam', 'gridtitle');
+    $("#btn_apply_excel").click(function() {
+    	var grid_id = "apply_grid";
+    	var rows    = $('#apply_grid').jqGrid('getGridParam', 'rowNum');
+    	var page    = $('#apply_grid').jqGrid('getGridParam', 'page');
+    	var total   = $('#apply_grid').jqGrid('getGridParam', 'total');
+    	var title   = $('#apply_grid').jqGrid('getGridParam', 'gridtitle');
     	var url     = "/psys/getPsys1005XlsxDwld2";  //페이징 존재
     	var rowid   = recruit_notice_grid.getSelectRowIDs();
     	var row     = recruit_notice_grid.getRowData(rowid);
@@ -282,7 +306,7 @@ $(document).ready(function(){
     // 
     $("#btn_bttn_menu_add").click(function() {
         // 현재 상위 그리드에서 선택된 값 확인
-        var sels = applicant_grid.getSelectRows();
+        var sels = apply_grid.getSelectRows();
         if (sels.length == 0) {
             alert('하위 메뉴를 선택하세요');
             return;
@@ -303,29 +327,29 @@ $(document).ready(function(){
 //grid resizing
 $(window).resize(function() {
 	recruit_notice_grid.setGridWidth($('.tblType1').width());
-	applicant_grid.setGridWidth($('.tblType1').width());
+	apply_grid.setGridWidth($('.tblType1').width());
 });
 
 //조회: 내부 로직 사용자 정의
 function fn_Search(){
 	recruit_notice_grid.retreive(); //{success:function(){alert('retreive success');}}
-    applicant_grid.clearGridData();
+    apply_grid.clearGridData();
  	// 코드id 수정못하도록 set false
     $("#recruit_notice_grid").jqGrid('setColProp', 'RECRUITNO', { editable: false });
-    $("#applicant_grid").jqGrid('setColProp', 'CD'    , { editable: false });     
+    $("#apply_grid").jqGrid('setColProp', 'APPLYNO'    , { editable: false });     
 }
 
 function fn_Save(){
 	//jqgrid grid 데이터 json 형태로 생성
 	var recruitNoticeData = getSaveData("recruit_notice_grid"); //grid_id
-    var applicantData  = getSaveData("applicant_grid"); //grid_id
+    var applyData  = getSaveData("apply_grid"); //grid_id
     if(isEmpty(recruitNoticeData)) {
     	return false;
     }
     
     //입력폼데이터 파라미터형태로 변경
     var formdata  = $("form[name=search]").serialize();
-    var data ="recruitNoticeData="+recruitNoticeData+"&applicantData="+applicantData+"&_pre_url="+parent.preUrl.getPreUrl() +"&" + formdata;
+    var data ="recruitNoticeData="+recruitNoticeData+"&applyData="+applyData+"&_pre_url="+parent.preUrl.getPreUrl() +"&" + formdata;
     console.log(data);
 	ajax({
    		url: '/linkruit/saveRecruitNotice',
@@ -363,10 +387,10 @@ function fn_Save(){
 						</colgroup>   
 						<tbody>
 							<tr>
-								<th>코드 ID</th>
-								<td><span class="txt_pw"><input type="text" name="RECRUITNO" id="RECRUITNO" class="text" /></span></td>
-								<th>마스터코드명</th>
-								<td><span class="txt_pw"><input type="text" name="RECRUITNO_nm" id="RECRUITNO_nm" class="text" /></span></td>
+								<th>공고번호</th>
+								<td><span class="txt_pw"><input type="text" name="recruitno" id="recruitno" class="text" /></span></td>
+								<th>공고 이름</th>
+								<td><span class="txt_pw"><input type="text" name="recruitname" id="recruitname" class="text" /></span></td>
 							</tr>
 						</tbody>
 		            </table>
@@ -392,16 +416,16 @@ function fn_Save(){
 			<!-- Detail Grid -->
 			<div class="grid_right_btn">
 				<div class="grid_right_btn_in">
-					<button id="btn_applicant_save" class="btn_common btn_default">저장</button>
-					<button id="btn_applicant_add" class="btn_common btn_default">행추가</button>
-					<button id="btn_applicant_del" class="btn_common btn_default">행삭제</button>
-					<button id="btn_applicant_excel" class="btn_common btn_default">
+					<button id="btn_apply_save" class="btn_common btn_default">저장</button>
+					<button id="btn_apply_add" class="btn_common btn_default">행추가</button>
+					<button id="btn_apply_del" class="btn_common btn_default">행삭제</button>
+					<button id="btn_apply_excel" class="btn_common btn_default">
 					   <img src="<c:out value='${pageContext.request.contextPath}' />/resources/pandora3/images/common_new/img_download.png" alt="엑셀 다운로드" />
                     </button>
 				</div>
 			</div>
-			<table id="applicant_grid"></table>
-			<div id="applicant_grid_pager"></div>
+			<table id="apply_grid"></table>
+			<div id="apply_grid_pager"></div>
 			<!-- Detail Grid // -->
 			<br />
 		</div>

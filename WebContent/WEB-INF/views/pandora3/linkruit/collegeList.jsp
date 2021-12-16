@@ -12,6 +12,8 @@
 var recruit_notice_grid;
 var applicant_grid;
 var college_grid;
+var career_grid;
+
 var target_row = null;
 
 
@@ -142,7 +144,7 @@ $(document).ready(function(){
                     if (isNotEmpty(row.APPLICANTNO)) {
                      	 target_row = row;
                     	 college_grid.retreive({data:{APPLICANTNO:row.APPLICANTNO}});
-                    	 
+                    	 career_grid.retreive({data:{APPLICANTNO:row.APPLICANTNO}});
                     	
                      }
 					
@@ -230,6 +232,84 @@ $(document).ready(function(){
             
         };
     
+    var down_down_config2 = { 
+            gridid    : 'career_grid',	    	// 그리드 id
+            pagerid   : 'career_grid_pager',	// 그리드 페이지 id
+            // column info
+            columns   :[
+            			 {name:'COLLEGEREGISTERNO', label:'자격증등록번호', align:'center', editable:false, width:20, hidden: true},
+      
+            		     {name:'APPLICANTNO', label:'수험번호', align:'center', editable:false, width:20},
+            		     
+                         {name:'APPLICANTID', label:'수험자 아이디', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGENAME', label:'학교명', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         
+                         {name:'COLLEGELOCATION', label:'소재지', align:'center', editable:true, editoptions:{dataInit: fn_changeGridDate}, width:20, required:true},
+                         {name:'COLLEGEENTER', label:'입학', align:'center', editable:true, width:25, edittype:'select', formatter:'select' ,
+                        	 editoptions:{maxlength:50, dataInit: fn_changeGridDate,
+                        		value : '입학:입학;'
+                        			   +'편입학:편입학;'
+                        			   +'재입학:재입학;'
+                        			   +'기타:기타'
+                        	 
+                       
+                         
+                        }},
+                         
+                         {name:'COLLEGEDEGREE', label:'학위', align:'center', editable:true, width:30, 
+                        	 editoptions:{maxlength:50, dataInit: fn_changeGridDate,
+                         		value : '학사:학사;'
+                         			   +'전문학사:전문학사;'
+                         			   +'석사:석사;'
+                         			   +'박사:박사;'
+                         			   +'석박사:석박사'                        	 
+                         }},
+                         {name:'COLLEGEMAJOR1', label:'주전공', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                           
+                         {name:'COLLEGEMAJOR2', label:'제2전공', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGEDOUBLEMAJORKIND', label:'제2전공 분류', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다
+                         {name:'COLLEGESCORE', label:'학점', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGESCOREMAX', label:'학점기준', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGESTARTDATE', label:'입학기간', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다
+                         {name:'COLLEGEENDDATE', label:'종료기간', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGEGRADUATE', label:'졸업상태', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         
+                         
+                         
+                         
+                        ],
+            editmode    : true,                               // 그리드 editable 여부
+            gridtitle   : '학력 목록2',                        // 그리드명
+            multiselect : true,                               // checkbox 여부
+            height      : 200,                                // 그리드 높이
+            shrinkToFit : true,                               // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
+            selecturl   : '/linkruit/getCollegeList',       // 그리드 조회 URL
+            saveurl     : '/linkruit/saveCollege3',          // 그리드 입력/수정/삭제 URL
+            events         : {
+				  ondblClickRow: function(event, rowid) {
+                    var row = college_grid.getRowData(rowid);
+					var applicantNo = row.APPLICANTNO;
+					
+                    if (isNotEmpty(row.COLLEGEREGISTERNO)) {
+                     	 target_row = row;
+                    	 //applicant_grid.retreive({data:{APPLICANTNO:row.collegeREGISTERNO}});
+                    	 
+                    	
+                     }
+					
+					alert(row.COLLEGEREGISTERNO);
+                    
+                   
+                   	
+                    }
+                }
+            
+        };
+    
+    
+    
+    
     recruit_notice_grid = new UxGrid(up_config);
     recruit_notice_grid.init();
     
@@ -239,9 +319,13 @@ $(document).ready(function(){
     college_grid = new UxGrid(down_down_config);
     college_grid.init();
     
+    career_grid = new UxGrid(down_down_config2);
+    career_grid.init();
+    
     recruit_notice_grid.setGridWidth($('.tblType1').width());
     applicant_grid.setGridWidth($('.tblType1').width());
     college_grid.setGridWidth($('.tblType1').width());
+    career_grid.setGridWidth($('.thlType1').width());
     
     $("#cb_recruit_notice_grid").css("display","none");
     
@@ -327,6 +411,7 @@ $(window).resize(function() {
 	recruit_notice_grid.setGridWidth($('.tblType1').width());
 	applicant_grid.setGridWidth($('.tblType1').width());
 	college_grid.setGridWidth($('.tblType1').width());
+	career_grid.setGridWidth($('.tblType1').width());
 });
 
 //조회: 내부 로직 사용자 정의
@@ -339,6 +424,7 @@ function fn_Search(){
     $("#recruit_notice_grid").jqGrid('setColProp', 'RECRUITNO', { editable: false });
     $("#applicant_grid").jqGrid('setColProp', 'APPLICANTNO'    , { editable: false });     
     $("#college_grid").jqGrid('setColProp', 'COLLEGEREGISTERNO'    , { editable: false });
+    $("#career_grid").jqGrid('setColProp', 'COLLEGEREGISTERNO'    , { editable: false });
 }
 
 function fn_Save(){
@@ -346,13 +432,14 @@ function fn_Save(){
 	var recruitNoticeData = getSaveData("recruit_notice_grid"); //grid_id
     var applicantData  = getSaveData("applicant_grid"); //grid_id
     var collegeData = getSaveData("college_grid"); // grid_id
+    var careerData = getSaveData("career_grid"); // grid_id
     if(isEmpty(recruitNoticeData)) {
     	return false;
     }
     
     //입력폼데이터 파라미터형태로 변경
     var formdata  = $("form[name=search]").serialize();
-    var data ="recruitNoticeData="+recruitNoticeData+"&applicantData="+applicantData+"&collegeData="+collegeData+"&_pre_url="+parent.preUrl.getPreUrl() +"&" + formdata;
+    var data ="recruitNoticeData="+recruitNoticeData+"&applicantData="+applicantData+"&collegeData="+collegeData+"&careerData="+careerData+"&_pre_url="+parent.preUrl.getPreUrl() +"&" + formdata;
     console.log(data);
 	ajax({
    		url: '/linkruit/saveRecruitNotice',
@@ -390,10 +477,10 @@ function fn_Save(){
 						</colgroup>   
 						<tbody>
 							<tr>
-								<th>코드 ID</th>
-								<td><span class="txt_pw"><input type="text" name="RECRUITNO" id="RECRUITNO" class="text" /></span></td>
-								<th>마스터코드명</th>
-								<td><span class="txt_pw"><input type="text" name="RECRUITNO_nm" id="RECRUITNO_nm" class="text" /></span></td>
+								<th>공고번호</th>
+								<td><span class="txt_pw"><input type="text" name="recruitno" id="recruitno" class="text" /></span></td>
+								<th>공고 이름</th>
+								<td><span class="txt_pw"><input type="text" name="recruitname" id="recruitname" class="text" /></span></td>
 							</tr>
 						</tbody>
 		            </table>
@@ -434,6 +521,21 @@ function fn_Save(){
 			<table id="college_grid"></table>
 			<div id="college_grid_pager"></div>
 			<!-- Detail Grid2 // -->			
+
+			<!-- Detail3 Grid -->
+			<div class="grid_right_btn">
+				<div class="grid_right_btn_in">
+					<button id="btn_college_save" class="btn_common btn_default">저장</button>
+					
+					<button id="btn_college_del" class="btn_common btn_default">행삭제</button>
+					<button id="btn_college_excel" class="btn_common btn_default">
+					   <img src="<c:out value='${pageContext.request.contextPath}' />/resources/pandora3/images/common_new/img_download.png" alt="엑셀 다운로드" />
+                    </button>
+				</div>
+			</div>
+			<table id="career_grid"></table>
+			<div id="career_grid_pager"></div>
+			<!-- Detail Grid3 // -->	
 			
 			<br />
 		</div>

@@ -25,7 +25,7 @@ public class ApplyMgr {
 	}
 	
 	public void saveApply2(ParameterMap parameterMap) throws Exception {
-		System.out.println("saveApply2 처리");
+		
 		List<ApplyDto> insertList = new ArrayList<ApplyDto>();
 		List<ApplyDto> updateList = new ArrayList<ApplyDto>();
 		List<ApplyDto> deleteList = new ArrayList<ApplyDto>();

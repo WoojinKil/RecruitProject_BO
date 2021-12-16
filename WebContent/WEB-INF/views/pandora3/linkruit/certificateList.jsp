@@ -361,10 +361,10 @@ function fn_Save(){
 						</colgroup>   
 						<tbody>
 							<tr>
-								<th>코드 ID</th>
-								<td><span class="txt_pw"><input type="text" name="RECRUITNO" id="RECRUITNO" class="text" /></span></td>
-								<th>마스터코드명</th>
-								<td><span class="txt_pw"><input type="text" name="RECRUITNO_nm" id="RECRUITNO_nm" class="text" /></span></td>
+								<th>공고번호</th>
+								<td><span class="txt_pw"><input type="text" name="recruitno" id="recruitno" class="text" /></span></td>
+								<th>공고 이름</th>
+								<td><span class="txt_pw"><input type="text" name="recruitname" id="recruitname" class="text" /></span></td>		
 							</tr>
 						</tbody>
 		            </table>

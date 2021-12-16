@@ -1,6 +1,8 @@
 package kr.co.ta9.pandora3.linkruit.dto;
 
-public class BasePartDto {
+import kr.co.ta9.pandora3.app.bean.CommonBean;
+
+public class BasePartDto extends CommonBean {
 
 	private String partno;
 	private String partname;

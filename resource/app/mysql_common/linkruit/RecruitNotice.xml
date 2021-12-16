@@ -45,8 +45,8 @@
 	
 	
 	<update id="update" parameterType="BaseRecruitNoticeDto">
-		update ta_recruit_notice
-			set recruitUpdateDate = SYSDATE()
+		UPDATE TA_RECRUIT_NOTICE
+			SET RECRUITUPDATEDATE = SYSDATE()
 			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitname)">
 			,RECRUITNAME = #{recruitname, jdbcType=VARCHAR}
 			</if>
@@ -67,13 +67,13 @@
 			</if>
 	
 	
-		where recruitno = #{recruitno}
+		WHERE RECRUITNO = #{recruitno}
 	</update>
 	
 	<!-- 채용공고 삭제 -->
 	<delete id="delete" parameterType="BaseRecruitNoticeDto">
-		delete from ta_recruit_notice
-		where recruitno = #{recruitno}
+		DELETE FROM TA_RECRUIT_NOTICE
+		WHERE RECRUITNO = #{recruitno}
 	
 	</delete>
 	
@@ -82,7 +82,15 @@
 	<select id = "selectRecruitNoticeList" resultType="BaseRecruitNoticeDto">
 	
 	
-	select * from ta_recruit_notice;
+		SELECT * 
+		FROM TA_RECRUIT_NOTICE
+		WHERE 1 = 1
+			  <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitno)">
+			   AND RECRUITNO LIKE CONCAT('%',#{recruitno, jdbcType=VARCHAR}, '%')
+			   </if>
+			   <if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitname)">
+			   AND RECRUITNAME LIKE CONCAT('%',#{recruitname, jdbcType=VARCHAR}, '%')
+			   </if>
 	
 	
 	</select>
@@ -91,9 +99,9 @@
 	
 	<!-- 채용공고/지원자 삭제 -->
 	<delete id="deleteApplicant" parameterType="BaseApplicantDto">
-		delete
-			from ta_recruit_applicant
-			where RECRUITNO = #{recruitno, jdbcType=INTEGER}
+		DELETE
+			FROM TA_RECRUIT_APPLICANT
+			WHERE RECRUITNO = #{recruitno, jdbcType=INTEGER}
 			
 		
 	
@@ -102,9 +110,9 @@
 	<!-- 채용공고 수 -->
 	<select id ="selectRecruitNoticeCnt" parameterType="ParameterMap" resultType="Integer">
 	
-		select count(1)
-			from ta_recruit_notice
-	 		where recruitNo = upper(#{recruitno, jdbcType=INTEGER})
+		SELECT COUNT(1)
+			FROM TA_RECRUIT_NOTICE
+	 		WHERE RECRUITNO = UPPER(#{recruitno, jdbcType=INTEGER})
 	
 	
 	</select></mapper>

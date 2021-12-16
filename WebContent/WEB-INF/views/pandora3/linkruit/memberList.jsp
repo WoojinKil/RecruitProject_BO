@@ -59,7 +59,7 @@ $(document).ready(function(){
         ],          
 //      initval     : {US_YN : 'Y', SORT_ORD : 999, MST_CD : 'A00'}, // 컬럼 add 시 초기값
         editmode    : true,                                 // 그리드 editable 여부
-        gridtitle   : '사원관리 목록',                        // 그리드명
+        gridtitle   : '회원관리 목록',                        // 그리드명
         multiselect : true,                                 // checkbox 여부
         formid      : 'search',                             // 조회조건 form id
         height      : '300',                                // 그리드 높이
@@ -258,7 +258,6 @@ function fn_Save(){
 			<div class="grid_right_btn">
 				<div class="grid_right_btn_in">
 					<button id="btn_member_save" class="btn_common btn_default">저장</button>
-					<button id="btn_member_add" class="btn_common btn_default">행추가</button>
 					<button id="btn_member_del" class="btn_common btn_default">행삭제</button>
 					<button id="btn_member_excel" class="btn_common btn_default">
                         <img src="<c:out value='${pageContext.request.contextPath}' />/resources/pandora3/images/common_new/img_download.png" alt="엑셀 다운로드" />

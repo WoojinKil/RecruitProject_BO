@@ -2,32 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Apply">
 	<select id="selectApplyList" parameterType="ParameterMap" resultType="ApplyDto">
-		select   AP.applyno
-				, N.recruitno
-				, P.partname
-				, AP.partno
-				, O.objectname
-				, AP.objectno
-				, W.workname
-				, AP.workno
-				, AP.applyContent
-				, AP.applyUpdateDate
+		SELECT   AP.APPLYNO
+				, N.RECRUITNO
+				, P.PARTNAME
+				, AP.PARTNO
+				, O.OBJECTNAME
+				, AP.OBJECTNO
+				, W.WORKNAME
+				, AP.WORKNO
+				, AP.APPLYCONTENT
+				, AP.APPLYUPDATEDATE
 		
 			  
 			
 		
 		
-		from ta_recruit_apply AP
-			 ,ta_recruit_notice N
-			 ,ta_recruit_part P
-			 ,ta_recruit_object O
-			 ,ta_recruit_work W
-		where 1=1
-		and AP.recruitNo=N.recruitNO
-		and AP.recruitNo=#{RECRUITNO}
-		and AP.objectNo = O.objectNo
-		and AP.partNo = P.partNo
-		and AP.workNo = W.workNo
+		FROM TA_RECRUIT_APPLY AP
+			 ,TA_RECRUIT_NOTICE N
+			 ,TA_RECRUIT_PART P
+			 ,TA_RECRUIT_OBJECT O
+			 ,TA_RECRUIT_WORK W
+		WHERE 1=1
+		AND AP.RECRUITNO=N.RECRUITNO
+		AND AP.RECRUITNO=#{RECRUITNO}
+		AND AP.OBJECTNO = O.objectNo
+		AND AP.PARTNO = P.partNo
+		AND AP.WORKNO = W.workNo
 		
 		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(RECRUITNO)">AND AP.RECRUITNO        = #{RECRUITNO         ,jdbcType=NUMERIC} </if>
 	
@@ -36,7 +36,7 @@
 	</select>
 	
 	<insert id="insert" parameterType="ApplyDto">
-		insert into ta_recruit_apply
+		INSERT INTO TA_RECRUIT_APPLY
 		(
 			  APPLYNO
 			, RECRUITNO
@@ -46,9 +46,9 @@
 			, APPLYCONTENT
 			
 		)
-		values
+		VALUES
 		(
-			  (SELECT IFNULL(MAX(applyno),1) FROM ta_recruit_apply A)+1
+			  (SELECT IFNULL(MAX(APPLYNO),1) FROM TA_RECRUIT_APPLY A)+1
 			, #{recruitno}
 			, #{partno}
 			, #{objectno}
@@ -62,8 +62,8 @@
 	</insert>
 
 	<update id="update" parameterType="ApplyDto">
-		update ta_recruit_apply
-		set   APPLYUPDATEDATE = SYSDATE()
+		UPDATE TA_RECRUIT_APPLY
+		SET   APPLYUPDATEDATE = SYSDATE()
 			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(partno)">
 			, PARTNO =  #{partno, jdbcType=VARCHAR}
 			</if>
@@ -82,7 +82,7 @@
 			, APPLYCONTENT = #{applycontent, jdbcType=VARCHAR}
 			</if>
 			
-		WHERE ApplyNo = #{applyno}
+		WHERE APPLYNO = #{applyno}
 			  
 	</update>
 	
