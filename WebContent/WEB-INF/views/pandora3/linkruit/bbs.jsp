@@ -34,15 +34,15 @@ $(document).ready(function(){
         columns   : [
             {name : 'BBSNO', label : '게시판번호', sortable:false, editable : true, hidden : true},
 
-            {name : 'BBSTITLE', label : '제목',   align : 'center', editable : true},
-            {name : 'BBSCONTENT', label : '내용', edittype:'textarea',  align : 'left', editable : true},
+            {name : 'BBSTITLE', label : '제목',   align : 'center', editable : true, required:true},
+            {name : 'BBSCONTENT', label : '내용', edittype:'textarea',  align : 'left', editable : true, required	:true},
             {name : 'BBSHIT', label : '조회수',   align : 'center', editable : false},
             {name : 'BBSWRITEDATE', label : '작성일자',   align : 'center', editable : false},
             {name : 'BBSUPDATEDATE', label : '갱신일자',   align : 'center', editable : false}
         ],          
         initval     : {SORT_ORD : 999}, // 컬럼 add 시 초기값
         editmode    : true,                                 // 그리드 editable 여부
-        gridtitle   : '게시판 목록',                        // 그리드명
+        gridtitle   : '공지사항 목록',                        // 그리드명
         multiselect : true,                                 // checkbox 여부
         formid      : 'search',                             // 조회조건 form id
         height      : '300',                                // 그리드 높이

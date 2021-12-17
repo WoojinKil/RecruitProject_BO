@@ -33,7 +33,7 @@ $(document).ready(function(){
         // column info
         columns   :[
         		    
-        		    {name:'RECRUITNO', label: '공고번호', width:25, required:true, editable:false, editoptions:{
+        		    {name:'RECRUITNO', label: '공고번호', width:25, editable:false, editoptions:{
 		                maxlength:12,
 		                dataInit: function(element){
 		                     $(element).keyup(function() {

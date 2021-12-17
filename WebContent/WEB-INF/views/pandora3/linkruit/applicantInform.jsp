@@ -43,7 +43,7 @@ $(document).ready(function(){
         // column info
         columns   :[
         		    
-        		    {name:'RECRUITNO', label: '공고번호', width:25, required:true, editable:false, editoptions:{
+        		    {name:'RECRUITNO', label: '공고번호', width:25, editable:false, editoptions:{
 		                maxlength:12,
 		                dataInit: function(element){
 		                     $(element).keyup(function() {
@@ -52,8 +52,8 @@ $(document).ready(function(){
 		                     });
 		                 }
 		             }},
-                     {name:'RECRUITNAME', label:'공고 이름', editable:false, edittype:'text', width:100, required:true, editoptions:{maxlength:100, dataInit: fn_changeGridDate }},   // 저장 필수값은 required:true를 준다             
-                     {name:'TYPENO', label:'채용형태', align:'center', editable:false, edittype:'select', formatter:'select', editoptions:{value:'T1:공채;T2:수시', dataInit:fn_changeGridDate}, width:25, required:true},
+                     {name:'RECRUITNAME', label:'공고 이름', editable:false, edittype:'text', width:100, editoptions:{maxlength:100, dataInit: fn_changeGridDate }},   // 저장 필수값은 required:true를 준다             
+                     {name:'TYPENO', label:'채용형태', align:'center', editable:false, edittype:'select', formatter:'select', editoptions:{value:'T1:공채;T2:수시', dataInit:fn_changeGridDate}, width:25},
                      {name:'RECRUITSCALE', label:'채용규모', editable:false, width:25 , editoptions:{maxlength:10, dataInit: fn_changeGridDate}},
                      {name:'RECRUITSTARTDATETIME',label:'채용시작시간',editable:false, align:'center', width:40, formatter: "date", formatoptions: { dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
                      
@@ -69,8 +69,7 @@ $(document).ready(function(){
         
         editmode       : true,                                 	    // 그리드 editable 여부
         gridtitle      : '지원공고 목록',                           	// 그리드명
-        multiselect    : true,                             		    // checkbox 여부
-        //multiboxonly : true,                                      
+
         formid         : 'search',                                  // 조회조건 form id
         height         : 200,                                       // 그리드 높이
         //shrinkToFit  : true,                              	    // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
@@ -126,7 +125,7 @@ $(document).ready(function(){
                          {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:15, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          {name:'MEMBERBIRTH', label:'생년월일', editable:false, edittype:'text', width:10, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          
-                         {name:'FINALAPPLYCHECKED', label:'제출여부', align:'center', editable:false, width:10, edittype:'select', formatter:'select', editoptions:{value:'1:제출;0:미제출', dataInit: fn_changeGridDate}, width:10, required:true},
+                         {name:'FINALAPPLYCHECKED', label:'제출여부', align:'center', editable:false, width:10, edittype:'select', formatter:'select', editoptions:{value:'1:제출;0:미제출', dataInit: fn_changeGridDate}, width:10},
                          {name:'APPLYNO', label:'지원번호', align:'center', editable:true, width:10, editoptions:{maxlength:50, dataInit: fn_changeGridDate}},
                          {name:'APPLICANTMILLITARY', label:'병역여부', align:'center', editable:false, width:10, edittype:'select', formatter:'select', editoptions:{maxlength:70, dataInit: fn_changeGridDate,value:'만기제대:만기제대(소집해제);복무중:복무중;면제:면제;해당사항 없음:해당사항 없음', dataInit: fn_changeGridDate}},
                          {name:'APPLICANTVETERAN', label:'보훈여부', align:'center', editable:false, width:10, edittype:'select', formatter:'select', editoptions:{value:'대상:대상;비대상:비대상', maxlength:50, dataInit: fn_changeGridDate}},
@@ -145,7 +144,6 @@ $(document).ready(function(){
                         ],
             editmode    : true,                               // 그리드 editable 여부
             gridtitle   : '지원자 목록',                        // 그리드명
-            multiselect : true,                               // checkbox 여부
             height      : 200,                                // 그리드 높이
             shrinkToFit : true,                               // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
             selecturl   : '/linkruit/getApplicantList',       // 그리드 조회 URL
@@ -184,10 +182,10 @@ $(document).ready(function(){
             		     
                          {name:'APPLICANTID', label:'수험자 아이디', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'COLLEGENAME', label:'학교명', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGENAME', label:'학교명', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          
-                         {name:'COLLEGELOCATION', label:'소재지', align:'center', editable:true, editoptions:{dataInit: fn_changeGridDate}, width:20, required:true},
-                         {name:'COLLEGEENTER', label:'입학', align:'center', editable:true, width:25, edittype:'select', formatter:'select' ,
+                         {name:'COLLEGELOCATION', label:'소재지', align:'center', editable:false, editoptions:{dataInit: fn_changeGridDate}, width:20, required:true},
+                         {name:'COLLEGEENTER', label:'입학', align:'center', editable:false, width:25, edittype:'select', formatter:'select' ,
                         	 editoptions:{maxlength:50, dataInit: fn_changeGridDate,
                         		value : '입학:입학;'
                         			   +'편입학:편입학;'
@@ -198,7 +196,7 @@ $(document).ready(function(){
                          
                         }},
                          
-                         {name:'COLLEGEDEGREE', label:'학위', align:'center', editable:true, width:30, 
+                         {name:'COLLEGEDEGREE', label:'학위', align:'center', editable:false, width:30, 
                         	 editoptions:{maxlength:50, dataInit: fn_changeGridDate,
                          		value : '학사:학사;'
                          			   +'전문학사:전문학사;'
@@ -206,15 +204,15 @@ $(document).ready(function(){
                          			   +'박사:박사;'
                          			   +'석박사:석박사'                        	 
                          }},
-                         {name:'COLLEGEMAJOR1', label:'주전공', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGEMAJOR1', label:'주전공', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                            
-                         {name:'COLLEGEMAJOR2', label:'제2전공', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'COLLEGEDOUBLEMAJORKIND', label:'제2전공 분류', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다
-                         {name:'COLLEGESCORE', label:'학점', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'COLLEGESCOREMAX', label:'학점기준', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'COLLEGESTARTDATE', label:'입학기간', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다
-                         {name:'COLLEGEENDDATE', label:'종료기간', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'COLLEGEGRADUATE', label:'졸업상태', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGEMAJOR2', label:'제2전공', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGEDOUBLEMAJORKIND', label:'제2전공 분류', editable: false, edittype:'text', width:25, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다
+                         {name:'COLLEGESCORE', label:'학점', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGESCOREMAX', label:'학점기준', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGESTARTDATE', label:'입학기간', editable: false, edittype:'text', width:25, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다
+                         {name:'COLLEGEENDDATE', label:'종료기간', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'COLLEGEGRADUATE', label:'졸업상태', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          
                          
                          
@@ -222,7 +220,6 @@ $(document).ready(function(){
                         ],
             editmode    : true,                               // 그리드 editable 여부
             gridtitle   : '학력 목록(전문대 이상)',                        // 그리드명
-            multiselect : true,                               // checkbox 여부
             height      : 200,                                // 그리드 높이
             shrinkToFit : true,                               // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
             selecturl   : '/linkruit/getCollegeList',       // 그리드 조회 URL
@@ -259,16 +256,15 @@ $(document).ready(function(){
             		     
                          {name:'APPLICANTID', label:'수험자 아이디', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'CERTIFICATENAME', label:'자격증 이름', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'CERTIFICATENAME', label:'자격증 이름', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          
-                         {name:'CERTIFICATESCORE', label:'자격증 등급(점수)', align:'center', editable:true, editoptions:{dataInit: fn_changeGridDate}, width:20, required:true},
-                         {name:'CERTIFICATEDATE', label:'취득 날짜', align:'center', editable:true, width:25, editoptions:{maxlength:50, dataInit: fn_changeGridDate}},
-                         {name:'CERTIFICATECODE', label:'자격증 번호', align:'center', editable:true, width:50, editoptions:{maxlength:70, dataInit: fn_changeGridDate, dataInit: fn_changeGridDate}},
+                         {name:'CERTIFICATESCORE', label:'자격증 등급(점수)', align:'center', editable:false, editoptions:{dataInit: fn_changeGridDate}, width:20, required:true},
+                         {name:'CERTIFICATEDATE', label:'취득 날짜', align:'center', editable:false, width:25, editoptions:{maxlength:50, dataInit: fn_changeGridDate}},
+                         {name:'CERTIFICATECODE', label:'자격증 번호', align:'center', editable:false, width:50, editoptions:{maxlength:70, dataInit: fn_changeGridDate, dataInit: fn_changeGridDate}},
                          
                         ],
             editmode    : true,                               // 그리드 editable 여부
             gridtitle   : '자격증 목록',                        // 그리드명
-            multiselect : true,                               // checkbox 여부
             height      : 200,                                // 그리드 높이
             shrinkToFit : true,                               // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
             selecturl   : '/linkruit/getCertificateList',       // 그리드 조회 URL
@@ -305,21 +301,20 @@ $(document).ready(function(){
             		     
                          {name:'APPLICANTID', label:'수험자 아이디', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'ACTIVATIONNAME', label:'활동명', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'ACTIVATIONNAME', label:'활동명', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          
-                         {name:'ACTIVATIONKIND', label:'종류', align:'center', editable:true, editoptions:{dataInit: fn_changeGridDate}, width:20, required:true},
-                         {name:'ACTIVATIONROLE', label:'역할', align:'center', editable:true, width:25, edittype:'text'},
+                         {name:'ACTIVATIONKIND', label:'종류', align:'center', editable:false, editoptions:{dataInit: fn_changeGridDate}, width:20},
+                         {name:'ACTIVATIONROLE', label:'역할', align:'center', editable:false, width:25, edittype:'text'},
                          
-                         {name:'ACTIVATIONSTARTDATE', label:'시작기간', align:'center', editable:true, width:30},
+                         {name:'ACTIVATIONSTARTDATE', label:'시작기간', align:'center', editable:false, width:30},
 
-                         {name:'ACTIVATIONENDDATE', label:'종료기간', align:'center', editable:true, width:30},
-                         {name:'ACTIVATIONORGAN', label:'기관명', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}}   // 저장 필수값은 required:true를 준다  
+                         {name:'ACTIVATIONENDDATE', label:'종료기간', align:'center', editable:false, width:30},
+                         {name:'ACTIVATIONORGAN', label:'기관명', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}}   // 저장 필수값은 required:true를 준다  
                          
                          
                         ],
             editmode    : true,                               // 그리드 editable 여부
             gridtitle   : '인턴, 동아리, 교육활동 사항',                        // 그리드명
-            multiselect : true,                               // checkbox 여부
             height      : 200,                                // 그리드 높이
             shrinkToFit : true,                               // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
             selecturl   : '/linkruit/getActivationList',       // 그리드 조회 URL
@@ -354,23 +349,22 @@ $(document).ready(function(){
       
             		     {name:'APPLICANTNO', label:'수험번호', align:'center', editable:false, width:20},
             		     
-                         {name:'APPLICANTID', label:'수험자 아이디', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:25, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'CAREERNAME', label:'회사명', editable:true, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'APPLICANTID', label:'수험자 아이디', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'MEMBERNAME', label:'수험자 이름', editable: false, edittype:'text', width:25, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'CAREERNAME', label:'회사명', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          
-                         {name:'CAREERCONTRACT', label:'근무형태', align:'center', editable:true, editoptions:{dataInit: fn_changeGridDate}, width:20, required:true},
-                         {name:'CAREERPART', label:'사업부', align:'center', editable:true, width:25, edittype:'text'},
+                         {name:'CAREERCONTRACT', label:'근무형태', align:'center', editable:false, editoptions:{dataInit: fn_changeGridDate}, width:20},
+                         {name:'CAREERPART', label:'사업부', align:'center', editable:false, width:25, edittype:'text'},
                          
-                         {name:'CAREERROLE', label:'직급', align:'center', editable:true, width:30},
+                         {name:'CAREERROLE', label:'직급', align:'center', editable:false, width:30},
 
-                         {name:'CAREERSTARTDATE', label:'시작기간', align:'center', editable:true, width:30},
-                         {name:'CAREERENDDATE', label:'종료기간', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
-                         {name:'CAREERCONTENT', label:'근무내용', align:'left', editable:false, edittype:'text', width:30, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}}   // 저장 필수값은 required:true를 준다
+                         {name:'CAREERSTARTDATE', label:'시작기간', align:'center', editable:false, width:30},
+                         {name:'CAREERENDDATE', label:'종료기간', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
+                         {name:'CAREERCONTENT', label:'근무내용', align:'left', editable:false, edittype:'text', width:30, editoptions:{maxlength:25, dataInit: fn_changeGridDate}}   // 저장 필수값은 required:true를 준다
                          
                         ],
             editmode    : true,                               // 그리드 editable 여부
             gridtitle   : '경력 사항(아르바이트 제외)',                        // 그리드명
-            multiselect : true,                               // checkbox 여부
             height      : 200,                                // 그리드 높이
             shrinkToFit : true,                               // true인경우 column의 width 자동조정, false인경우 정해진 width대로 구현(가로스크롤바필요시 false)
             selecturl   : '/linkruit/getCareerList',       // 그리드 조회 URL
@@ -606,12 +600,7 @@ function fn_Save(){
 			</div>
 			<div class="bgBorder"></div>
 			<!-- search // -->
-			<div class="grid_right_btn">
-				<div class="grid_right_btn_in">
-					<button id="btn_recruit_notice_save" class="btn_common btn_default">저장</button>
 
-				</div>
-			</div>
 			<table id="recruit_notice_grid"></table>
 			<div class="bgBorder"></div>
 			<div id="recruit_notice_grid_pager"></div>
@@ -628,9 +617,7 @@ function fn_Save(){
 			<!-- DetailDetail1 Grid -->
 			<div class="grid_right_btn">
 				<div class="grid_right_btn_in">
-					<button id="btn_college_save" class="btn_common btn_default">저장</button>
-					
-					<button id="btn_college_del" class="btn_common btn_default">행삭제</button>
+
 					<button id="btn_college_excel" class="btn_common btn_default">
 					   <img src="<c:out value='${pageContext.request.contextPath}' />/resources/pandora3/images/common_new/img_download.png" alt="엑셀 다운로드" />
                     </button>
@@ -643,9 +630,7 @@ function fn_Save(){
 			<!-- DetailDetail2 Grid -->
 			<div class="grid_right_btn">
 				<div class="grid_right_btn_in">
-					<button id="btn_certificate_save" class="btn_common btn_default">저장</button>
-					
-					<button id="btn_certificate_del" class="btn_common btn_default">행삭제</button>
+
 					<button id="btn_certificate_excel" class="btn_common btn_default">
 					   <img src="<c:out value='${pageContext.request.contextPath}' />/resources/pandora3/images/common_new/img_download.png" alt="엑셀 다운로드" />
                     </button>
@@ -658,9 +643,7 @@ function fn_Save(){
 			<!-- DetailDetail3 Grid -->
 			<div class="grid_right_btn">
 				<div class="grid_right_btn_in">
-					<button id="btn_certificate_save" class="btn_common btn_default">저장</button>
-					
-					<button id="btn_certificate_del" class="btn_common btn_default">행삭제</button>
+
 					<button id="btn_certificate_excel" class="btn_common btn_default">
 					   <img src="<c:out value='${pageContext.request.contextPath}' />/resources/pandora3/images/common_new/img_download.png" alt="엑셀 다운로드" />
                     </button>
@@ -673,9 +656,7 @@ function fn_Save(){
 			<!-- DetailDetail4 Grid -->
 			<div class="grid_right_btn">
 				<div class="grid_right_btn_in">
-					<button id="btn_certificate_save" class="btn_common btn_default">저장</button>
-					
-					<button id="btn_certificate_del" class="btn_common btn_default">행삭제</button>
+
 					<button id="btn_certificate_excel" class="btn_common btn_default">
 					   <img src="<c:out value='${pageContext.request.contextPath}' />/resources/pandora3/images/common_new/img_download.png" alt="엑셀 다운로드" />
                     </button>

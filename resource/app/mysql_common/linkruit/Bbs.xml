@@ -30,7 +30,7 @@
 		)
 		values
 		(
-			  (SELECT IFNULL(MAX(BBSNO),1) FROM TA_RECRUIT_BBS A)+1
+			  (SELECT IFNULL(MAX(BBSNO),0) FROM TA_RECRUIT_BBS A)+1
 			, #{bbstitle}
 			, #{bbscontent}
 			, SYSDATE()

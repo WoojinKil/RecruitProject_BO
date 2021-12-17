@@ -21,7 +21,7 @@
 		)
 		VALUES
 		(
-			  #{recruitno}
+			  (SELECT IFNULL(MAX(RECRUITNO),0) FROM TA_RECRUIT_NOTICE A)+1
 			, #{recruitname}
 			, #{typeno}
 			, #{recruitscale}
