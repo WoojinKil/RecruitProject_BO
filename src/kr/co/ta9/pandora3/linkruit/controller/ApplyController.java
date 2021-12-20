@@ -42,7 +42,7 @@ public class ApplyController extends CommonActionController{
 			result = Const.BOOLEAN_FAIL;
 			
 		}
-		System.out.println(json.toString());
+		
 		
 		json.put("RESULT", result);
 		ResponseUtil.write(response, json.toJSONString());
