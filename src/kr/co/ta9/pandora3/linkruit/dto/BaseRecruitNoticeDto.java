@@ -4,7 +4,7 @@ import kr.co.ta9.pandora3.app.bean.CommonBean;
 
 public class BaseRecruitNoticeDto extends CommonBean {
 	private Integer recruitno; //채용공고 번호
-	private String typeno; //채용 유형 (수시, 공채, 혹은null)
+	private String typename; //채용 유형 (수시, 공채, 혹은null)
 	private String recruitname; //채용공고 이름
 	private String recruitscale; //채용 규모 (000명, 혹은 null)
 	private String recruitstartdatetime; //채용 시작일
@@ -21,11 +21,11 @@ public class BaseRecruitNoticeDto extends CommonBean {
 	public void setRecruitno(Integer recruitno) {
 		this.recruitno = recruitno;
 	}
-	public String getTypeno() {
-		return typeno;
+	public String getTypename() {
+		return typename;
 	}
-	public void setTypeno(String typeno) {
-		this.typeno = typeno;
+	public void setTypename(String typename) {
+		this.typename = typename;
 	}
 
 	public String getRecruitname() {
@@ -80,7 +80,7 @@ public class BaseRecruitNoticeDto extends CommonBean {
 	}
 	@Override
 	public String toString() {
-		return "BaseRecruitNoticeDto [recruitno=" + recruitno + ", typeno=" + typeno + ", recruitname=" + recruitname
+		return "BaseRecruitNoticeDto [recruitno=" + recruitno + ", typename=" + typename + ", recruitname=" + recruitname
 				+ ", recruitscale=" + recruitscale + ", recruitstartdatetime=" + recruitstartdatetime
 				+ ", recruitenddatetime=" + recruitenddatetime + ", recruithit=" + recruithit + ", recruitcontent="
 				+ recruitcontent + ", recruitwritedate=" + recruitwritedate + ", recruitupdate=" + recruitupdate + "]";

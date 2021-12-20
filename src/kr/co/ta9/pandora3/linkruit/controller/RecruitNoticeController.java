@@ -26,16 +26,16 @@ public class RecruitNoticeController extends CommonActionController{
 	@RequestMapping(value="/linkruit/getRecruitNoticeList", method=  RequestMethod.POST)
 	public void getRecruitNoticeList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		
-		System.out.println("getRecruitNoticeList controller 진입");
+		
 		ParameterMap parameterMap = getParameterGridMap(request, response);
 		
 		String result = Const.BOOLEAN_SUCCESS;
 		JSONObject json = new JSONObject();
 		
 		try {
-			System.out.println("mgr 진입시도");
+			
 			json = recruitNoticeMgr.selectRecruitNoticeGridList(parameterMap);
-			System.out.println("진입성공");
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			result = Const.BOOLEAN_FAIL;
@@ -54,7 +54,6 @@ public class RecruitNoticeController extends CommonActionController{
 		String result = Const.BOOLEAN_SUCCESS;
 		
 		JSONObject json = new JSONObject();
-		System.out.println("/linkruit/saveRecruitNotice1 Controller 진입");
 		
 		try {
 			
@@ -71,12 +70,12 @@ public class RecruitNoticeController extends CommonActionController{
 		
 		json.put("RESULT", result);
 		ResponseUtil.write(response, json.toJSONString());
-		System.out.println("/linkruit/saveRecruitNotice1 Controller 처리완료");
+		
 	}
 	
 	@RequestMapping(value="/linkruit/saveRecruitNotice", method= RequestMethod.POST)
 	public void saveRecruitNotice(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("/linkruit/saveRecruitNotice Controller 진입");
+		
 		ParameterMap parameterMap = getParameterMap(request, response);
 		
 		String result= Const.BOOLEAN_SUCCESS;
@@ -96,7 +95,7 @@ public class RecruitNoticeController extends CommonActionController{
 		json.put("RESULT", result);
 		ResponseUtil.write(response, json.toJSONString());
 
-		System.out.println("/linkruit/saveRecruitNotice Controller 처리완료");
+		
 	}
 	
 }

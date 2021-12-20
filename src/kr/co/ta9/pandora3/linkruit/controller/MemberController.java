@@ -60,7 +60,7 @@ public class MemberController extends CommonActionController {
 		String result = Const.BOOLEAN_SUCCESS;
 		// json 선언
 		JSONObject json = new JSONObject();
-		System.out.println("saveMember Controller");
+		
 		try {
 			// 하위 메뉴 저장
 			memberMgr.saveMember(parameterMap);

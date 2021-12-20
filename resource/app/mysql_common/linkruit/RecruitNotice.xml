@@ -10,7 +10,7 @@
 		
 			  RECRUITNO
 			, RECRUITNAME
-			, TYPENO
+			, TYPENAME
 			, RECRUITSCALE
 			, RECRUITSTARTDATETIME
 			, RECRUITENDDATETIME
@@ -23,7 +23,7 @@
 		(
 			  (SELECT IFNULL(MAX(RECRUITNO),0) FROM TA_RECRUIT_NOTICE A)+1
 			, #{recruitname}
-			, #{typeno}
+			, #{typename}
 			, #{recruitscale}
 			, #{recruitstartdatetime}
 			, #{recruitenddatetime}
@@ -50,8 +50,8 @@
 			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitname)">
 			,RECRUITNAME = #{recruitname, jdbcType=VARCHAR}
 			</if>
-			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(typeno)">
-			,TYPENO = #{typeno, jdbcType=VARCHAR}
+			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(typename)">
+			,TYPENAME = #{typename, jdbcType=VARCHAR}
 			</if>
 			<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(recruitscale)">
 			,RECRUITSCALE = #{recruitscale, jdbcType=VARCHAR}
@@ -78,7 +78,7 @@
 	</delete>
 	
 	
-	<!-- 채용공고 리스트 조회 -->
+	<!-- 채용공고 검색 및 리스트 조회 -->
 	<select id = "selectRecruitNoticeList" resultType="BaseRecruitNoticeDto">
 	
 	
@@ -96,23 +96,7 @@
 	</select>
 	
 	
+
 	
-	<!-- 채용공고/지원자 삭제 -->
-	<delete id="deleteApplicant" parameterType="BaseApplicantDto">
-		DELETE
-			FROM TA_RECRUIT_APPLICANT
-			WHERE RECRUITNO = #{recruitno, jdbcType=INTEGER}
-			
-		
-	
-	</delete>
-	
-	<!-- 채용공고 수 -->
-	<select id ="selectRecruitNoticeCnt" parameterType="ParameterMap" resultType="Integer">
-	
-		SELECT COUNT(1)
-			FROM TA_RECRUIT_NOTICE
-	 		WHERE RECRUITNO = UPPER(#{recruitno, jdbcType=INTEGER})
-	
-	
-	</select></mapper>
+
+	</mapper>

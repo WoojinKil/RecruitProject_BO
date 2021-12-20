@@ -25,13 +25,12 @@ public class RecruitNoticeMgr {
 	
 	
 	public JSONObject selectRecruitNoticeGridList(ParameterMap parameterMap) throws Exception{
-		System.out.println("selectRecruitNoticeList Mgr 들어감");
 		
 		return recruitNoticeDao.selectRecruitNoticeGridList(parameterMap);
 	}
 	
 	public void saveRecruitNotice(ParameterMap parameterMap) throws Exception{
-		System.out.println("saveRecruitNotice MGR");
+		
 		int cnt =0;
 		List<BaseRecruitNoticeDto> insertList = new ArrayList<BaseRecruitNoticeDto>();
 		List<BaseRecruitNoticeDto> updateList = new ArrayList<BaseRecruitNoticeDto>();
@@ -51,13 +50,13 @@ public class RecruitNoticeMgr {
 			}
 		}
 		if(cnt != 0) {
-			System.out.println("saveRecruitNotice MGR insert");
+			
 			recruitNoticeDao.insertMany(insert);
-			System.out.println("saveRecruitNotice MGR update");
+			
 			recruitNoticeDao.updateMany("RecruitNotice.update",update);
-			System.out.println("saveRecruitNotice MGR delete");
+			
 			recruitNoticeDao.deleteMany("RecruitNotice.delete",delete);
-			recruitNoticeDao.deleteApplicant(delete);
+			
 		}
 		
 		
@@ -65,41 +64,24 @@ public class RecruitNoticeMgr {
 		
 		
 	}
-	//지원자 입력/수정/삭제
+	//지원 분야/수정/삭제
 	public void saveAll(ParameterMap parameterMap) throws Exception{
 		
-		System.out.println("saveRecruitNotice MGR");
 		
 		
 		List<BaseRecruitNoticeDto> insertList = new ArrayList<BaseRecruitNoticeDto> ();
 		List<BaseRecruitNoticeDto> updateList = new ArrayList<BaseRecruitNoticeDto>();
 		List<BaseRecruitNoticeDto> deleteList = new ArrayList<BaseRecruitNoticeDto>();
 		parameterMap.populates(BaseRecruitNoticeDto.class, insertList, updateList, deleteList,"recruitNoticeData");
-		System.out.println("saveRecruitNotice MGR에서 parameterMap"+ parameterMap);
-		
-		System.out.println("insertList " + insertList.toString());
-		System.out.println("updateList " + updateList.toString());
-		System.out.println("deleteList " + deleteList.toString());
-		
-		
+	
 		BaseRecruitNoticeDto[] insert = insertList.toArray(new BaseRecruitNoticeDto[0]);
 		BaseRecruitNoticeDto[] update = updateList.toArray(new BaseRecruitNoticeDto[0]);
 		BaseRecruitNoticeDto[] delete = deleteList.toArray(new BaseRecruitNoticeDto[0]);
-		for(int i=0;i<insert.length; i++) {
 
-			System.out.println("insert 값은="+insert[i].toString());
-				
-		}
-		
-		System.out.println("saveRecruitNotice MGR에서 insert시도");
-		
+	
 		recruitNoticeDao.insertMany("RecruitNotice.insert",insert);
-		System.out.println("saveRecruitNotice MGR에서 update시도");
-		recruitNoticeDao.updateMany("RecruitNotice.update",update);
-		System.out.println("saveRecruitNotice MGR에서 delete시도");
-		
+		recruitNoticeDao.updateMany("RecruitNotice.update",update);		
 		recruitNoticeDao.deleteMany("RecruitNotice.delete",delete);
-		recruitNoticeDao.deleteApplicant(delete);
 		
 	
 		List<BaseApplyDto> insertApplyList = new ArrayList<BaseApplyDto>();

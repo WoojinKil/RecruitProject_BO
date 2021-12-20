@@ -26,14 +26,14 @@ public class MemberMgr {
 
 	public void saveMember(ParameterMap parameterMap) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("saveMember 처리");
+		
 		List<BaseMemberDto> insertList = new ArrayList<BaseMemberDto>();
 		List<BaseMemberDto> updateList = new ArrayList<BaseMemberDto>();
 		List<BaseMemberDto> deleteList = new ArrayList<BaseMemberDto>();
 		
 		parameterMap.populates(BaseMemberDto.class, insertList, updateList, deleteList,"memberData");
 
-		System.out.println("parameter | "+ parameterMap);
+		
 		BaseMemberDto[] insert = insertList.toArray(new BaseMemberDto[0]);
 		BaseMemberDto[] update = updateList.toArray(new BaseMemberDto[0]);
 		BaseMemberDto[] delete = deleteList.toArray(new BaseMemberDto[0]);

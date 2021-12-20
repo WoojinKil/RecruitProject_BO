@@ -28,17 +28,14 @@ public class BbsMgr {
 		List<BaseBbsDto> updateList = new ArrayList<BaseBbsDto>();
 		List<BaseBbsDto> deleteList = new ArrayList<BaseBbsDto>();
 		parameterMap.populates(BaseBbsDto.class, insertList, updateList, deleteList, "bbsData");
-		System.out.println("parameterMap : "+parameterMap);
 		
 		BaseBbsDto[] insert = insertList.toArray(new BaseBbsDto[0]);
 		BaseBbsDto[] update = updateList.toArray(new BaseBbsDto[0]);
 		BaseBbsDto[] delete = deleteList.toArray(new BaseBbsDto[0]);
 		
-		System.out.println("insert시도");
-		bbsDao.insertMany("Bbs.insert",insert);
-		System.out.println("update시도");
-		bbsDao.updateMany("Bbs.update",update);
 		
+		bbsDao.insertMany("Bbs.insert",insert);
+		bbsDao.updateMany("Bbs.update",update);
 		bbsDao.deleteMany("Bbs.delete",delete);
 		
 				

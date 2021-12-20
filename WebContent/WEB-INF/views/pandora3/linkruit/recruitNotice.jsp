@@ -43,7 +43,7 @@ $(document).ready(function(){
 		                 }
 		             }},
                      {name:'RECRUITNAME', label:'공고 이름', editable:true, edittype:'text', width:100, required:true, editoptions:{maxlength:100, dataInit: fn_changeGridDate }},   // 저장 필수값은 required:true를 준다             
-                     {name:'TYPENO', label:'채용형태', align:'center', editable:true, edittype:'select', formatter:'select', editoptions:{value:'T1:공채;T2:수시', dataInit:fn_changeGridDate}, width:25, required:true},
+                     {name:'TYPENAME', label:'채용형태', align:'center', editable:true, required:true, edittype:'select', formatter:'select', editoptions:{value:'공채:공채;수시:수시;기타:기타', dataInit:fn_changeGridDate}, width:25, required:true},
                      {name:'RECRUITSCALE', label:'채용규모', editable:true, width:25 , editoptions:{maxlength:10, dataInit: fn_changeGridDate}},
                      {name:'RECRUITSTARTDATETIME',label:'채용시작시간',editable:true, align:'center', width:40, formatter: "date", formatoptions: {srcformat: "ISO8601Long", dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
                      
@@ -56,7 +56,7 @@ $(document).ready(function(){
                      
                      
                     ],          
-        initval        : {typeNo:'T1', SRT_SEQ:999, recruitNo:'A00'},    // 컬럼 add 시 초기값
+        initval        : {typeNo:'공채', SRT_SEQ:999},    // 컬럼 add 시 초기값
         editmode       : true,                                 	    // 그리드 editable 여부
         gridtitle      : '지원공고 목록',                           	// 그리드명
         multiselect    : true,                             		    // checkbox 여부

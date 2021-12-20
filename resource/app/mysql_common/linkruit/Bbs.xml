@@ -6,10 +6,10 @@
 		FROM TA_RECRUIT_BBS
 		WHERE 1=1
 
-		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(search_bbsTitle)">
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(bbstitle)">
 		AND BBSTITLE LIKE CONCAT('%',#{bbstitle, jdbcType=VARCHAR}, '%')
 		</if>
-		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(search_bbsContent)">
+		<if test="@kr.co.ta9.pandora3.common.util.TextUtil@isNotEmpty(bbscontent)">
 		AND BBSCONTENT LIKE CONCAT('%',#{bbscontent, jdbcType=VARCHAR}, '%')
 		</if>
 

@@ -32,7 +32,7 @@ public class PartController extends CommonActionController {
 		JSONObject json = new JSONObject();
 
 		try {
-			System.out.println("여기까지 진입");
+			
 			// 시스템 사용자 목록 그리드 조회
 			json = partMgr.selectPart(parameterMap);
 		} catch (Exception e) {
@@ -40,13 +40,13 @@ public class PartController extends CommonActionController {
 			result = Const.BOOLEAN_FAIL;
 			e.printStackTrace();
 		}
-		System.out.println("처리완료");
+		
 		json.put("RESULT", result);
-		System.out.println("처리완료2");
+		
 
 		ResponseUtil.write(response, json.toJSONString());
-		System.out.println("처리완료3");
-		System.out.println(json.toString());
+		
+		
 
 	}
 }

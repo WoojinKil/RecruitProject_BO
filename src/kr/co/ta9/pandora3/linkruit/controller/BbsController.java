@@ -46,7 +46,7 @@ public class BbsController extends CommonActionController {
 		String result = Const.BOOLEAN_SUCCESS;
 		
 		JSONObject json = new JSONObject();
-		System.out.println("/linkruit/saveBbs 진입");
+		
 		
 		try {
 			bbsMgr.saveBbs(parameterMap);

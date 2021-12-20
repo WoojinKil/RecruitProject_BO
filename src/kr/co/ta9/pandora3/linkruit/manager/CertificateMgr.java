@@ -20,7 +20,7 @@ public class CertificateMgr {
 	CertificateDao certificateDao;
 	
 	public JSONObject selectCertificateGridList(ParameterMap parameterMap) throws Exception{
-		System.out.println("parameterMap:"+parameterMap);
+		
 		return certificateDao.selectCertificateGridLsit(parameterMap);
 	}
 

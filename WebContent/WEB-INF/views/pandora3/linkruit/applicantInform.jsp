@@ -53,7 +53,7 @@ $(document).ready(function(){
 		                 }
 		             }},
                      {name:'RECRUITNAME', label:'공고 이름', editable:false, edittype:'text', width:100, editoptions:{maxlength:100, dataInit: fn_changeGridDate }},   // 저장 필수값은 required:true를 준다             
-                     {name:'TYPENO', label:'채용형태', align:'center', editable:false, edittype:'select', formatter:'select', editoptions:{value:'T1:공채;T2:수시', dataInit:fn_changeGridDate}, width:25},
+                     {name:'TYPENAME', label:'채용형태', align:'center', editable:false, edittype:'select', formatter:'select', editoptions:{value:'공채:공채;수시:수시;기타:기타', dataInit:fn_changeGridDate}, width:25},
                      {name:'RECRUITSCALE', label:'채용규모', editable:false, width:25 , editoptions:{maxlength:10, dataInit: fn_changeGridDate}},
                      {name:'RECRUITSTARTDATETIME',label:'채용시작시간',editable:false, align:'center', width:40, formatter: "date", formatoptions: { dataInit:fn_changeGridDate, newformat: "Y-m-d h:i:s"}},
                      

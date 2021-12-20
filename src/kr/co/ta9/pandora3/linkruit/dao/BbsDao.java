@@ -9,6 +9,7 @@ import kr.co.ta9.pandora3.app.servlet.ParameterMap;
 public class BbsDao extends BaseDao {
 
 	public JSONObject selectBbs(ParameterMap parameterMap ) throws Exception{
+		
 		return queryForGrid("Bbs.selectBbsList", parameterMap);
 		
 	}
