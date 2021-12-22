@@ -37,8 +37,7 @@ $(document).ready(function(){
             {name : 'MEMBERNAME', label :'이름'},
            
             {name : 'MEMBERBIRTH', label : '생년월일', align : 'center', editable : true},
-            {name : 'MEMBERPW', label : '비밀번호', sortable:false, editable : true},
-            {name : 'MEMBERPWCONFIRM', label : '비밀번호확인', align : 'center', editable : true},
+            {name : 'MEMBERPW', label : '비밀번호', sortable:false, editable : false},
             {name : 'MEMBERROOT', label : '검색경로',   align : 'center', editable : true, edittype:'select', formatter:'select',
            	 editoptions:{maxlength:25, dataInit: fn_changeGridDate,
        		  value :   '회사 홈페이지 방문:회사 홈페이지 방문;'
