@@ -126,7 +126,7 @@ $(document).ready(function(){
                          {name:'MEMBERBIRTH', label:'생년월일', editable:false, edittype:'text', width:10, required:true, editoptions:{maxlength:25, dataInit: fn_changeGridDate}},   // 저장 필수값은 required:true를 준다  
                          
                          {name:'FINALAPPLYCHECKED', label:'제출여부', align:'center', editable:false, width:10, edittype:'select', formatter:'select', editoptions:{value:'1:제출;0:미제출', dataInit: fn_changeGridDate}, width:10},
-                         {name:'APPLYNO', label:'지원번호', align:'center', editable:true, width:10, editoptions:{maxlength:50, dataInit: fn_changeGridDate}},
+                         {name:'APPLYNO', label:'지원번호', align:'center', editable:false, width:10, editoptions:{maxlength:50, dataInit: fn_changeGridDate}},
                          {name:'APPLICANTMILLITARY', label:'병역여부', align:'center', editable:false, width:10, edittype:'select', formatter:'select', editoptions:{maxlength:70, dataInit: fn_changeGridDate,value:'만기제대:만기제대(소집해제);복무중:복무중;면제:면제;해당사항 없음:해당사항 없음', dataInit: fn_changeGridDate}},
                          {name:'APPLICANTVETERAN', label:'보훈여부', align:'center', editable:false, width:10, edittype:'select', formatter:'select', editoptions:{value:'대상:대상;비대상:비대상', maxlength:50, dataInit: fn_changeGridDate}},
                          {name:'APPLICANTDISABILITY', label:'장애여부', editable:false, width:10, edittype:'select', formatter:'select', editoptions:{ value:'해당없음:해당없음;1급:1급;2급:2급;3급:3급',maxlength:100, dataInit: fn_changeGridDate}},
